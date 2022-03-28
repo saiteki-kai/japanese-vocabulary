@@ -67,19 +67,6 @@ class Review {
     );
   }
 
-  Review reset() {
-    return Review(
-      id: id,
-      ef: 2.5,
-      interval: 0,
-      repetition: 0,
-      correctAnswers: 0,
-      incorrectAnswers: 0,
-      nextDate: null,
-      type: type,
-    );
-  }
-
   Map<String, dynamic> toMap() {
     return {
       'id': id,
