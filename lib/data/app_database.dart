@@ -17,7 +17,7 @@ class AppDatabase {
 
   /// A database instance.
   /// The connection opens lazily when this property is accessed for the first time.
-  Future<Store> get db async {
+  Future<Store> get store async {
     if (_completer == null) {
       _completer = Completer();
       _openDatabase();
@@ -41,8 +41,8 @@ class AppDatabase {
   void _openDatabase() async {
     try {
       // Opens the database
-      final db = await openStore(directory: await _dbPath);
-      _completer!.complete(db);
+      final store = await openStore(directory: await _dbPath);
+      _completer!.complete(store);
     } catch (e) {
       _completer!.completeError(e);
     }
