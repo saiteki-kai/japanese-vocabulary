@@ -22,6 +22,26 @@ Mobile app for learning Japanese vocabulary through a spaced repetition method. 
 
 ![Architecture](./images/High-level%20Architecture.png)
 
+### Data Layer
+
+This layer interacts with the database and other data sources. The data is accessed directly via a repository.
+
+The **repository pattern** decouples the data layer from the business logic layer by hiding access to the data. Since we have only one data source, we don't use DAOs but only repository implementations to avoid excessive abstraction.
+
+### Business Logic Layer
+
+This layer is the core of the application and processes the business logic.
+
+The [**BloC pattern**](https://bloclibrary.dev/#/) decouples the business layer from the presentation layer, allowing changes to the UI to be made without impacting business logic and simplifying business logic testing.
+
+[![bloc pattern](images/bloc_architecture_full.png)](https://bloclibrary.dev/#/coreconcepts)
+
+The Bloc receives events via user input and sends a request to the data layer. Then the response is processed and the result is returned by changing the state and rerender the user interface.
+
+### Presentation Layer
+
+This layer displays the interface and gets information from the user. The user interface is presented using Flutter widgets.
+
 ## Folder Structure
 
 ```text
@@ -44,7 +64,39 @@ lib
 └── main.dart
 ```
 
-<!-- ## Installation -->
+## Installation
+
+Install packages
+
+```bash
+flutter pub get
+```
+
+Code generation
+
+```bash
+flutter pub run build_runner build
+```
+
+## Tests
+
+Install the library objectbox (see https://github.com/objectbox/objectbox-dart/issues/280)
+
+```bash
+bash <(curl -s https://raw.githubusercontent.com/objectbox/objectbox-dart/main/install.sh)
+```
+
+Unit/Widget test
+
+```bash
+flutter test
+```
+
+Integration tests
+
+```bash
+flutter test integration_test/
+```
 
 <!--
 Generate the documentation
