@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:objectbox/objectbox.dart';
 
 import './review.dart';
@@ -20,18 +19,20 @@ class Word {
   @Property(type: PropertyType.byte)
   int jlpt;
 
-  /// List of meanings of this word.
-  List<String> meanings = [];
+  /// Meaning of this word.
+  @Index()
+  String meaning;
 
-  /// List of part of speeches of this word.
-  List<String> pos = [];
+  /// Part of speech of this word.
+  @Index()
+  String pos;
 
   Word({
     required this.id,
     required this.text,
     required this.reading,
     required this.jlpt,
-    required this.meanings,
+    required this.meaning,
     required this.pos,
   });
 
@@ -45,15 +46,15 @@ class Word {
     String? text,
     String? reading,
     int? jlpt,
-    List<String>? meanings,
-    List<String>? pos,
+    String? meaning,
+    String? pos,
   }) {
     return Word(
       id: id,
       text: text ?? this.text,
       reading: reading ?? this.reading,
       jlpt: jlpt ?? this.jlpt,
-      meanings: meanings ?? this.meanings,
+      meaning: meaning ?? this.meaning,
       pos: pos ?? this.pos,
     );
   }
@@ -64,7 +65,7 @@ class Word {
       'text': text,
       'reading': reading,
       'jlpt': jlpt,
-      'meanings': meanings,
+      'meaning': meaning,
       'pos': pos,
     };
   }
@@ -75,28 +76,27 @@ class Word {
       text: map['text'] ?? '',
       reading: map['reading'] ?? '',
       jlpt: map['jlpt']?.toInt() ?? 0,
-      meanings: List<String>.from(map['meanings']),
-      pos: List<String>.from(map['pos']),
+      meaning: map['meaning'] ?? '',
+      pos: map['pos'] ?? '',
     );
   }
 
   @override
   String toString() {
-    return 'Word(id: $id, text: $text, reading: $reading, jlpt: $jlpt, meanings: $meanings, pos: $pos)';
+    return 'Word(id: $id, text: $text, reading: $reading, jlpt: $jlpt, meaning: $meaning, pos: $pos)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    final listEquals = const DeepCollectionEquality().equals;
 
     return other is Word &&
         other.id == id &&
         other.text == text &&
         other.reading == reading &&
         other.jlpt == jlpt &&
-        listEquals(other.meanings, meanings) &&
-        listEquals(other.pos, pos);
+        other.meaning == meaning &&
+        other.pos == pos;
   }
 
   @override
@@ -105,7 +105,7 @@ class Word {
         text.hashCode ^
         reading.hashCode ^
         jlpt.hashCode ^
-        meanings.hashCode ^
+        meaning.hashCode ^
         pos.hashCode;
   }
 }

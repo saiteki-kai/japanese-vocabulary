@@ -62,7 +62,7 @@
     },
     {
       "id": "2:401038334785999611",
-      "lastPropertyId": "8:5037895364817270746",
+      "lastPropertyId": "9:8175364561035269813",
       "name": "Word",
       "properties": [
         {
@@ -91,14 +91,11 @@
           "type": 2
         },
         {
-          "id": "5:5284903311057106241",
-          "name": "meanings",
-          "type": 30
-        },
-        {
           "id": "6:4797713563500394941",
           "name": "pos",
-          "type": 30
+          "type": 9,
+          "flags": 2048,
+          "indexId": "8:8729763161222566721"
         },
         {
           "id": "7:3512978780094895428",
@@ -115,20 +112,31 @@
           "flags": 520,
           "indexId": "5:8527817239037047097",
           "relationTarget": "Review"
+        },
+        {
+          "id": "9:8175364561035269813",
+          "name": "meaning",
+          "type": 9,
+          "flags": 2048,
+          "indexId": "7:6191155656918217405"
         }
       ],
       "relations": []
     }
   ],
   "lastEntityId": "2:401038334785999611",
-  "lastIndexId": "5:8527817239037047097",
+  "lastIndexId": "8:8729763161222566721",
   "lastRelationId": "0:0",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredIndexUids": [
+    3458087574536909469
+  ],
+  "retiredPropertyUids": [
+    5284903311057106241
+  ],
   "retiredRelationUids": [],
   "version": 1
 }
