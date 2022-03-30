@@ -35,7 +35,8 @@ code-quality:
   stage: verify
   needs: [dependencies]
   script:
-    - flutter pub run metrics lib -r codeclimate > gl-code-quality-report.json
+    - pub global activate dart_code_metrics
+    - metrics lib -r codeclimate > gl-code-quality-report.json
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
@@ -45,6 +46,7 @@ unit-test:
   stage: test
   needs: [dependencies]
   script:
+    - pub global activate junitreport
     - flutter test --machine --coverage | tojunit -o report.xml
     - lcov --summary coverage/lcov.info
     - genhtml coverage/lcov.info --output=coverage
