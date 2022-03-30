@@ -40,7 +40,7 @@ code-quality:
   needs: [dependencies]
   script:
     - pub global activate dart_code_metrics
-    - metrics lib -r codeclimate > gl-code-quality-report.json
+    - metrics --reporter=gitlab lib -r codeclimate > gl-code-quality-report.json
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
