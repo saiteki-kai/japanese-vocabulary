@@ -61,3 +61,20 @@ unit-test:
       - $CI_PROJECT_DIR/coverage
     reports:
       junit: report.xml
+
+integration-test:
+  image: cirrusci/flutter:2.10.3
+  stage: test
+  needs: [dependencies]
+  script:
+    - pub global activate junitreport
+    - flutter test integration_test/ --machine --coverage | tojunit -o report.xml
+    - lcov --summary coverage/lcov.info
+    - genhtml coverage/lcov.info --output=coverage
+  coverage: '/lines\.*: \d+\.\d+\%/'
+  artifacts:
+    name: coverage
+    paths:
+      - $CI_PROJECT_DIR/coverage
+    reports:
+      junit: report.xml
