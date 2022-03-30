@@ -1,0 +1,56 @@
+variables:
+  PUB_CACHE: $CI_PROJECT_DIR/.pub-cache
+
+stages:
+  - install
+  - verify
+  - test
+
+cache:
+  key: $CI_COMMIT_REF_SLUG
+  paths:
+    - .pub-cache/
+
+before_script:
+  - export PATH="$PATH":"$PUB_CACHE/bin"
+  - flutter pub get
+
+dependencies:
+  image: cirrusci/flutter:2.10.3
+  stage: install
+  before_script: []
+  script:
+    - flutter pub get
+
+lint:
+  image: cirrusci/flutter:2.10.3
+  stage: verify
+  needs: [dependencies]
+  script:
+    - flutter analyze
+
+code-quality:
+  image: cirrusci/flutter:2.10.3
+  stage: verify
+  needs: [dependencies]
+  script:
+    - flutter pub global run metrics lib -r codeclimate > gl-code-quality-report.json
+  artifacts:
+    reports:
+      codequality: gl-code-quality-report.json
+
+unit-test:
+  image: cirrusci/flutter:2.10.3
+  stage: test
+  needs: [dependencies]
+  script:
+    - flutter test --machine --coverage | tojunit -o report.xml
+    - lcov --summary coverage/lcov.info
+    - genhtml coverage/lcov.info --output=coverage
+  coverage: '/lines\.*: \d+\.\d+\%/'
+  artifacts:
+    name: coverage
+    paths:
+      - $CI_PROJECT_DIR/coverage
+    reports:
+      junit: report.xml
