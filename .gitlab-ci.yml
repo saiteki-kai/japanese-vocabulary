@@ -14,6 +14,7 @@ cache:
 before_script:
   - export PATH="$PATH":"$PUB_CACHE/bin"
   - flutter pub get
+  - flutter pub run build_runner build
 
 dependencies:
   image: cirrusci/flutter:2.10.3
@@ -34,7 +35,7 @@ code-quality:
   stage: verify
   needs: [dependencies]
   script:
-    - flutter pub global run metrics lib -r codeclimate > gl-code-quality-report.json
+    - metrics lib -r codeclimate > gl-code-quality-report.json
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
