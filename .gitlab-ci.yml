@@ -68,6 +68,7 @@ integration-test:
   stage: test
   needs: [dependencies]
   script:
+    - sdkmanager --install "system-images;android-30;default;x86"
     - flutter emulators --create emulator1
     - flutter emulators --launch emulator1
     - android-wait-for-emulator
