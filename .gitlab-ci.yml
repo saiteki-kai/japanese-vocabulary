@@ -68,6 +68,7 @@ integration-test:
   stage: test
   needs: [dependencies]
   script:
+    - android-wait-for-emulator
     - pub global activate junitreport
     - flutter test integration_test/ --machine --coverage | tojunit -o report.xml
     - lcov --summary coverage/lcov.info
