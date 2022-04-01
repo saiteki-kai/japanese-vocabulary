@@ -6,3 +6,5 @@ abstract class ReviewEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class ReviewRetrieved extends ReviewEvent {}
