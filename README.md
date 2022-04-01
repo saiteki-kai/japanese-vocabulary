@@ -1,14 +1,12 @@
 # Japanese vocabulary
 
-Mobile app for learning Japanese vocabulary through a spaced repetition method. The user can review the vocabularies and evaluate himself.
-
 <!-- ## Badges -->
-<!--
-[![pipeline](https://gitlab.com/saiteki-kai/japanese-vocabulary/badges/main/pipeline.svg)]()
-[![coverage](https://gitlab.com/saiteki-kai/japanese-vocabulary/badges/main/coverage.svg)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Latest Release](https://gitlab.com/saiteki-kai/japanese-vocabulary/-/badges/release.svg)](https://gitlab.com/saiteki-kai/japanese-vocabulary/-/releases)
--->
+[![pipeline](https://gitlab.com/saiteki-kai/japanese-vocabulary/badges/ci/pipeline.svg)](https://gitlab.com/saiteki-kai/japanese-vocabulary/-/pipelines)
+[![coverage](https://gitlab.com/saiteki-kai/japanese-vocabulary/badges/ci/coverage.svg)]()
+<!--[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Latest Release](https://gitlab.com/saiteki-kai/japanese-vocabulary/-/badges/release.svg)](https://gitlab.com/saiteki-kai/japanese-vocabulary/-/releases)-->
+
+Mobile app for learning Japanese vocabulary through a spaced repetition method. The user can review the vocabularies and evaluate himself.
 
 ## Group
 
