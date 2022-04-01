@@ -21,4 +21,10 @@ class ReviewRepository {
         .build()
         .find();
   }
+
+  Future<int> updateReview(Review review) async {
+    final store = await _store;
+
+    return store.box<Review>().put(review);
+  }
 }
