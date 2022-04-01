@@ -51,6 +51,7 @@ unit-test:
   stage: test
   needs: [dependencies]
   script:
+    - bash <(curl -s https://raw.githubusercontent.com/objectbox/objectbox-dart/main/install.sh)
     - pub global activate junitreport
     - flutter test --machine --coverage | tojunit -o report.xml
     - lcov --summary coverage/lcov.info
