@@ -43,8 +43,10 @@ void main() async {
 
   test("get today's reviews", () async {
     final reviews = await repo.getTodayReviews();
-    expect(reviews.length, 1);
-    expect(reviews[0].nextDate?.millisecondsSinceEpoch ?? double.infinity,
+    expect(reviews.length, 2);
+
+    final notNullReview = reviews.lastWhere((e) => e.nextDate != null);
+    expect(notNullReview.nextDate?.millisecondsSinceEpoch ?? double.infinity,
         lessThan(DateTime.now().millisecondsSinceEpoch));
   });
 
