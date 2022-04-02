@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:japanese_vocabulary/config/routes.gr.dart';
+import './config/routes.gr.dart';
 
 void main() {
   runApp(JapaneseVocabularyApp());
