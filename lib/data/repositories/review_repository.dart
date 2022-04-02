@@ -17,7 +17,7 @@ class ReviewRepository {
 
     return store
         .box<Review>()
-        .query(Review_.nextDate.lessOrEqual(now))
+        .query(Review_.nextDate.lessOrEqual(now).or(Review_.nextDate.isNull()))
         .build()
         .find();
   }
