@@ -25,6 +25,8 @@ dependencies:
   
   flutter_bloc: ^8.0.1
   equatable: ^2.0.3
+  tab_indicator_styler: ^2.0.0
+  percent_indicator: ^4.0.0
 
 dev_dependencies:
   flutter_test:
