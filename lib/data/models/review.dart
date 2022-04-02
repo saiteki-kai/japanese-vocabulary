@@ -36,7 +36,7 @@ class Review {
   final word = ToOne<Word>();
 
   Review({
-    required this.id,
+    this.id = 0,
     required this.ef,
     required this.interval,
     required this.repetition,
