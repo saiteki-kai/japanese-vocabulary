@@ -1,5 +1,11 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  exclude: 
+    - lib/data/repositories/word_repository.dart
+    - lib/bloc/word_*.dart
+    - integration_test/app_test.dart
+
 linter:
   rules:
     prefer_relative_imports: true
