@@ -12,10 +12,11 @@ class ReviewInitial extends ReviewState {}
 class ReviewLoading extends ReviewState {}
 
 class ReviewLoaded extends ReviewState {
-  final List<Review> reviews;
+  final Review review;
+  final bool isLast;
 
-  const ReviewLoaded(this.reviews);
+  const ReviewLoaded({required this.review, required this.isLast});
 
   @override
-  List<Object> get props => [reviews];
+  List<Object> get props => [review, isLast];
 }
