@@ -7,13 +7,13 @@ abstract class ReviewEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ReviewRetrieved extends ReviewEvent {}
+class ReviewSessionStarted extends ReviewEvent {}
 
-class ReviewUpdated extends ReviewEvent {
+class ReviewSessionUpdated extends ReviewEvent {
+  const ReviewSessionUpdated(this.review, this.quality);
+
   final Review review;
   final int quality;
-
-  const ReviewUpdated(this.review, this.quality);
 
   @override
   List<Object> get props => [review, quality];

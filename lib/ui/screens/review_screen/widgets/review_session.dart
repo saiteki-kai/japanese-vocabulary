@@ -37,7 +37,7 @@ class _ReviewSessionState extends State<ReviewSession> {
   @override
   void initState() {
     _bloc = BlocProvider.of<ReviewBloc>(context);
-    _bloc?.add(ReviewRetrieved());
+    _bloc?.add(ReviewSessionStarted());
 
     super.initState();
   }
@@ -92,13 +92,17 @@ class _ReviewSessionState extends State<ReviewSession> {
     );
   }
 
+  /// Adds the [ReviewSessionUpdated] event to bloc.
   void _nextReview(Review review, int quality) {
-    _bloc?.add(ReviewUpdated(review, quality));
+    _bloc?.add(ReviewSessionUpdated(review, quality));
 
     _hideAnswer.value = true;
     _selectedQuality.value = -1;
   }
 
+  /// Toggles visibility of the answer controlled by [_hideAnswer].
+  ///
+  /// Resets the [_selectedQuality.value] to -1.
   void _onToggleAnswer() {
     _hideAnswer.value = !_hideAnswer.value;
 

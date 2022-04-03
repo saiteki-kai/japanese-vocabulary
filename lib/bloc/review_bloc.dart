@@ -9,18 +9,18 @@ part 'review_event.dart';
 part 'review_state.dart';
 
 class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
+  ReviewBloc({required this.repository}) : super(ReviewInitial()) {
+    on<ReviewSessionStarted>(_onSessionStarted);
+    on<ReviewSessionUpdated>(_onSessionUpdated);
+  }
+
   final ReviewRepository repository;
 
   final List<Review> _session = [];
   int _currentIndex = 0;
 
-  ReviewBloc({required this.repository}) : super(ReviewInitial()) {
-    on<ReviewRetrieved>(_onRetrieved);
-    on<ReviewUpdated>(_onUpdated);
-  }
-
   /// Get today's reviews and start a review session
-  void _onRetrieved(_, emit) async {
+  void _onSessionStarted(_, emit) async {
     emit(ReviewLoading());
 
     final reviews = await repository.getTodayReviews();
@@ -35,7 +35,7 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
 
   /// Schedule the next date review of the Review given a quality value
   /// and returns the next word to review.
-  void _onUpdated(ReviewUpdated event, emit) async {
+  void _onSessionUpdated(ReviewSessionUpdated event, emit) async {
     final review = SM2.schedule(event.review, event.quality);
     await repository.updateReview(review);
 

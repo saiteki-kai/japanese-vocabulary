@@ -28,7 +28,7 @@ void main() async {
   blocTest<ReviewBloc, ReviewState>(
     'emits [ReviewLoading, ReviewLoaded] when ReviewRetrieved is added.',
     build: () => bloc,
-    act: (bloc) => bloc.add(ReviewRetrieved()),
+    act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
       ReviewLoaded(review: ReviewUtils.nullDateReview, isLast: false),
@@ -39,8 +39,8 @@ void main() async {
     'emits [ReviewLoaded] when ReviewUpdated is added.',
     build: () => bloc,
     act: (bloc) => bloc
-      ..add(ReviewRetrieved())
-      ..add(ReviewUpdated(ReviewUtils.review1, 4)),
+      ..add(ReviewSessionStarted())
+      ..add(ReviewSessionUpdated(ReviewUtils.review1, 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
       ReviewLoaded(review: ReviewUtils.nullDateReview, isLast: false),
@@ -51,7 +51,7 @@ void main() async {
   blocTest<ReviewBloc, ReviewState>(
     'emits [] when ReviewUpdated is added and ReviewRetrieved is not added previously.',
     build: () => bloc,
-    act: (bloc) => bloc.add(ReviewUpdated(ReviewUtils.review1, 4)),
+    act: (bloc) => bloc.add(ReviewSessionUpdated(ReviewUtils.review1, 4)),
     expect: () => <ReviewState>[],
   );
 }
