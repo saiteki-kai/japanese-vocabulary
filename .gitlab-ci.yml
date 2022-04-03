@@ -8,8 +8,10 @@ variables:
 
 stages:
   - install
+  - docs
   - verify
   - test
+
 
 cache:
   key: $CI_COMMIT_REF_SLUG
@@ -21,24 +23,35 @@ before_script:
   - flutter pub get
   - flutter pub run build_runner build
 
-dependencies:
+flutter_dependencies:
   image: cirrusci/flutter:2.10.3
   stage: install
   before_script: []
   script:
     - flutter pub get
 
+pages:
+  stage: docs
+  image: python:3.9
+  before_script: []
+  script:
+  - pip install -r ./docs/requirements.txt
+  - mkdocs build --strict --verbose
+  artifacts:
+    paths:
+    - public
+
 lint:
   image: cirrusci/flutter:2.10.3
   stage: verify
-  needs: [dependencies]
+  needs: [flutter_dependencies]
   script:
     - flutter analyze
 
 code-quality:
   image: cirrusci/flutter:2.10.3
   stage: verify
-  needs: [dependencies]
+  needs: [flutter_dependencies]
   script:
     - pub global activate dart_code_metrics
     - metrics --reporter=gitlab lib -r codeclimate > gl-code-quality-report.json
@@ -46,28 +59,28 @@ code-quality:
     reports:
       codequality: gl-code-quality-report.json
 
-unit-test:
-  image: cirrusci/flutter:2.10.3
-  stage: test
-  needs: [dependencies]
-  script:
-    - bash <(curl -s https://raw.githubusercontent.com/objectbox/objectbox-dart/main/install.sh)
-    - pub global activate junitreport
-    - flutter test --machine --coverage | tojunit -o report.xml
-    - lcov --summary coverage/lcov.info
-    - genhtml coverage/lcov.info --output=coverage
-  coverage: '/lines\.*: \d+\.\d+\%/'
-  artifacts:
-    name: coverage
-    paths:
-      - $CI_PROJECT_DIR/coverage
-    reports:
-      junit: report.xml
+#unit-test:
+#  image: cirrusci/flutter:2.10.3
+#  stage: test
+#  needs: [flutter_dependencies]
+#  script:
+#    - bash <(curl -s https://raw.githubusercontent.com/objectbox/objectbox-dart/main/install.sh)
+#    - pub global activate junitreport
+#    - flutter test --machine --coverage | tojunit -o report.xml
+#    - lcov --summary coverage/lcov.info
+#    - genhtml coverage/lcov.info --output=coverage
+#  coverage: '/lines\.*: \d+\.\d+\%/'
+#  artifacts:
+#    name: coverage
+#    paths:
+#      - $CI_PROJECT_DIR/coverage
+#    reports:
+#      junit: report.xml
 
 # integration-test:
 #   image: cirrusci/flutter:2.10.3
 #   stage: test
-#   needs: [dependencies]
+#   needs: [flutter_dependencies]
 #   script:
 #     - sdkmanager --install "system-images;android-30;default;x86"
 #     - flutter emulators --create emulator1
@@ -84,3 +97,5 @@ unit-test:
 #       - $CI_PROJECT_DIR/coverage
 #     reports:
 #       junit: report.xml
+
+
