@@ -5,6 +5,7 @@ import './word.dart';
 @Entity()
 class Review {
   /// Auto increment id
+  /// 
   int id = 0;
 
   /// Easiness factor for the spaced repetition algorithm.

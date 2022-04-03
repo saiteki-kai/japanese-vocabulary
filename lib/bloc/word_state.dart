@@ -8,3 +8,5 @@ abstract class WordState extends Equatable {
 }
 
 class WordInitial extends WordState {}
+
+class WordAdded extends WordState {}

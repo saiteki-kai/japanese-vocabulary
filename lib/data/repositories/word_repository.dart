@@ -4,7 +4,7 @@ import '../../data/models/word.dart';
 import '../../data/models/review.dart';
 
 class WordRepository {
-  Future<Store> get _store async => await AppDatabase.instance.store;
+  Future<Store> get _store => AppDatabase.instance.store;
   Future<int> addWord(Word word) async {
     final store = await _store;
 
@@ -34,5 +34,17 @@ class WordRepository {
     reading.word.target = word;
 
     return store.box<Word>().put(word);
+  }
+
+  Future<List<Word>> getWords() async {
+    final store = await _store;
+
+    return store.box<Word>().getAll();
+  }
+
+  Future<int> clear() async {
+    final store = await _store;
+
+    return store.box<Word>().removeAll();
   }
 }
