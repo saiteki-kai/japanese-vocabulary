@@ -7,10 +7,17 @@ import 'widgets/word_details_tab.dart';
 import './widgets/word_stats_tab.dart';
 import '../../widgets/screen_layout.dart';
 
+/// A widget that displays the details and the statistics of a [Word] from the associated reviews.
+///
+/// A [TabBar] is used, where the word details are displayed in a [WordDetailsTab] and
+/// the statistics associated with the word associated reviews are displayed in a [WordStatisticsTab].
 class WordDetailsScreen extends StatefulWidget {
-  const WordDetailsScreen({Key? key, required this.word})
-      : super(key: key);
+  /// Creates a word details widget.
+  ///
+  /// The [word] parameter is required and must not be null.
+  const WordDetailsScreen({Key? key, required this.word}) : super(key: key);
 
+  /// The [word] from which details and statistics will be displayed, must not be null.
   final Word word;
 
   @override

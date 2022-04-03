@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import '../../../../data/models/word.dart';
 import '../../word_details_screen/widgets/title_subtitle_widget.dart';
 
+/// A widget that displays the details of a [Word].
+///
+/// The details are the word text, meaning, reading, part of speech and the jlpt level.
 class WordDetailsTab extends StatelessWidget {
+  /// Creates a word details tab widget.
+  ///
+  /// The [word] parameter is required and must not be null.
   const WordDetailsTab({Key? key, required this.word}) : super(key: key);
 
+  /// The [word] from which details will be displayed, must not be null.
   final Word word;
 
   @override

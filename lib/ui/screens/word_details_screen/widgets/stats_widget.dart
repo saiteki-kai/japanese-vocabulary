@@ -5,12 +5,21 @@ import 'title_subtitle_widget.dart';
 import '../../../../data/models/review.dart';
 import '../../../../utils/colors.dart';
 
+/// A widget that displays the statistics of a [Review] associated to a [Word].
+///
+/// The statistics are displayed by using the [StatsItem] widget.
+/// The word statistics are: easiness, streak, correct and incorrect number of answers.
+/// Other information are also displayed the type of the review (meaning/reading), the next review date and the accuracy of the Review.
 class StatsWidget extends StatelessWidget {
+  /// Creates a stats widget.
+  ///
+  /// The [review] parameter is required and must not be null.
   const StatsWidget({
     Key? key,
     required this.review,
   }) : super(key: key);
 
+  /// The [review] from which statistics will be displayed, must not be null.
   final Review? review;
 
   @override
@@ -53,12 +62,13 @@ class StatsWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   TitleSubtitleWidget(
-                      title: "Next Review",
-                      titleTextStyle:
-                          const TextStyle(fontWeight: FontWeight.w500),
-                      subtitle:
-                          '${review?.nextDate?.day ?? '--'} / ${review?.nextDate?.month ?? '--'} / ${review?.nextDate?.year ?? '----'} ',
-                      padding: const EdgeInsets.all(8.0)),
+                    title: "Next Review",
+                    titleTextStyle:
+                        const TextStyle(fontWeight: FontWeight.w500),
+                    subtitle:
+                        '${review?.nextDate?.day ?? '--'} / ${review?.nextDate?.month ?? '--'} / ${review?.nextDate?.year ?? '----'} ',
+                    padding: const EdgeInsets.all(8.0),
+                  ),
                   CircularPercentIndicator(
                     radius: 32,
                     lineWidth: 32 / 4,
