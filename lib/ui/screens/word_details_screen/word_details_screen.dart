@@ -8,10 +8,10 @@ import './widgets/word_stats_tab.dart';
 import '../../widgets/screen_layout.dart';
 
 class WordDetailsScreen extends StatefulWidget {
-  final Word word;
-
   const WordDetailsScreen({Key? key, required this.word})
       : super(key: key);
+
+  final Word word;
 
   @override
   State<WordDetailsScreen> createState() => _WordDetailsScreenState();

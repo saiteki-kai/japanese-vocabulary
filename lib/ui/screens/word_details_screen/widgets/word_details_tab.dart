@@ -3,8 +3,9 @@ import '../../../../data/models/word.dart';
 import '../../word_details_screen/widgets/title_subtitle_widget.dart';
 
 class WordDetailsTab extends StatelessWidget {
-  final Word word;
   const WordDetailsTab({Key? key, required this.word}) : super(key: key);
+
+  final Word word;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,11 @@ class WordDetailsTab extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                          child: Text(word.text, style: const TextStyle(fontSize: 24.0))),
+                        child: Text(
+                          word.text,
+                          style: const TextStyle(fontSize: 24.0),
+                        ),
+                      ),
                       Text("N${word.jlpt}"),
                     ],
                   ),

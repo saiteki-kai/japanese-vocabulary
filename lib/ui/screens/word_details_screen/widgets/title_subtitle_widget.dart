@@ -1,17 +1,6 @@
 import 'package:flutter/material.dart';
 
 class TitleSubtitleWidget extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final TextStyle? titleTextStyle;
-  final TextStyle? subtitleTextStyle;
-  final TextAlign? titleTextAlign;
-  final TextAlign? subtitleTextAlign;
-  final EdgeInsetsGeometry padding;
-  final CrossAxisAlignment crossAxisAlignment;
-  final MainAxisAlignment mainAxisAlignment;
-  final MainAxisSize mainAxisSize;
-
   const TitleSubtitleWidget({
     Key? key,
     required this.title,
@@ -25,6 +14,17 @@ class TitleSubtitleWidget extends StatelessWidget {
     this.crossAxisAlignment = CrossAxisAlignment.center,
     this.mainAxisSize = MainAxisSize.min,
   }) : super(key: key);
+
+  final String title;
+  final String subtitle;
+  final TextStyle? titleTextStyle;
+  final TextStyle? subtitleTextStyle;
+  final TextAlign? titleTextAlign;
+  final TextAlign? subtitleTextAlign;
+  final EdgeInsetsGeometry padding;
+  final CrossAxisAlignment crossAxisAlignment;
+  final MainAxisAlignment mainAxisAlignment;
+  final MainAxisSize mainAxisSize;
 
   @override
   Widget build(BuildContext context) {

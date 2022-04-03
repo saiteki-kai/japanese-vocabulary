@@ -4,8 +4,9 @@ import '../../../../data/models/word.dart';
 import 'stats_widget.dart';
 
 class WordStatisticsTab extends StatelessWidget {
-  final Word word;
   const WordStatisticsTab({Key? key, required this.word}) : super(key: key);
+
+  final Word word;
 
   Review? get _meaningReview => word.meaningReview.target;
   Review? get _readingReview => word.readingReview.target;

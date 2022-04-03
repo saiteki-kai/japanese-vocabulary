@@ -68,7 +68,8 @@ class StatsWidget extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     percent: review?.getReviewAccuracy() ?? 0.0,
-                    progressColor: CustomColors.colorPercent(review?.getReviewAccuracy() ?? 0.0),
+                    progressColor: CustomColors.colorPercent(
+                        review?.getReviewAccuracy() ?? 0.0),
                   ),
                 ]),
           ),

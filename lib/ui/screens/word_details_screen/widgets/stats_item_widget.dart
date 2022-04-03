@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 
 class StatsItemWidget extends StatelessWidget {
-
-  final String label;
-  final String value;
-
   const StatsItemWidget({
     Key? key,
     required this.label,
     required this.value,
   }) : super(key: key);
 
+  final String label;
+  final String value;
 
   @override
   Widget build(BuildContext context) {
