@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../../data/models/review.dart';
 
 class ReviewItem extends StatelessWidget {
-  final Review review;
-  final void Function()? onToggleAnswer;
-
   const ReviewItem({
     Key? key,
     required this.review,
     required this.onToggleAnswer,
   }) : super(key: key);
+
+  final Review review;
+  final void Function()? onToggleAnswer;
 
   @override
   Widget build(BuildContext context) {

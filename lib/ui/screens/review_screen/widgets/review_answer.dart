@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import '../../../../data/models/review.dart';
 
 class ReviewAnswer extends StatelessWidget {
+  const ReviewAnswer({
+    Key? key,
+    required this.review,
+    required this.hidden,
+  }) : super(key: key);
+
   final Review review;
   final ValueNotifier<bool> hidden;
-
-  const ReviewAnswer({Key? key, required this.review, required this.hidden})
-      : super(key: key);
 
   String get meaning => review.word.target?.meaning ?? "<NA>";
   String get reading => review.word.target?.reading ?? "<NA>";

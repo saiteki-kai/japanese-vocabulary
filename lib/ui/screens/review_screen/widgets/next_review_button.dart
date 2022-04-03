@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class NextReviewButton extends StatelessWidget {
-  final bool isLast;
-  final ValueNotifier<int> selectedQuality;
-  final void Function(int) onPressed;
-
   const NextReviewButton({
     Key? key,
     required this.selectedQuality,
     required this.isLast,
     required this.onPressed,
   }) : super(key: key);
+
+  final bool isLast;
+  final ValueNotifier<int> selectedQuality;
+  final void Function(int) onPressed;
 
   @override
   Widget build(BuildContext context) {
