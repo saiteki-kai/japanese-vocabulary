@@ -40,6 +40,9 @@ pages:
   artifacts:
     paths:
     - public
+  only:
+  - main
+  - sprint_1
 
 lint:
   image: cirrusci/flutter:2.10.3
@@ -59,23 +62,23 @@ code-quality:
     reports:
       codequality: gl-code-quality-report.json
 
-#unit-test:
-#  image: cirrusci/flutter:2.10.3
-#  stage: test
-#  needs: [flutter_dependencies]
-#  script:
-#    - bash <(curl -s https://raw.githubusercontent.com/objectbox/objectbox-dart/main/install.sh)
-#    - pub global activate junitreport
-#    - flutter test --machine --coverage | tojunit -o report.xml
-#    - lcov --summary coverage/lcov.info
-#    - genhtml coverage/lcov.info --output=coverage
-#  coverage: '/lines\.*: \d+\.\d+\%/'
-#  artifacts:
-#    name: coverage
-#    paths:
-#      - $CI_PROJECT_DIR/coverage
-#    reports:
-#      junit: report.xml
+unit-test:
+  image: cirrusci/flutter:2.10.3
+  stage: test
+  needs: [flutter_dependencies]
+  script:
+    - bash <(curl -s https://raw.githubusercontent.com/objectbox/objectbox-dart/main/install.sh)
+    - pub global activate junitreport
+    - flutter test --machine --coverage | tojunit -o report.xml
+    - lcov --summary coverage/lcov.info
+    - genhtml coverage/lcov.info --output=coverage
+  coverage: '/lines\.*: \d+\.\d+\%/'
+  artifacts:
+    name: coverage
+    paths:
+      - $CI_PROJECT_DIR/coverage
+    reports:
+      junit: report.xml
 
 # integration-test:
 #   image: cirrusci/flutter:2.10.3
