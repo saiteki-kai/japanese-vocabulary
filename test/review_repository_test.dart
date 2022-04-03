@@ -3,33 +3,19 @@ import 'package:japanese_vocabulary/data/app_database.dart';
 import 'package:japanese_vocabulary/data/models/review.dart';
 import 'package:japanese_vocabulary/data/repositories/review_repository.dart';
 
+import 'utils/review.dart';
+
 void main() async {
   final store = await AppDatabase.instance.store;
-
-  Review createReviewByDate(DateTime? date) {
-    return Review(
-      id: 0,
-      ef: 2.5,
-      interval: 0,
-      repetition: 0,
-      correctAnswers: 0,
-      incorrectAnswers: 0,
-      nextDate: date,
-      type: "meaning",
-    );
-  }
-
-  final nullDateReview = createReviewByDate(null);
-  final review1 = createReviewByDate(DateTime(DateTime.now().year - 1));
-  final review2 = createReviewByDate(DateTime(DateTime.now().year + 1));
 
   final box = store.box<Review>();
   final repo = ReviewRepository();
 
   setUp(() {
-    box.put(nullDateReview);
-    box.put(review1);
-    box.put(review2);
+    store.box<Review>().removeAll();
+    box.put(ReviewUtils.nullDateReview);
+    box.put(ReviewUtils.review1);
+    box.put(ReviewUtils.review2);
   });
 
   tearDown(() {
@@ -78,7 +64,7 @@ void main() async {
     });
 
     test("review not present in the database", () async {
-      final newReview = createReviewByDate(null);
+      final newReview = ReviewUtils.createReviewByDate(null);
       final id3 = await repo.updateReview(newReview);
       expect(id3, equals(4));
     });
