@@ -6,25 +6,12 @@ import '../../../../data/models/review.dart';
 import '../../../../utils/colors.dart';
 
 class StatsWidget extends StatelessWidget {
-  final Review? review;
-
   const StatsWidget({
     Key? key,
     required this.review,
   }) : super(key: key);
 
-  double reviewAccuracy() {
-    if (review == null) {
-      return 0.0;
-    } else {
-      final totalAnswers = review!.correctAnswers + review!.incorrectAnswers;
-      if (totalAnswers == 0.0) {
-        return 0.0;
-      } else {
-        return review!.correctAnswers / totalAnswers;
-      }
-    }
-  }
+  final Review? review;
 
   @override
   Widget build(BuildContext context) {
@@ -77,11 +64,11 @@ class StatsWidget extends StatelessWidget {
                     lineWidth: 32 / 4,
                     circularStrokeCap: CircularStrokeCap.butt,
                     center: Text(
-                      '${(reviewAccuracy() * 100).round()}%',
+                      '${((review?.getReviewAccuracy() ?? 0.0) * 100).round()}%',
                       textAlign: TextAlign.center,
                     ),
-                    percent: reviewAccuracy(),
-                    progressColor: CustomColors.colorPercent(reviewAccuracy()),
+                    percent: review?.getReviewAccuracy() ?? 0.0,
+                    progressColor: CustomColors.colorPercent(review?.getReviewAccuracy() ?? 0.0),
                   ),
                 ]),
           ),
