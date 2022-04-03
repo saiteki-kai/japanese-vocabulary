@@ -28,7 +28,7 @@ class Word {
   String pos;
 
   Word({
-    required this.id,
+    id,
     required this.text,
     required this.reading,
     required this.jlpt,

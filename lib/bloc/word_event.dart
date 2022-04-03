@@ -6,3 +6,7 @@ abstract class WordEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class GetWord extends WordEvent {}
+
+class AddWordEvent extends WordEvent {}
