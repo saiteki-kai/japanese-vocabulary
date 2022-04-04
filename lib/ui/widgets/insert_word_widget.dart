@@ -16,37 +16,10 @@ class InsertWord extends StatefulWidget {
 }
 
 class _InsertWordState extends State<InsertWord> {
-  final WordRepository _wordRepository = WordRepository();
-  
-
-  List<int> _selectedPOS = [];
   Word _wordToAdd = Word(jlpt: 5, text: "", reading: "", meaning: "", pos: "");
   int _jlpt_value = 5;
   List<bool> _jlpt = [true, false, false, false, false];
   final List<bool> _jlpt_default = [true, false, false, false, false];
-  List<bool> _pos = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
   final List<bool> _pos_default = [
     false,
     false,
@@ -132,12 +105,9 @@ class _InsertWordState extends State<InsertWord> {
                       _wordToAdd.meaning = _meaningController.text;
                       _wordToAdd.reading = _readingController.text;
                       _wordToAdd.text = _textController.text;
-
-                      String posTmp = "";
-                      //build string from selected elements
-                      for (int i = 0; i < _pos.length; i++) {
-                        if (_pos[i]) posTmp += _pos_names[i] + ",";
-                      }
+                      final _pos_selected = _posController.selectedIndexes;
+                      String posTmp =
+                          _pos_selected.map((e) => _pos_names[e]).join(",");
                       //remove last ',' if any
                       if (posTmp.isNotEmpty) {
                         posTmp = posTmp.substring(0, posTmp.length - 1);
@@ -153,14 +123,11 @@ class _InsertWordState extends State<InsertWord> {
 
                       //clean the UI
                       //removable once every module is assembled together (?)
-                      _pos.clear();
-                      _pos.addAll(_pos_default);
                       _jlpt.clear();
                       _jlpt.addAll(_jlpt_default);
                       _textController.clear();
                       _readingController.clear();
                       _meaningController.clear();
-                      _selectedPOS = [];
                       _posController.selectedIndexes.clear();
                       _posController.selectIndexes([]);
 
@@ -228,9 +195,7 @@ class _InsertWordState extends State<InsertWord> {
                     GroupButton(
                       isRadio: false,
                       onSelected: (index, isSelected) {
-                        _selectedPOS.add(index);
-                        _pos[index] = !_pos[index];
-                        print('$index button is ${_pos[index]}');
+                        print('$index button is ${index}');
                       },
                       buttons: _pos_names,
                       controller: _posController,
