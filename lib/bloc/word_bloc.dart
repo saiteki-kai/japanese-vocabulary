@@ -17,12 +17,23 @@ class WordBloc extends Bloc<WordEvent, WordState> {
     //final WordRepository repository = WordBloc.repository;
     //should emit a state for returning to the visualization page
 
-    final cleared = await repository.clear();
-    print("cleared");
-    final added = await repository.addWord(event.word);
-    print("added");
-    final get = await repository.getWords();
-    print(get.toString());
-    emit(WordAdded());
+    //final cleared = await repository.clear();
+    //print("cleared");
+
+    if (event.word.text.isEmpty ||
+        event.word.meaning.isEmpty ||
+        event.word.reading.isEmpty) {
+      print("error");
+      emit(WordInitial());
+    } else {
+      final added = await repository.addWord(event.word);
+      print("added");
+      final get = await repository.getWords();
+      print(get.toString());
+      emit(WordAdded());
+    }
+
+    //final get = await repository.getWords();
+    //print(get.toString());
   }
 }

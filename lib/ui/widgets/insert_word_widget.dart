@@ -3,6 +3,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';
 import 'package:flutter/material.dart';
+import 'package:chips_choice/chips_choice.dart';
 
 import '../../bloc/word_bloc.dart';
 import '../../data/repositories/word_repository.dart';
@@ -97,7 +98,7 @@ class _InsertWordState extends State<InsertWord> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Insert a new item'),
+                const Text('Insert a word'),
                 IconButton(
                     onPressed: () {
                       //WordBloc().add(event)
@@ -121,6 +122,7 @@ class _InsertWordState extends State<InsertWord> {
                       BlocProvider.of<WordBloc>(context)
                           .add(AddWordEvent(word: _wordToAdd));
 
+/*
                       //clean the UI
                       //removable once every module is assembled together (?)
                       _jlpt.clear();
@@ -130,7 +132,7 @@ class _InsertWordState extends State<InsertWord> {
                       _meaningController.clear();
                       _posController.selectedIndexes.clear();
                       _posController.selectIndexes([]);
-
+*/
                       //Navigator.pop(context);
                     },
                     icon: const Icon(
@@ -143,7 +145,7 @@ class _InsertWordState extends State<InsertWord> {
           body: Container(
             width: double.infinity,
             decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.all(Radius.circular(24)),
             ),
             child: Padding(
               padding: const EdgeInsets.all(30),
@@ -154,85 +156,90 @@ class _InsertWordState extends State<InsertWord> {
                   mainAxisSize: MainAxisSize.max,
                   verticalDirection: VerticalDirection.down,
                   children: [
-                    const Text(
-                      "Text",
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 171, 127, 111)),
-                    ),
-                    TextField(
-                      controller: _textController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: const Text(
+                        "Text",
                       ),
                     ),
-                    const Text(
-                      "Reading",
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 171, 127, 111)),
-                    ),
-                    TextField(
-                      controller: _readingController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: TextField(
+                        controller: _textController,
                       ),
                     ),
-                    const Text(
-                      "Meaning",
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 171, 127, 111)),
-                    ),
-                    TextField(
-                      controller: _meaningController,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "Reading",
                       ),
                     ),
-                    const Text(
-                      "Part of speech",
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 171, 127, 111)),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: TextField(
+                        controller: _readingController,
+                      ),
                     ),
-                    GroupButton(
-                      isRadio: false,
-                      onSelected: (index, isSelected) {
-                        print('$index button is ${index}');
-                      },
-                      buttons: _pos_names,
-                      controller: _posController,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: const Text(
+                        "Meaning",
+                      ),
                     ),
-                    const Text(
-                      "JLPT",
-                      style:
-                          TextStyle(color: Color.fromARGB(255, 171, 127, 111)),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: TextField(
+                        controller: _meaningController,
+                      ),
                     ),
-                    ToggleButtons(
-                      fillColor: const Color.fromARGB(255, 63, 81, 180),
-                      selectedColor: Colors.white,
-                      borderColor: Colors.transparent,
-                      selectedBorderColor: Colors.transparent,
-                      textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                      children: [
-                        Text("N5"),
-                        Text("N4"),
-                        Text("N3"),
-                        Text("N2"),
-                        Text("N1"),
-                      ],
-                      onPressed: (int index) {
-                        setState(() {
-                          for (int buttonIndex = 0;
-                              buttonIndex < _jlpt.length;
-                              buttonIndex++) {
-                            if (buttonIndex == index) {
-                              _jlpt[buttonIndex] = true;
-                              _jlpt_value = index + 1;
-                            } else {
-                              _jlpt[buttonIndex] = false;
-                            }
-                          }
-                        });
-                      },
-                      isSelected: _jlpt,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: const Text(
+                        "Part of speech",
+                      ),
+                    ),
+                    Center(
+                      child: GroupButton(
+                        options: GroupButtonOptions(
+                            borderRadius: BorderRadius.circular(8)),
+                        isRadio: false,
+                        onSelected: (index, isSelected) {
+                          print('$index button is ${index}');
+                        },
+                        buttons: _pos_names,
+                        controller: _posController,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: const Text(
+                        "JLPT",
+                      ),
+                    ),
+                    Center(
+                      child: ChipsChoice<int>.single(
+                        value: _jlpt_value,
+                        wrapped: true,
+                        padding: EdgeInsets.zero,
+                        choiceStyle: C2ChoiceStyle(
+                          color: Colors.indigo,
+                          borderColor: Colors.indigo[400],
+                          brightness: Brightness.dark,
+                          borderRadius: BorderRadius.circular(8.0),
+                          margin: const EdgeInsets.only(
+                              left: 4.0, right: 4.0, bottom: 8.0),
+                        ),
+                        choiceItems: [
+                          C2Choice(value: 5, label: 'N5'),
+                          C2Choice(value: 4, label: 'N4'),
+                          C2Choice(value: 3, label: 'N3'),
+                          C2Choice(value: 2, label: 'N2'),
+                          C2Choice(value: 1, label: 'N1'),
+                        ],
+                        onChanged: (int value) {
+                          setState(() => _jlpt_value = value);
+                        },
+                      ),
                     )
                   ],
                 ),

@@ -28,6 +28,10 @@ dependencies:
 
   tab_indicator_styler: ^2.0.0
   group_button: ^4.8.0
+  chips_choice: ^2.0.1
+  bloc_test: ^9.0.3
+
+  
 
 dev_dependencies:
   flutter_test:

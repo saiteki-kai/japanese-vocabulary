@@ -15,7 +15,15 @@ class JapaneseVocabularyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Japanese Vocabulary',
-      theme: ThemeData(primarySwatch: Colors.indigo),
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+        inputDecorationTheme: const InputDecorationTheme(
+          border: OutlineInputBorder(
+              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          filled: true,
+        ),
+      ),
       routerDelegate: AutoRouterDelegate(_appRouter),
       routeInformationParser: _appRouter.defaultRouteParser(),
     );
