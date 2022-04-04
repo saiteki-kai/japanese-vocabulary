@@ -1,5 +1,12 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  exclude: 
+    - lib/data/repositories/review_repository.dart
+    - integration_test/*
+    - lib/bloc/review_*.dart
+
+
 linter:
   rules:
     prefer_relative_imports: true
