@@ -14,11 +14,7 @@ class InsertItemScreen extends StatefulWidget {
 class _InsertItemScreenState extends State<InsertItemScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => WordBloc(
-        repository: WordRepository(),
-      ),
-      child: InsertWord(),
-    );
+    return const InsertWord();
   }
+  
 }

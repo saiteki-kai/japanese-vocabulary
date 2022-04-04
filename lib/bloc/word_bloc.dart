@@ -7,22 +7,22 @@ part 'word_event.dart';
 part 'word_state.dart';
 
 class WordBloc extends Bloc<WordEvent, WordState> {
-  final WordRepository repository;
-
   WordBloc({required this.repository}) : super(WordInitial()) {
     on<AddWordEvent>(_onAddWordEvent);
   }
-}
 
-void _onAddWordEvent(AddWordEvent event, Emitter<WordState> emit) async {
-  final WordRepository repository = WordRepository();
-  //should emit a state for returning to the visualization page
+  final WordRepository repository;
 
-  final cleared = await repository.clear();
-  print("cleared");
-  final added = await repository.addWord(event.word);
-  print("added");
-  final get = await repository.getWords();
-  print(get.toString());
-  emit(WordAdded());
+  void _onAddWordEvent(AddWordEvent event, Emitter<WordState> emit) async {
+    //final WordRepository repository = WordBloc.repository;
+    //should emit a state for returning to the visualization page
+
+    final cleared = await repository.clear();
+    print("cleared");
+    final added = await repository.addWord(event.word);
+    print("added");
+    final get = await repository.getWords();
+    print(get.toString());
+    emit(WordAdded());
+  }
 }
