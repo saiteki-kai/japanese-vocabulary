@@ -23,17 +23,25 @@ void main() async {
   });
 
   test("get all reviews", () async {
-    final reviews = await repo.getAllReviews();
+    List<Review> reviews = await repo.getAllReviews();
     expect(reviews.length, 3);
+
+    store.box<Review>().removeAll();
+    reviews = await repo.getAllReviews();
+    expect(reviews.length, 0);
   });
 
   test("get today's reviews", () async {
-    final reviews = await repo.getTodayReviews();
+    List<Review> reviews = await repo.getTodayReviews();
     expect(reviews.length, 2);
 
     final notNullReview = reviews.lastWhere((e) => e.nextDate != null);
     expect(notNullReview.nextDate?.millisecondsSinceEpoch ?? double.infinity,
         lessThan(DateTime.now().millisecondsSinceEpoch));
+
+    store.box<Review>().removeAll();
+    reviews = await repo.getAllReviews();
+    expect(reviews.length, 0);
   });
 
   group("update a review", () {
