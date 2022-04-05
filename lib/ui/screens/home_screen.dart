@@ -8,6 +8,10 @@ import '../../data/repositories/word_repository.dart';
 import '../../utils/initial_data.dart';
 import 'word_item.dart';
 
+/// Widget for the basic definition of the [WordScreen].
+///
+/// This widget is called the [AppBar] and the [FloatingActionButton]
+/// button to insert a new [Word] in the vocabulary.
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -33,6 +37,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
+/// This widget initializes values in the database by calling [_WordScreenState].
 class WordScreen extends StatefulWidget {
   const WordScreen({
     Key? key,
@@ -42,6 +47,12 @@ class WordScreen extends StatefulWidget {
   State<WordScreen> createState() => _WordScreenState();
 }
 
+/// A private widget that displays a list of [Word] and initialize database.
+///
+/// This widget initializes values in the database and also
+/// allows you to view all the words in the dictionary through a scrolling list
+/// that shows the text of the word,
+/// the next revision date and an average of the accuracy of the last two revisions.
 class _WordScreenState extends State<WordScreen> {
   WordBloc? bloc;
 
