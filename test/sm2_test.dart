@@ -11,7 +11,7 @@ void main() {
     repetition: 0,
     correctAnswers: 0,
     incorrectAnswers: 0,
-    nextDate: null,
+    nextDate: DateTime.now(),
     type: "meaning",
   );
 
@@ -55,9 +55,16 @@ void main() {
   test("multiple repetitions", () {
     Review oldReview = review;
 
+    final rnd = Random(42);
+
     for (var i = 0; i < 100; i++) {
-      final quality = Random(42).nextInt(6);
+      final quality = rnd.nextInt(6);
       final newReview = SM2.schedule(oldReview, quality);
+
+      // Only for test. Simulate the passing days by using the scheduled oldReview
+      newReview.nextDate = oldReview.nextDate?.add(
+        Duration(days: newReview.interval),
+      );
 
       final newEF = double.parse(newReview.ef.toStringAsPrecision(2));
       final oldEF = double.parse(oldReview.ef.toStringAsPrecision(2));
@@ -79,11 +86,11 @@ void main() {
       if (quality < 3) {
         expect(newEF, lessThanOrEqualTo(oldEF), reason: "ef should be lower");
         expect(newReview.repetition, 0, reason: "repetition should be 0");
-        // expect(
-        //   newReview.nextDate?.millisecondsSinceEpoch ?? 0,
-        //   greaterThan(oldReview.nextDate?.millisecondsSinceEpoch ?? -1),
-        //   reason: "the next review date should be later than the old one",
-        // );
+        expect(
+          newReview.nextDate?.millisecondsSinceEpoch ?? 0,
+          greaterThan(oldReview.nextDate?.millisecondsSinceEpoch ?? -1),
+          reason: "the next review date should be later than the old one",
+        );
         expect(
           newReview.nextDate?.millisecondsSinceEpoch ?? 0,
           greaterThan(DateTime.now().millisecondsSinceEpoch),
