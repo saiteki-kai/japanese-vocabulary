@@ -20,3 +20,14 @@ class ReviewLoaded extends ReviewState {
   @override
   List<Object> get props => [review, isLast];
 }
+
+class ReviewError extends ReviewState {
+  const ReviewError({required this.message});
+
+  final String message;
+
+  @override
+  List<Object> get props => [message];
+}
+
+class ReviewFinished extends ReviewState {}

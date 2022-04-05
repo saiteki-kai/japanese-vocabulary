@@ -30,6 +30,8 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
       _session.addAll(reviews);
 
       emit(ReviewLoaded(review: _session[0], isLast: false));
+    } else {
+      emit(const ReviewError(message: "Empty session, no reviews found."));
     }
   }
 
@@ -39,11 +41,14 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     final review = SM2.schedule(event.review, event.quality);
     await repository.updateReview(review);
 
+    _currentIndex = _currentIndex + 1;
+
     if (_currentIndex < _session.length) {
-      _currentIndex = _currentIndex + 1;
       final isLast = _currentIndex == _session.length - 1;
 
       emit(ReviewLoaded(review: _session[_currentIndex], isLast: isLast));
+    } else {
+      emit(ReviewFinished());
     }
   }
 }
