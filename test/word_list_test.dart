@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:japanese_vocabulary/data/models/word.dart';
 import 'package:japanese_vocabulary/ui/screens/word_item.dart';
 
 void main() {
