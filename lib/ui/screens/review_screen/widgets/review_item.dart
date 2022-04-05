@@ -1,15 +1,20 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../data/models/review.dart';
+import 'review_type_tag.dart';
+import 'show_button.dart';
 
 class ReviewItem extends StatelessWidget {
   const ReviewItem({
     Key? key,
     required this.review,
     required this.onToggleAnswer,
+    required this.hidden,
   }) : super(key: key);
 
   final Review review;
+  final ValueListenable<bool> hidden;
   final void Function()? onToggleAnswer;
 
   @override
@@ -28,23 +33,7 @@ class ReviewItem extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4.0,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    color: Colors.amber.withOpacity(0.3),
-                  ),
-                  child: Text(
-                    review.type.toUpperCase(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber,
-                    ),
-                  ),
-                ),
+                ReviewTypeTag(review: review),
               ],
             ),
             Padding(
@@ -55,16 +44,14 @@ class ReviewItem extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline4,
               ),
             ),
-            TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.grey.shade200,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-              ),
-              child: Text("show".toUpperCase()),
-              onPressed: onToggleAnswer,
+            ValueListenableBuilder(
+              valueListenable: hidden,
+              builder: (context, bool value, child) {
+                return ShowButton(
+                  show: value,
+                  onToggleAnswer: onToggleAnswer,
+                );
+              },
             ),
           ],
         ),

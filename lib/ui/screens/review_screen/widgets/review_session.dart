@@ -63,6 +63,7 @@ class _ReviewSessionState extends State<ReviewSession> {
                   // Word information for the review
                   ReviewItem(
                     review: state.review,
+                    hidden: _hideAnswer,
                     onToggleAnswer: _onToggleAnswer,
                   ),
                   const Spacer(flex: 1),
