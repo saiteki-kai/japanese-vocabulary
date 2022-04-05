@@ -10,6 +10,7 @@ import 'package:japanese_vocabulary/ui/screens/review_screen/widgets/next_review
 import 'package:japanese_vocabulary/ui/screens/review_screen/widgets/review_answer.dart';
 import 'package:japanese_vocabulary/ui/screens/review_screen/widgets/review_item.dart';
 import 'package:japanese_vocabulary/ui/screens/review_screen/widgets/review_session.dart';
+import 'package:japanese_vocabulary/ui/widgets/loading_indicator.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'utils/review.dart';
@@ -46,6 +47,24 @@ void main() {
       ),
     );
   }
+
+  testWidgets("check loading", (WidgetTester tester) async {
+    when(() => bloc.state).thenReturn(ReviewLoading());
+
+    await tester.pumpAndSettle();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: BlocProvider.value(
+          value: bloc,
+          child: const ReviewSession(),
+        ),
+      ),
+    );
+
+    final loadingFinder = find.byType(LoadingIndicator);
+    expect(loadingFinder, findsOneWidget);
+  });
 
   testWidgets("check correct answer", (WidgetTester tester) async {
     await setUpWidget(tester, ReviewUtils.meaningReviewWithWord);
