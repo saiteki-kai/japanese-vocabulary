@@ -40,7 +40,7 @@ class SM2 {
       ef = 1.3;
     }
 
-    final next = DateTime.now().add(Duration(days: interval + 100));
+    final next = DateTime.now().add(Duration(days: interval));
 
     return review.copyWith(
       ef: ef,
