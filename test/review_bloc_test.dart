@@ -18,6 +18,7 @@ void main() async {
     box.removeAll();
     box.put(ReviewUtils.nullDateReview);
     box.put(ReviewUtils.review1);
+    box.put(ReviewUtils.review2);
   });
 
   tearDown(() {
@@ -36,7 +37,7 @@ void main() async {
   );
 
   blocTest<ReviewBloc, ReviewState>(
-    'emits [ReviewLoaded] when ReviewUpdated is added.',
+    'emits [ReviewLoaded, ReviewLoaded] when ReviewSessionUpdated is added.',
     build: () => bloc,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
@@ -49,9 +50,35 @@ void main() async {
   );
 
   blocTest<ReviewBloc, ReviewState>(
-    'emits [] when ReviewUpdated is added and ReviewRetrieved is not added previously.',
+    'emits [ReviewLoaded, ReviewLoaded] when ReviewSessionUpdated is added.',
+    build: () => bloc,
+    act: (bloc) => bloc
+      ..add(ReviewSessionStarted())
+      ..add(ReviewSessionUpdated(ReviewUtils.review1, 4))
+      ..add(ReviewSessionUpdated(ReviewUtils.review2, 4)),
+    expect: () => <ReviewState>[
+      ReviewLoading(),
+      ReviewLoaded(review: ReviewUtils.nullDateReview, isLast: false),
+      ReviewLoaded(review: ReviewUtils.review1, isLast: true),
+      ReviewFinished(),
+    ],
+  );
+
+  blocTest<ReviewBloc, ReviewState>(
+    'emits [ReviewLoading, ReviewError] when ReviewSessionStarted is added and session is empty.',
+    build: () => bloc,
+    setUp: box.removeAll,
+    act: (bloc) => bloc..add(ReviewSessionStarted()),
+    expect: () => <ReviewState>[
+      ReviewLoading(),
+      const ReviewError(message: "Empty session, no reviews found."),
+    ],
+  );
+
+  blocTest<ReviewBloc, ReviewState>(
+    'emits [ReviewFinished] when ReviewUpdated is added and ReviewRetrieved is not added previously.',
     build: () => bloc,
     act: (bloc) => bloc.add(ReviewSessionUpdated(ReviewUtils.review1, 4)),
-    expect: () => <ReviewState>[],
+    expect: () => <ReviewState>[ReviewFinished()],
   );
 }
