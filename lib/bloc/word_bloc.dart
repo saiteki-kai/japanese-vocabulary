@@ -10,16 +10,13 @@ class WordBloc extends Bloc<WordEvent, WordState> {
   WordBloc({required this.repository}) : super(WordInitial()) {
     on<AddWordEvent>(_onAddWordEvent);
   }
-
+  /// The instance of the repository
   final WordRepository repository;
 
   void _onAddWordEvent(AddWordEvent event, Emitter<WordState> emit) async {
-    //final WordRepository repository = WordBloc.repository;
-    //should emit a state for returning to the visualization page
-
-    //final cleared = await repository.clear();
-    //print("cleared");
-
+    /// If one of the text fields is empty, the app will return to the initial state of the insertion
+    ///
+    /// otherwise the app will go to the word added state, closing the insertion page
     if (event.word.text.isEmpty ||
         event.word.meaning.isEmpty ||
         event.word.reading.isEmpty) {
@@ -28,12 +25,7 @@ class WordBloc extends Bloc<WordEvent, WordState> {
     } else {
       final added = await repository.addWord(event.word);
       print("added");
-      final get = await repository.getWords();
-      print(get.toString());
       emit(WordAdded());
     }
-
-    //final get = await repository.getWords();
-    //print(get.toString());
   }
 }

@@ -3,48 +3,28 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';
 import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:chips_choice/chips_choice.dart';
-
 import '../../bloc/word_bloc.dart';
-import '../../data/repositories/word_repository.dart';
 import '../../data/models/word.dart';
 
-class InsertWord extends StatefulWidget {
-  const InsertWord({Key? key}) : super(key: key);
+/// A widget that allows the user to add a new [Word] they want to learn.
+class WordInsert extends StatefulWidget {
+  /// Creates a word insert widget.
+  const WordInsert({Key? key}) : super(key: key);
 
   @override
-  State<InsertWord> createState() => _InsertWordState();
+  State<WordInsert> createState() => _WordInsertState();
 }
 
-class _InsertWordState extends State<InsertWord> {
+class _WordInsertState extends State<WordInsert> {
   Word _wordToAdd = Word(jlpt: 5, text: "", reading: "", meaning: "", pos: "");
+
+  /// The currently selected jlpt value
   int _jlpt_value = 5;
-  List<bool> _jlpt = [true, false, false, false, false];
-  final List<bool> _jlpt_default = [true, false, false, false, false];
-  final List<bool> _pos_default = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
-  List<String> _pos_names = [
+
+  /// The list of the selectable parts of speech names
+  final List<String> _pos_names = [
     "adj-i",
     "adj-na",
     "adj-no",
@@ -68,6 +48,7 @@ class _InsertWordState extends State<InsertWord> {
     "vt"
   ];
 
+  ///
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _readingController = TextEditingController();
   final TextEditingController _meaningController = TextEditingController();
@@ -83,16 +64,14 @@ class _InsertWordState extends State<InsertWord> {
           appBar: AppBar(
             leading: InkWell(
               onTap: () {
-                //Navigator.pop(context);
+                /*Navigator.pop(context);*/
               },
               child: IconButton(
                 icon: const Icon(
                   Icons.arrow_back_ios,
                   color: Colors.white,
                 ),
-                onPressed: () {
-                  print("ciao");
-                },
+                onPressed: () {},
               ),
             ),
             title: Row(
@@ -101,39 +80,27 @@ class _InsertWordState extends State<InsertWord> {
                 const Text('Insert a word'),
                 IconButton(
                     onPressed: () {
-                      //WordBloc().add(event)
                       _wordToAdd.jlpt = _jlpt_value;
                       _wordToAdd.meaning = _meaningController.text;
                       _wordToAdd.reading = _readingController.text;
                       _wordToAdd.text = _textController.text;
                       final _pos_selected = _posController.selectedIndexes;
+
+                      // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
                       String posTmp =
                           _pos_selected.map((e) => _pos_names[e]).join(",");
-                      //remove last ',' if any
-                      if (posTmp.isNotEmpty) {
-                        posTmp = posTmp.substring(0, posTmp.length - 1);
-                      }
                       _wordToAdd.pos = posTmp;
+
                       print("meaning: ${_wordToAdd.meaning}");
                       print("pos: ${_wordToAdd.pos}");
 
+                      /// Closes the keyboard when the submit button is pressed
                       FocusManager.instance.primaryFocus?.unfocus();
 
                       BlocProvider.of<WordBloc>(context)
                           .add(AddWordEvent(word: _wordToAdd));
 
-/*
-                      //clean the UI
-                      //removable once every module is assembled together (?)
-                      _jlpt.clear();
-                      _jlpt.addAll(_jlpt_default);
-                      _textController.clear();
-                      _readingController.clear();
-                      _meaningController.clear();
-                      _posController.selectedIndexes.clear();
-                      _posController.selectIndexes([]);
-*/
-                      //Navigator.pop(context);
+                      /*Navigator.pop(context);*/
                     },
                     icon: const Icon(
                       Icons.check,
@@ -156,9 +123,9 @@ class _InsertWordState extends State<InsertWord> {
                   mainAxisSize: MainAxisSize.max,
                   verticalDirection: VerticalDirection.down,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: const Text(
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
                         "Text",
                       ),
                     ),
@@ -168,8 +135,8 @@ class _InsertWordState extends State<InsertWord> {
                         controller: _textController,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
                       child: Text(
                         "Reading",
                       ),
@@ -180,9 +147,9 @@ class _InsertWordState extends State<InsertWord> {
                         controller: _readingController,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: const Text(
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
                         "Meaning",
                       ),
                     ),
@@ -192,9 +159,9 @@ class _InsertWordState extends State<InsertWord> {
                         controller: _meaningController,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: const Text(
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
                         "Part of speech",
                       ),
                     ),
@@ -210,9 +177,9 @@ class _InsertWordState extends State<InsertWord> {
                         controller: _posController,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: const Text(
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: Text(
                         "JLPT",
                       ),
                     ),
@@ -229,7 +196,7 @@ class _InsertWordState extends State<InsertWord> {
                           margin: const EdgeInsets.only(
                               left: 4.0, right: 4.0, bottom: 8.0),
                         ),
-                        choiceItems: [
+                        choiceItems: const [
                           C2Choice(value: 5, label: 'N5'),
                           C2Choice(value: 4, label: 'N4'),
                           C2Choice(value: 3, label: 'N3'),
@@ -237,6 +204,7 @@ class _InsertWordState extends State<InsertWord> {
                           C2Choice(value: 1, label: 'N1'),
                         ],
                         onChanged: (int value) {
+                          /// Updates the currently selected value
                           setState(() => _jlpt_value = value);
                         },
                       ),
