@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
+/// A widget that show a loading indicator.
+///
+/// A message can be displayed on the bottom of this component.
 class LoadingIndicator extends StatelessWidget {
-  final String? message;
-
+  /// Creates a widget that show a loading indicator.
   const LoadingIndicator({Key? key, this.message}) : super(key: key);
+
+  /// The [message] displayed on the bottom of this.
+  ///
+  /// If the [message] is null only the loading indicator will be displayed.
+  final String? message;
 
   @override
   Widget build(BuildContext context) {

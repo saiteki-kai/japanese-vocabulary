@@ -22,7 +22,7 @@ class ReviewItem extends StatelessWidget {
   /// The [review] of the word to show.
   final Review review;
 
-  /// 
+  /// A boolean value that show or hide the [ShowButton].
   final ValueListenable<bool> hidden;
 
   /// Called when the [ShowButton] is tapped.

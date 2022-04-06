@@ -2,14 +2,23 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
 
+/// A widget that allow you to select a quality level from 0 to 5.+
+///
+/// The selection is made through several buttons, each of which represents a specific quality level from 0 to 5.
 class ReviewQualitySelector extends StatelessWidget {
+  /// Create a widget that allow you to select a quality level from 0 to 5.
+  ///
+  /// The [disabled] and [onQualitySelected] parameters are required and must not be null.
   const ReviewQualitySelector({
     Key? key,
     required this.disabled,
     required this.onQualitySelected,
   }) : super(key: key);
 
+  /// A boolean value that enable or disable all the buttons.
   final ValueListenable<bool> disabled;
+
+  /// Called when a option is selected and returns its quality value.
   final void Function(int) onQualitySelected;
 
   /// The possible values of quality to be selected

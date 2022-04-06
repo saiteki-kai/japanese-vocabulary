@@ -13,6 +13,13 @@ import 'widgets/review_item.dart';
 import 'widgets/review_quality_selector.dart';
 import 'widgets/review_session_appbar.dart';
 
+/// A widget that handles a review session.
+///
+/// A session consists of a series of reviews presented in a [ReviewItem],
+/// each of which allows you to show or hide the [ReviewAnswer]. When the answer
+/// is shown, [ReviewQualitySelector] is enabled and allows you to choose a
+/// quality value. Then [NextReviewButton] allows you to move on to the next
+/// review or, if there are no more, to go to the summary.
 class ReviewSessionScreen extends StatefulWidget implements AutoRouteWrapper {
   const ReviewSessionScreen({Key? key}) : super(key: key);
 
@@ -32,7 +39,12 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   /// A [ReviewBloc] instance.
   ReviewBloc? _bloc;
 
+  /// A boolean value that handles when show or hide the [ReviewAnswer] and
+  /// enable the [ReviewQualitySelector].
   final _hideAnswer = ValueNotifier<bool>(true);
+
+  /// The selected quality value. If the value is -1 the [NextReviewButton] is
+  /// disabled.
   final _selectedQuality = ValueNotifier<int>(-1);
 
   @override
@@ -94,7 +106,9 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
     );
   }
 
-  /// Adds the [ReviewSessionUpdated] event to bloc.
+  /// Updates the review based on the quality value and provide the next one.
+  ///
+  /// The [_hideAnswer] and [_selectedQuality] are reset.
   void _nextReview(Review review, int quality) {
     _bloc?.add(ReviewSessionUpdated(review, quality));
 
@@ -104,7 +118,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
 
   /// Toggles visibility of the answer controlled by [_hideAnswer].
   ///
-  /// Resets the [_selectedQuality.value] to -1.
+  /// Resets the [_selectedQuality] to -1.
   void _onToggleAnswer() {
     _hideAnswer.value = !_hideAnswer.value;
 
