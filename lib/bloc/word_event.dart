@@ -6,3 +6,6 @@ abstract class WordEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+/// This [WordRetrived] manages the events concerning the [Word].
+class WordRetrived extends WordEvent {}
