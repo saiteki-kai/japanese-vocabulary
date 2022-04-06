@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/word_bloc.dart';
-import '../../../data/app_database.dart';
 import '../../../data/models/word.dart';
-import '../../../utils/initial_data.dart';
 import '../word_item.dart';
 
 /// A private widget that displays a list of [Word] and initialize database.
