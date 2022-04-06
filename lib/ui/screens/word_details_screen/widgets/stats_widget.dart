@@ -45,7 +45,7 @@ class StatsWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               StatsItemWidget(
-                  label: "Easiness", value: (review?.ef ?? 0).toString()),
+                  label: "Easiness", value: (review?.ef.toStringAsPrecision(2) ?? 0).toString()),
               StatsItemWidget(
                   label: "Streak", value: (review?.repetition ?? 0).toString()),
               StatsItemWidget(
