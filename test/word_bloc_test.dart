@@ -5,15 +5,17 @@ import 'package:japanese_vocabulary/data/app_database.dart';
 import 'package:japanese_vocabulary/data/models/word.dart';
 import 'package:japanese_vocabulary/data/repositories/word_repository.dart';
 
-void main() {
+void main() async {
   final wordRepository = WordRepository();
-  final store = AppDatabase.instance.store;
+  final store = await AppDatabase.instance.store;
+  final box = store.box<Word>();
 
   late WordBloc bloc;
-  final List<Word> words = [];
 
   setUp(() async {
     bloc = WordBloc(repository: wordRepository);
+
+    final List<Word> words = [];
     words.add(Word(
       id: 0,
       text: "言葉",
@@ -38,26 +40,28 @@ void main() {
       meaning: "normal; ordinary; regular",
       pos: "Noun, Na-adjective",
     ));
-    (await store).box<Word>().putMany(words);
+
+    box.removeAll();
+    box.putMany(words);
   });
 
   tearDown(() async {
-    (await store).box<Word>().removeAll();
+    box.removeAll();
     bloc.close();
   });
 
   blocTest<WordBloc, WordState>(
     'emits [Wordloading, Wordloaded] when WordRetrived is added.',
     build: () => bloc,
-    act: (bloc) => bloc.add(WordRetrived()),
-    expect: () => <WordState>[WordLoading(), WordLoaded(words)],
+    act: (bloc) => bloc.add(WordRetrieved()),
+    expect: () => <WordState>[WordLoading(), WordLoaded(box.getAll())],
   );
 
   blocTest<WordBloc, WordState>(
     'emits [Wordloading, Wordloaded] when WordRetrived is added when store is empty.',
-    setUp: () async => (await store).box<Word>().removeAll(),
+    setUp: () async => box.removeAll(),
     build: () => bloc,
-    act: (bloc) => bloc.add(WordRetrived()),
+    act: (bloc) => bloc.add(WordRetrieved()),
     expect: () => <WordState>[WordLoading(), const WordLoaded([])],
   );
 }
