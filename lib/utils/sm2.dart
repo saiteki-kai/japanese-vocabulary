@@ -1,7 +1,13 @@
-// https://www.supermemo.com/en/archives1990-2015/english/ol/sm2
 import '../data/models/review.dart';
 
+/// An implementation of the SuperMemo 2 spaced repetition algorithm.
+///
+// https://www.supermemo.com/en/archives1990-2015/english/ol/sm2
 class SM2 {
+  /// Schedules a [review] with a new date based on the [quality] value.
+  ///
+  /// Throws a [FormatException] if the quality value is out of the range [0, 5].
+  /// Returns an updated [Review] with the values obtained by the algorithm.
   static Review schedule(Review review, int quality) {
     if (quality > 5 || quality < 0) {
       throw const FormatException("The quality must be in the range [0, 5].");
