@@ -92,105 +92,108 @@ class _WordInsertState extends State<WordInsert> {
                 ],
               ),
             ),
-            body: Container(
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(24)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(30),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.max,
-                    verticalDirection: VerticalDirection.down,
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Text",
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: TextField(
-                          controller: _textController,
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Reading",
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: TextField(
-                          controller: _readingController,
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Meaning",
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: TextField(
-                          controller: _meaningController,
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Part of speech",
-                        ),
-                      ),
-                      Center(
-                        child: GroupButton(
-                          options: GroupButtonOptions(
-                              borderRadius: BorderRadius.circular(8)),
-                          isRadio: false,
-                          onSelected: (index, isSelected) {},
-                          buttons: _posNames,
-                          controller: _posController,
-                        ),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "JLPT",
-                        ),
-                      ),
-                      Center(
-                        child: ChipsChoice<int>.single(
-                          value: _jlptValue,
-                          wrapped: true,
-                          padding: EdgeInsets.zero,
-                          choiceStyle: C2ChoiceStyle(
-                            color: Colors.indigo,
-                            borderColor: Colors.indigo[400],
-                            brightness: Brightness.dark,
-                            borderRadius: BorderRadius.circular(8.0),
-                            margin: const EdgeInsets.only(
-                                left: 4.0, right: 4.0, bottom: 8.0),
+            body: GestureDetector(
+              onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+              child: Container(
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(24)),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.max,
+                      verticalDirection: VerticalDirection.down,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            "Text",
                           ),
-                          choiceItems: const [
-                            C2Choice(value: 5, label: 'N5'),
-                            C2Choice(value: 4, label: 'N4'),
-                            C2Choice(value: 3, label: 'N3'),
-                            C2Choice(value: 2, label: 'N2'),
-                            C2Choice(value: 1, label: 'N1'),
-                          ],
-                          onChanged: (int value) {
-                            /// Updates the currently selected value
-                            setState(() => _jlptValue = value);
-                          },
                         ),
-                      )
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: TextField(
+                            controller: _textController,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            "Reading",
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: TextField(
+                            controller: _readingController,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            "Meaning",
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: TextField(
+                            controller: _meaningController,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            "Part of speech",
+                          ),
+                        ),
+                        Center(
+                          child: GroupButton(
+                            options: GroupButtonOptions(
+                                borderRadius: BorderRadius.circular(8)),
+                            isRadio: false,
+                            onSelected: (index, isSelected) {},
+                            buttons: _posNames,
+                            controller: _posController,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 8.0),
+                          child: Text(
+                            "JLPT",
+                          ),
+                        ),
+                        Center(
+                          child: ChipsChoice<int>.single(
+                            value: _jlptValue,
+                            wrapped: true,
+                            padding: EdgeInsets.zero,
+                            choiceStyle: C2ChoiceStyle(
+                              color: Colors.indigo,
+                              borderColor: Colors.indigo[400],
+                              brightness: Brightness.dark,
+                              borderRadius: BorderRadius.circular(8.0),
+                              margin: const EdgeInsets.only(
+                                  left: 4.0, right: 4.0, bottom: 8.0),
+                            ),
+                            choiceItems: const [
+                              C2Choice(value: 5, label: 'N5'),
+                              C2Choice(value: 4, label: 'N4'),
+                              C2Choice(value: 3, label: 'N3'),
+                              C2Choice(value: 2, label: 'N2'),
+                              C2Choice(value: 1, label: 'N1'),
+                            ],
+                            onChanged: (int value) {
+                              /// Updates the currently selected value
+                              setState(() => _jlptValue = value);
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
