@@ -26,7 +26,8 @@ class WordBloc extends Bloc<WordEvent, WordState> {
         event.word.reading.isEmpty) {
       emit(WordInitial());
     } else {
-      final added = await repository.addWord(event.word);
+      await repository.addWord(event.word);
+      print(await repository.getWords());
       emit(WordAdded());
     }
   }
@@ -34,6 +35,7 @@ class WordBloc extends Bloc<WordEvent, WordState> {
   void _onRetrieved(WordRetrived event, emit) async {
     emit(WordLoading());
     final words = await repository.getWords();
+    print(words);
     emit(WordLoaded(words));
   }
 }
