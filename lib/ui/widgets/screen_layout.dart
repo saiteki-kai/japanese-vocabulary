@@ -1,10 +1,28 @@
 import 'package:flutter/material.dart';
 
+/// A widget that displays an [appBar] and a [child] inside a container
+/// with rounded top edges.
 class ScreenLayout extends StatelessWidget {
+  /// Creates a widget with an [appBar] and a [child].
+  const ScreenLayout({
+    Key? key,
+    this.appBar,
+    this.padding = const EdgeInsets.all(8.0),
+    required this.child,
+  }) : super(key: key);
+
+  /// An app bar to display at the top of the screen layout.
+  ///
+  /// If null, only the [child] will be displayed.
   final Widget? appBar;
+
+  /// The padding of the [child].
+  final EdgeInsets? padding;
+
+  /// The [child] contained by the screen layout.
+  ///
+  /// The [child] is expanded to vertically fill the screen layout.
   final Widget child;
-  const ScreenLayout({Key? key, this.appBar, required this.child})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +35,7 @@ class ScreenLayout extends StatelessWidget {
           Expanded(
             child: Container(
               clipBehavior: Clip.hardEdge,
-              padding: const EdgeInsets.all(16.0),
+              padding: padding,
               decoration: BoxDecoration(
                 color: Theme.of(context).canvasColor,
                 borderRadius: const BorderRadius.only(

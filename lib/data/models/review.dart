@@ -16,7 +16,7 @@ class Review {
   });
 
   /// Auto increment id
-  /// 
+  ///
   int id;
 
   /// Easiness factor for the spaced repetition algorithm.
@@ -48,7 +48,7 @@ class Review {
   final word = ToOne<Word>();
 
   /// Return the accuracy of the review.
-  /// 
+  ///
   /// Return zero if the sum between the correctAnswers and the incorrectAnswers is zero.
   double getReviewAccuracy() {
     final totalAnswers = correctAnswers + incorrectAnswers;

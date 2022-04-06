@@ -59,6 +59,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
             ),
           ),
         ),
+        padding: EdgeInsets.zero,
         child: TabBarView(
           controller: _tabController,
           children: <Widget>[

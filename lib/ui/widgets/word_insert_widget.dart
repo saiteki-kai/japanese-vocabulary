@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:chips_choice/chips_choice.dart';
 import '../../bloc/word_bloc.dart';
 import '../../data/models/word.dart';
+import 'screen_layout.dart';
 
 /// A widget that allows the user to add a new [Word] they want to learn.
 class WordInsert extends StatefulWidget {
@@ -62,48 +63,49 @@ class _WordInsertState extends State<WordInsert> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<WordBloc, WordState>(
-      builder: (context, state) {
-        if (state is WordLoaded) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Insert a word'),
-                  IconButton(
-                    onPressed: () {
-                      _wordToAdd.jlpt = _jlptValue;
-                      _wordToAdd.meaning = _meaningController.text;
-                      _wordToAdd.reading = _readingController.text;
-                      _wordToAdd.text = _textController.text;
-                      final posSelected = _posController.selectedIndexes;
+    return Scaffold(
+      body: ScreenLayout(
+        appBar: AppBar(
+          elevation: 0,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Insert a word'),
+              IconButton(
+                onPressed: () {
+                  _wordToAdd.jlpt = _jlptValue;
+                  _wordToAdd.meaning = _meaningController.text;
+                  _wordToAdd.reading = _readingController.text;
+                  _wordToAdd.text = _textController.text;
+                  final posSelected = _posController.selectedIndexes;
 
-                      // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
-                      final posTmp =
-                          posSelected.map((e) => _posNames[e]).join(",");
-                      _wordToAdd.pos = posTmp;
+                  // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
+                  final posTmp = posSelected.map((e) => _posNames[e]).join(",");
+                  _wordToAdd.pos = posTmp;
 
-                      bloc?.add(AddWordEvent(word: _wordToAdd));
-                    },
-                    icon: const Icon(
-                      Icons.check,
-                      color: Colors.white,
-                    ),
-                  )
-                ],
-              ),
-            ),
-            body: GestureDetector(
+                  bloc?.add(AddWordEvent(word: _wordToAdd));
+                },
+                icon: const Icon(
+                  Icons.check,
+                  color: Colors.white,
+                ),
+              )
+            ],
+          ),
+        ),
+        padding: EdgeInsets.zero,
+        child: BlocConsumer<WordBloc, WordState>(
+          builder: (context, state) {
+            return GestureDetector(
               onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
               child: Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(24)),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: SingleChildScrollView(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(30.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,21 +202,19 @@ class _WordInsertState extends State<WordInsert> {
                   ),
                 ),
               ),
-            ),
-          );
-        } else {
-          return const Text("Error");
-        }
-      },
-      listener: (context, state) {
-        if (state is WordAdded) {
-          bloc?.add(WordRetrieved());
-          AutoRouter.of(context).pop();
-        }
-      },
-      buildWhen: (previous, current) {
-        return current is! WordAdded;
-      },
+            );
+          },
+          listener: (context, state) {
+            if (state is WordAdded) {
+              bloc?.add(WordRetrieved());
+              AutoRouter.of(context).pop();
+            }
+          },
+          buildWhen: (previous, current) {
+            return current is! WordAdded;
+          },
+        ),
+      ),
     );
   }
 }

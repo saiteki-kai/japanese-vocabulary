@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/word_bloc.dart';
 import '../../../data/models/word.dart';
-import '../word_item.dart';
+import '../../widgets/screen_layout.dart';
+import 'widgets/word_item.dart';
 
 /// A private widget that displays a list of [Word] and initialize database.
 ///
@@ -37,22 +38,26 @@ class _WordScreenState extends State<WordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WordBloc, WordState>(
-      builder: (context, state) {
-        if (state is WordLoaded) {
-          return ListView.builder(
-            itemCount: state.words.length,
-            itemBuilder: (context, index) {
-              final Word word = state.words[index];
-              return WordItem(word: word);
-            },
-            padding: const EdgeInsets.all(8),
-            shrinkWrap: true,
-          );
-        } else {
-          return const SizedBox();
-        }
-      },
+    return ScreenLayout(
+      appBar: AppBar(title: const Text("Words"), elevation: 0),
+      padding: EdgeInsets.zero,
+      child: BlocBuilder<WordBloc, WordState>(
+        builder: (context, state) {
+          if (state is WordLoaded) {
+            return ListView.builder(
+              itemCount: state.words.length,
+              itemBuilder: (context, index) {
+                final Word word = state.words[index];
+                return WordItem(word: word);
+              },
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+            );
+          } else {
+            return const SizedBox();
+          }
+        },
+      ),
     );
   }
 }

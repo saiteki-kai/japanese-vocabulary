@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../config/routes.gr.dart';
 import '../../data/models/review.dart';
 import '../../data/models/word.dart';
-import 'words_screen/words_screen.dart';
 
 /// Widget for the basic definition of the [WordScreen].
 ///
@@ -21,7 +20,7 @@ class HomeScreen extends StatelessWidget {
       meaning: "word; phrase; expression; term",
       pos: "Noun",
     );
-  
+
     final mRev = Review(
       id: 0,
       ef: 2.5,
@@ -32,7 +31,7 @@ class HomeScreen extends StatelessWidget {
       repetition: 0,
       type: "meaning",
     );
-  
+
     final rRev = Review(
       id: 0,
       ef: 2.5,
@@ -43,40 +42,47 @@ class HomeScreen extends StatelessWidget {
       repetition: 0,
       type: "reading",
     );
-  
+
     mRev.word.target = word;
     rRev.word.target = word;
-  
+
     word.meaningReview.target = mRev;
     word.readingReview.target = rRev;
-  
+
     return word;
   }();
 
-  //AutoRouter.of(context).push(WordDetailsScreen(word: word)
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        final FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          /// Removes the focus from the input fields when clicking outside of them
-          currentFocus.unfocus();
-        }
+    return AutoTabsScaffold(
+      routes: const [
+        ReviewScreen(),
+        WordScreen(),
+      ],
+      bottomNavigationBuilder: (_, tabsRouter) {
+        return BottomNavigationBar(
+          currentIndex: tabsRouter.activeIndex,
+          onTap: tabsRouter.setActiveIndex,
+          items: const [
+            BottomNavigationBarItem(
+              label: 'Reviews',
+              icon: Icon(Icons.replay),
+            ),
+            BottomNavigationBarItem(
+              label: 'Words',
+              icon: Icon(Icons.list),
+            ),
+          ],
+        );
       },
-      child: Scaffold(
-        body: const Center(
-          child: WordScreen(),
-        ),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: FloatingActionButton(
-            child: const Icon(Icons.add),
-            backgroundColor: Colors.amber,
-            onPressed: () {
-              AutoRouter.of(context).push(const WordInsertScreen());
-            },
-          ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FloatingActionButton(
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.amber,
+          onPressed: () {
+            AutoRouter.of(context).push(const WordInsertScreen());
+          },
         ),
       ),
     );

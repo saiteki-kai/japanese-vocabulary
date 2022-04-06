@@ -3,8 +3,6 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     - integration_test/app_test.dart
-    - lib/data/repositories/review_repository.dart
-    - lib/bloc/review_*.dart
 
 linter:
   rules:
