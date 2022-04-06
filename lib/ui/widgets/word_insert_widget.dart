@@ -56,15 +56,15 @@ class _WordInsertState extends State<WordInsert> {
 
   @override
   void initState() {
-    super.initState();
     bloc = BlocProvider.of<WordBloc>(context);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<WordBloc, WordState>(
       builder: (context, state) {
-        if (state is WordInitial) {
+        if (state is WordLoaded) {
           return Scaffold(
             appBar: AppBar(
               title: Row(
