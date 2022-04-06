@@ -26,6 +26,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   equatable: ^2.0.3
   percent_indicator: ^4.0.0
+  bloc_test: ^9.0.3
 
 dev_dependencies:
   flutter_test:
