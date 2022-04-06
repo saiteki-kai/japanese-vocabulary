@@ -70,7 +70,7 @@ unit-test:
     - bash <(curl -s https://raw.githubusercontent.com/objectbox/objectbox-dart/main/install.sh)
     - pub global activate junitreport
     - pub global activate remove_from_coverage
-    - flutter test --machine --coverage | tojunit -o report.xml
+    - flutter test --no-sound-null-safety --machine --coverage | tojunit -o report.xml
     - remove_from_coverage -f coverage/lcov.info -r '\.g\.dart$'
     - remove_from_coverage -f coverage/lcov.info -r '\.gr\.dart$'
     - lcov --summary coverage/lcov.info
