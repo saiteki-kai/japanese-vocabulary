@@ -1,0 +1,63 @@
+import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:japanese_vocabulary/bloc/word_bloc.dart';
+import 'package:japanese_vocabulary/data/app_database.dart';
+import 'package:japanese_vocabulary/data/models/word.dart';
+import 'package:japanese_vocabulary/data/repositories/word_repository.dart';
+
+void main() {
+  final wordRepository = WordRepository();
+  final store = AppDatabase.instance.store;
+
+  late WordBloc bloc;
+  final List<Word> words = [];
+
+  setUp(() async {
+    bloc = WordBloc(repository: wordRepository);
+    words.add(Word(
+      id: 0,
+      text: "言葉",
+      reading: "ことば",
+      jlpt: 5,
+      meaning: "word; phrase; expression; term",
+      pos: "Noun",
+    ));
+    words.add(Word(
+      id: 0,
+      text: "復習",
+      reading: "ふくしゅう",
+      jlpt: 4,
+      meaning: "review (of learned material); revision",
+      pos: "Noun, Suru verb",
+    ));
+    words.add(Word(
+      id: 0,
+      text: "普通",
+      reading: "ふつう",
+      jlpt: 4,
+      meaning: "normal; ordinary; regular",
+      pos: "Noun, Na-adjective",
+    ));
+    (await store).box<Word>().putMany(words);
+  });
+
+  tearDown(() async {
+    (await store).box<Word>().removeAll();
+    bloc.close();
+  });
+
+  blocTest<WordBloc, WordState>(
+    'emits [Wordloading, Wordloaded] when WordRetrived is added.',
+    build: () => bloc,
+    act: (bloc) => bloc.add(WordRetrived()),
+    expect: () => <WordState>[WordLoading(), WordLoaded(words)],
+  );
+
+  blocTest<WordBloc, WordState>(
+    'emits [Wordloading, Wordloaded] when WordRetrived is added when store is empty.',
+    setUp: () async => (await store).box<Word>().removeAll(),
+    build: () => bloc,
+    act: (bloc) => bloc.add(WordRetrived()),
+    expect: () => <WordState>[WordLoading(), const WordLoaded([])],
+  );
+}

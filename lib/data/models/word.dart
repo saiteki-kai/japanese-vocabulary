@@ -42,6 +42,33 @@ class Word {
   /// Review related to reading of this word.
   final readingReview = ToOne<Review>();
 
+  double get meanAccuracy {
+    if (meaningReview.target != null || readingReview.target != null) {
+      return 0.0;
+    }
+    return (meaningReview.target!.getReviewAccuracy() +
+            readingReview.target!.getReviewAccuracy()) /
+        2;
+  }
+
+  DateTime? get nextReview {
+    if (meaningReview.target?.nextDate == null &&
+        readingReview.target?.nextDate == null) return null;
+
+    var r1 = 8640000000000000; // maxMillisecondsSinceEpoch
+    var r2 = 8640000000000000; // maxMillisecondsSinceEpoch
+
+    if (meaningReview.target?.nextDate != null) {
+      r1 = meaningReview.target!.nextDate!.millisecondsSinceEpoch;
+    }
+    if (readingReview.target?.nextDate != null) {
+      r2 = readingReview.target!.nextDate!.millisecondsSinceEpoch;
+    }
+
+    if (r1 < r2) return readingReview.target!.nextDate;
+    return readingReview.target!.nextDate;
+  }
+
   Word copyWith({
     String? text,
     String? reading,

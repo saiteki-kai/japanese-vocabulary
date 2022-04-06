@@ -4,6 +4,17 @@ import './word.dart';
 
 @Entity()
 class Review {
+  Review({
+    required this.id,
+    required this.ef,
+    required this.interval,
+    required this.repetition,
+    required this.correctAnswers,
+    required this.incorrectAnswers,
+    required this.nextDate,
+    required this.type,
+  });
+
   /// Auto increment id
   /// 
   int id = 0;
@@ -36,16 +47,14 @@ class Review {
   /// Word related of this review.
   final word = ToOne<Word>();
 
-  Review({
-    required this.id,
-    required this.ef,
-    required this.interval,
-    required this.repetition,
-    required this.correctAnswers,
-    required this.incorrectAnswers,
-    required this.nextDate,
-    required this.type,
-  });
+  double getReviewAccuracy() {
+    final totalAnswers = correctAnswers + incorrectAnswers;
+    if (totalAnswers == 0.0) {
+      return 0.0;
+    } else {
+      return correctAnswers / totalAnswers;
+    }
+  }
 
   Review copyWith({
     double? ef,

@@ -16,3 +16,6 @@ class AddWordEvent extends WordEvent {
   @override
   List<Object> get props => [word];
 }
+
+/// This [WordRetrived] manages the events concerning the [Word].
+class WordRetrived extends WordEvent {}

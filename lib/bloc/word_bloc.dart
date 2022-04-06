@@ -1,15 +1,19 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+
 import '../data/repositories/word_repository.dart';
-import '../../data/models/word.dart';
+import '../data/models/word.dart';
 
 part 'word_event.dart';
 part 'word_state.dart';
 
+/// This [WordBloc] manages the business logic.
 class WordBloc extends Bloc<WordEvent, WordState> {
   WordBloc({required this.repository}) : super(WordInitial()) {
     on<AddWordEvent>(_onAddWordEvent);
+    on<WordRetrived>(_onRetrieved);
   }
+
   /// The instance of the repository
   final WordRepository repository;
 
@@ -20,12 +24,16 @@ class WordBloc extends Bloc<WordEvent, WordState> {
     if (event.word.text.isEmpty ||
         event.word.meaning.isEmpty ||
         event.word.reading.isEmpty) {
-      print("error");
       emit(WordInitial());
     } else {
       final added = await repository.addWord(event.word);
-      print("added");
       emit(WordAdded());
     }
+  }
+
+  void _onRetrieved(WordRetrived event, emit) async {
+    emit(WordLoading());
+    final words = await repository.getWords();
+    emit(WordLoaded(words));
   }
 }
