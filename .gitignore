@@ -9,6 +9,7 @@
 .history
 .svn/
 coverage/
+public
 
 # IntelliJ related
 *.iml
@@ -45,3 +46,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Generated dart files
+*.g.dart
+*.gr.dart

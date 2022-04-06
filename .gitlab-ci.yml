@@ -1,0 +1,107 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_PIPELINE_SOURCE == 'web'
+
+variables:
+  PUB_CACHE: $CI_PROJECT_DIR/.pub-cache
+
+stages:
+  - install
+  - docs
+  - verify
+  - test
+
+
+cache:
+  key: $CI_COMMIT_REF_SLUG
+  paths:
+    - .pub-cache/
+
+before_script:
+  - export PATH="$PATH":"$PUB_CACHE/bin"
+  - flutter pub get
+  - flutter pub run build_runner build
+
+flutter_dependencies:
+  image: cirrusci/flutter:2.10.3
+  stage: install
+  before_script: []
+  script:
+    - flutter pub get
+
+pages:
+  stage: docs
+  image: python:3.9
+  before_script: []
+  script:
+  - pip install -r ./docs/requirements.txt
+  - mkdocs build --strict --verbose
+  artifacts:
+    paths:
+    - public
+  only:
+  - main
+  - sprint_1
+
+lint:
+  image: cirrusci/flutter:2.10.3
+  stage: verify
+  needs: [flutter_dependencies]
+  script:
+    - flutter analyze
+
+code-quality:
+  image: cirrusci/flutter:2.10.3
+  stage: verify
+  needs: [flutter_dependencies]
+  script:
+    - pub global activate dart_code_metrics
+    - metrics --reporter=gitlab lib -r codeclimate > gl-code-quality-report.json
+  artifacts:
+    reports:
+      codequality: gl-code-quality-report.json
+
+unit-test:
+  image: cirrusci/flutter:2.10.3
+  stage: test
+  needs: [flutter_dependencies]
+  script:
+    - bash <(curl -s https://raw.githubusercontent.com/objectbox/objectbox-dart/main/install.sh)
+    - pub global activate junitreport
+    - pub global activate remove_from_coverage
+    - flutter test --no-sound-null-safety --machine --coverage | tojunit -o report.xml
+    - remove_from_coverage -f coverage/lcov.info -r '\.g\.dart$'
+    - remove_from_coverage -f coverage/lcov.info -r '\.gr\.dart$'
+    - lcov --summary coverage/lcov.info
+    - genhtml coverage/lcov.info --output=coverage
+  coverage: '/lines\.*: \d+\.\d+\%/'
+  artifacts:
+    name: coverage
+    paths:
+      - $CI_PROJECT_DIR/coverage
+    reports:
+      junit: report.xml
+
+# integration-test:
+#   image: cirrusci/flutter:2.10.3
+#   stage: test
+#   needs: [flutter_dependencies]
+#   script:
+#     - sdkmanager --install "system-images;android-30;default;x86"
+#     - flutter emulators --create emulator1
+#     - flutter emulators --launch emulator1
+#     - android-wait-for-emulator
+#     - pub global activate junitreport
+#     - flutter test integration_test/ --machine --coverage | tojunit -o report.xml
+#     - lcov --summary coverage/lcov.info
+#     - genhtml coverage/lcov.info --output=coverage
+#   coverage: '/lines\.*: \d+\.\d+\%/'
+#   artifacts:
+#     name: coverage
+#     paths:
+#       - $CI_PROJECT_DIR/coverage
+#     reports:
+#       junit: report.xml
+
+

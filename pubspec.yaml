@@ -18,16 +18,31 @@ dependencies:
     sdk: flutter
 
   auto_route: ^3.2.4
+  percent_indicator: ^4.0.0  
+  group_button: ^4.8.0
+
+  path_provider: ^2.0.9
+  objectbox: ^1.4.0
+  objectbox_flutter_libs: ^1.4.1
+  
+  flutter_bloc: ^8.0.1
+  equatable: ^2.0.3
+
+  tab_indicator_styler: ^2.0.0
+  chips_choice: ^2.0.1
+  mocktail: ^0.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   integration_test:
     sdk: flutter
+  bloc_test: ^9.0.3
 
   flutter_lints: ^1.0.0
   build_runner: ^2.1.8
   auto_route_generator: ^3.2.3
+  objectbox_generator: ^1.4.1
 
 flutter:
   uses-material-design: true
