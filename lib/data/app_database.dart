@@ -47,4 +47,14 @@ class AppDatabase {
       _completer!.completeError(e);
     }
   }
+
+  /// Deletes the database if exists.
+  Future<void> deleteDatabase() async {
+    final dir = Directory(await _dbPath);
+
+    if (dir.existsSync()) {
+      await dir.delete(recursive: true);
+    }
+  }
+
 }

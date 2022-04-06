@@ -11,13 +11,18 @@ void main() async {
   final box = store.box<Word>();
 
   late WordBloc bloc;
+  final List<Word> words = [];
+  final invalidWord = Word(
+    text: "言葉",
+    reading: "",
+    jlpt: 5,
+    meaning: "",
+    pos: "Noun",
+  );
 
   setUp(() async {
     bloc = WordBloc(repository: wordRepository);
-
-    final List<Word> words = [];
     words.add(Word(
-      id: 0,
       text: "言葉",
       reading: "ことば",
       jlpt: 5,
@@ -25,7 +30,6 @@ void main() async {
       pos: "Noun",
     ));
     words.add(Word(
-      id: 0,
       text: "復習",
       reading: "ふくしゅう",
       jlpt: 4,
@@ -33,7 +37,6 @@ void main() async {
       pos: "Noun, Suru verb",
     ));
     words.add(Word(
-      id: 0,
       text: "普通",
       reading: "ふつう",
       jlpt: 4,
@@ -63,5 +66,21 @@ void main() async {
     build: () => bloc,
     act: (bloc) => bloc.add(WordRetrieved()),
     expect: () => <WordState>[WordLoading(), const WordLoaded([])],
+  );
+
+  blocTest<WordBloc, WordState>(
+    'Testing insertion of a word correctly set',
+    setUp: () => {box.removeAll()}, // to ensure words inside the db is empty.
+    build: () => bloc,
+    act: (bloc) => bloc.add(AddWordEvent(word: words[0])),
+    expect: () => <WordState>[WordAdded()],
+  );
+
+  blocTest<WordBloc, WordState>(
+    'Testing insertion of a word with empty fields',
+    setUp: () => {box.removeAll()}, // to ensure words inside the db is empty.
+    build: () => bloc,
+    act: (bloc) => bloc.add(AddWordEvent(word: invalidWord)),
+    expect: () => <WordState>[WordInitial()],
   );
 }

@@ -4,8 +4,17 @@ import './review.dart';
 
 @Entity()
 class Word {
+  Word({
+    this.id = 0,
+    required this.text,
+    required this.reading,
+    required this.jlpt,
+    required this.meaning,
+    required this.pos,
+  });
+
   /// Auto increment id
-  int id = 0;
+  int id;
 
   /// Text of this word.
   @Index()
@@ -26,15 +35,6 @@ class Word {
   /// Part of speech of this word.
   @Index()
   String pos;
-
-  Word({
-    id,
-    required this.text,
-    required this.reading,
-    required this.jlpt,
-    required this.meaning,
-    required this.pos,
-  });
 
   /// Review related to meaning of this word.
   final meaningReview = ToOne<Review>();

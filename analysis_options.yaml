@@ -1,11 +1,10 @@
 include: package:flutter_lints/flutter.yaml
 
 analyzer:
-  exclude: 
+  exclude:
+    - integration_test/app_test.dart
     - lib/data/repositories/review_repository.dart
-    - integration_test/*
     - lib/bloc/review_*.dart
-
 
 linter:
   rules:

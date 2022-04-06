@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-
 import '../../config/routes.gr.dart';
+import '../../data/models/review.dart';
 import '../../data/models/word.dart';
 import 'words_screen/words_screen.dart';
 
@@ -10,8 +10,50 @@ import 'words_screen/words_screen.dart';
 /// This widget is called the [AppBar] and the [FloatingActionButton]
 /// button to insert a new [Word] in the vocabulary.
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
 
+  final Word word = () {
+    final Word word = Word(
+      id: 0,
+      text: "言葉",
+      reading: "ことば",
+      jlpt: 5,
+      meaning: "word; phrase; expression; term",
+      pos: "Noun",
+    );
+  
+    final mRev = Review(
+      id: 0,
+      ef: 2.5,
+      correctAnswers: 0,
+      incorrectAnswers: 0,
+      interval: 0,
+      nextDate: null,
+      repetition: 0,
+      type: "meaning",
+    );
+  
+    final rRev = Review(
+      id: 0,
+      ef: 2.5,
+      correctAnswers: 0,
+      incorrectAnswers: 0,
+      interval: 0,
+      nextDate: null,
+      repetition: 0,
+      type: "reading",
+    );
+  
+    mRev.word.target = word;
+    rRev.word.target = word;
+  
+    word.meaningReview.target = mRev;
+    word.readingReview.target = rRev;
+  
+    return word;
+  }();
+
+  //AutoRouter.of(context).push(WordDetailsScreen(word: word)
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

@@ -5,7 +5,7 @@ import './word.dart';
 @Entity()
 class Review {
   Review({
-    required this.id,
+    this.id = 0,
     required this.ef,
     required this.interval,
     required this.repetition,
@@ -17,7 +17,7 @@ class Review {
 
   /// Auto increment id
   /// 
-  int id = 0;
+  int id;
 
   /// Easiness factor for the spaced repetition algorithm.
   ///
@@ -47,6 +47,9 @@ class Review {
   /// Word related of this review.
   final word = ToOne<Word>();
 
+  /// Return the accuracy of the review.
+  /// 
+  /// Return zero if the sum between the correctAnswers and the incorrectAnswers is zero.
   double getReviewAccuracy() {
     final totalAnswers = correctAnswers + incorrectAnswers;
     if (totalAnswers == 0.0) {
