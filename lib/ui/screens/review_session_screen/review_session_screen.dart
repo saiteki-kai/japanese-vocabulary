@@ -2,22 +2,22 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../bloc/review_bloc.dart';
-import '../../../../data/models/review.dart';
-import '../../../../data/repositories/review_repository.dart';
-import '../../../widgets/loading_indicator.dart';
-import '../../../widgets/screen_layout.dart';
-import 'next_review_button.dart';
-import 'review_answer.dart';
-import 'review_item.dart';
-import 'review_quality_selector.dart';
-import 'review_session_appbar.dart';
+import '../../../bloc/review_bloc.dart';
+import '../../../data/models/review.dart';
+import '../../../data/repositories/review_repository.dart';
+import '../../widgets/loading_indicator.dart';
+import '../../widgets/screen_layout.dart';
+import 'widgets/next_review_button.dart';
+import 'widgets/review_answer.dart';
+import 'widgets/review_item.dart';
+import 'widgets/review_quality_selector.dart';
+import 'widgets/review_session_appbar.dart';
 
-class ReviewSession extends StatefulWidget implements AutoRouteWrapper {
-  const ReviewSession({Key? key}) : super(key: key);
+class ReviewSessionScreen extends StatefulWidget implements AutoRouteWrapper {
+  const ReviewSessionScreen({Key? key}) : super(key: key);
 
   @override
-  State<ReviewSession> createState() => _ReviewSessionState();
+  State<ReviewSessionScreen> createState() => _ReviewSessionScreenState();
 
   @override
   Widget wrappedRoute(BuildContext context) {
@@ -28,11 +28,12 @@ class ReviewSession extends StatefulWidget implements AutoRouteWrapper {
   }
 }
 
-class _ReviewSessionState extends State<ReviewSession> {
+class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
+  /// A [ReviewBloc] instance.
   ReviewBloc? _bloc;
 
-  final _hideAnswer = ValueNotifier(true);
-  final _selectedQuality = ValueNotifier(-1);
+  final _hideAnswer = ValueNotifier<bool>(true);
+  final _selectedQuality = ValueNotifier<int>(-1);
 
   @override
   void initState() {

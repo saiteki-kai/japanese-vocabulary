@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// Appbar of the [ReviewSession] screen.
 class ReviewSessionAppBar extends StatelessWidget {
+  /// Creates a custom appbar
   const ReviewSessionAppBar({Key? key}) : super(key: key);
 
   @override

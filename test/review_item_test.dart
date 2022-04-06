@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:japanese_vocabulary/data/models/review.dart';
-import 'package:japanese_vocabulary/ui/screens/review_screen/widgets/review_item.dart';
-import 'package:japanese_vocabulary/ui/screens/review_screen/widgets/review_type_tag.dart';
-
+import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_item.dart';
+import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_type_tag.dart';
 import 'utils/review.dart';
 
 void main() {

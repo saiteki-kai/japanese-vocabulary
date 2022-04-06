@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class NextReviewButton extends StatelessWidget {
@@ -9,7 +10,7 @@ class NextReviewButton extends StatelessWidget {
   }) : super(key: key);
 
   final bool isLast;
-  final ValueNotifier<int> selectedQuality;
+  final ValueListenable<int> selectedQuality;
   final void Function(int) onPressed;
 
   @override

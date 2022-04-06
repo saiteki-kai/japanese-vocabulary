@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
 
@@ -8,7 +9,7 @@ class ReviewQualitySelector extends StatelessWidget {
     required this.onQualitySelected,
   }) : super(key: key);
 
-  final ValueNotifier<bool> disabled;
+  final ValueListenable<bool> disabled;
   final void Function(int) onQualitySelected;
 
   /// The possible values of quality to be selected

@@ -5,17 +5,28 @@ import '../../../../data/models/review.dart';
 import 'review_type_tag.dart';
 import 'show_button.dart';
 
+/// A widget that displays a card with the word related to a [review] and
+/// provide a button to show or hide the [ShowButton] and the [ReviewAnswer].
 class ReviewItem extends StatelessWidget {
+  /// Creates a widget that displays the word for a [review] to review and
+  /// a button to show or hide the review answer based on the [hidden] value.
+  /// A [onToggleAnswer] callback is provided to control when the button is
+  /// tapped.
   const ReviewItem({
     Key? key,
     required this.review,
-    required this.onToggleAnswer,
     required this.hidden,
+    required this.onToggleAnswer,
   }) : super(key: key);
 
+  /// The [review] of the word to show.
   final Review review;
+
+  /// 
   final ValueListenable<bool> hidden;
-  final void Function()? onToggleAnswer;
+
+  /// Called when the [ShowButton] is tapped.
+  final VoidCallback? onToggleAnswer;
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +55,9 @@ class ReviewItem extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline4,
               ),
             ),
-            ValueListenableBuilder(
-              valueListenable: hidden,
-              builder: (context, bool value, child) {
-                return ShowButton(
-                  show: value,
-                  onToggleAnswer: onToggleAnswer,
-                );
-              },
+            ShowButton(
+              show: hidden,
+              onPressed: onToggleAnswer,
             ),
           ],
         ),

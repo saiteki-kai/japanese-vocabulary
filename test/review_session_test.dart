@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:group_button/group_button.dart';
-import 'package:japanese_vocabulary/ui/screens/review_screen/widgets/show_button.dart';
 import 'package:japanese_vocabulary/bloc/review_bloc.dart';
 import 'package:japanese_vocabulary/data/models/review.dart';
-import 'package:japanese_vocabulary/ui/screens/review_screen/widgets/next_review_button.dart';
-import 'package:japanese_vocabulary/ui/screens/review_screen/widgets/review_answer.dart';
-import 'package:japanese_vocabulary/ui/screens/review_screen/widgets/review_item.dart';
-import 'package:japanese_vocabulary/ui/screens/review_screen/widgets/review_session.dart';
+import 'package:japanese_vocabulary/ui/screens/review_session_screen/review_session_screen.dart';
+import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/next_review_button.dart';
+import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_answer.dart';
+import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_item.dart';
+import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/show_button.dart';
 import 'package:japanese_vocabulary/ui/widgets/loading_indicator.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -42,7 +42,7 @@ void main() {
       MaterialApp(
         home: BlocProvider.value(
           value: bloc,
-          child: const ReviewSession(),
+          child: const ReviewSessionScreen(),
         ),
       ),
     );
@@ -57,7 +57,7 @@ void main() {
       MaterialApp(
         home: BlocProvider.value(
           value: bloc,
-          child: const ReviewSession(),
+          child: const ReviewSessionScreen(),
         ),
       ),
     );

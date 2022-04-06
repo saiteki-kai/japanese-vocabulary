@@ -1,18 +1,34 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../data/models/review.dart';
 
+/// A widget that displays the review answer.
+///
+/// The answer corresponds to the [meaning] or [reading] of a word
+/// according to its type.
+///
+/// The answer can be shown or hidden by the [hidden] value.
 class ReviewAnswer extends StatelessWidget {
+  /// Create a widget that shows or hides the [review] answer based
+  /// on the value [hidden].
   const ReviewAnswer({
     Key? key,
     required this.review,
     required this.hidden,
   }) : super(key: key);
 
+  /// The [review] of which to show the [meaning] or [reading] of a word
+  /// according to its type.
   final Review review;
-  final ValueNotifier<bool> hidden;
 
+  /// A boolean value that controls the visibility of this widget.
+  final ValueListenable<bool> hidden;
+
+  /// The [meaning] of the word associated with the [review].
   String get meaning => review.word.target?.meaning ?? "<NA>";
+
+  /// The [reading] of the word associated with the [review].
   String get reading => review.word.target?.reading ?? "<NA>";
 
   @override
