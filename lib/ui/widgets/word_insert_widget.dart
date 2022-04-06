@@ -47,12 +47,13 @@ class _WordInsertState extends State<WordInsert> {
     "vt"
   ];
 
-  ///
+  WordBloc? bloc;
+
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _readingController = TextEditingController();
   final TextEditingController _meaningController = TextEditingController();
   final GroupButtonController _posController = GroupButtonController();
-  WordBloc? bloc;
+
   @override
   void initState() {
     super.initState();
@@ -71,29 +72,30 @@ class _WordInsertState extends State<WordInsert> {
                 children: [
                   const Text('Insert a word'),
                   IconButton(
-                      onPressed: () {
-                        _wordToAdd.jlpt = _jlptValue;
-                        _wordToAdd.meaning = _meaningController.text;
-                        _wordToAdd.reading = _readingController.text;
-                        _wordToAdd.text = _textController.text;
-                        final posSelected = _posController.selectedIndexes;
+                    onPressed: () {
+                      _wordToAdd.jlpt = _jlptValue;
+                      _wordToAdd.meaning = _meaningController.text;
+                      _wordToAdd.reading = _readingController.text;
+                      _wordToAdd.text = _textController.text;
+                      final posSelected = _posController.selectedIndexes;
 
-                        /// A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
-                        final posTmp =
-                            posSelected.map((e) => _posNames[e]).join(",");
-                        _wordToAdd.pos = posTmp;
+                      // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
+                      final posTmp =
+                          posSelected.map((e) => _posNames[e]).join(",");
+                      _wordToAdd.pos = posTmp;
 
-                        bloc?.add(AddWordEvent(word: _wordToAdd));
-                      },
-                      icon: const Icon(
-                        Icons.check,
-                        color: Colors.white,
-                      ))
+                      bloc?.add(AddWordEvent(word: _wordToAdd));
+                    },
+                    icon: const Icon(
+                      Icons.check,
+                      color: Colors.white,
+                    ),
+                  )
                 ],
               ),
             ),
             body: GestureDetector(
-              onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+              onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
               child: Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -153,7 +155,8 @@ class _WordInsertState extends State<WordInsert> {
                         Center(
                           child: GroupButton(
                             options: GroupButtonOptions(
-                                borderRadius: BorderRadius.circular(8)),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                             isRadio: false,
                             onSelected: (index, isSelected) {},
                             buttons: _posNames,
@@ -205,7 +208,7 @@ class _WordInsertState extends State<WordInsert> {
       },
       listener: (context, state) {
         if (state is WordAdded) {
-          bloc?.add(WordRetrived());
+          bloc?.add(WordRetrieved());
           AutoRouter.of(context).pop();
         }
       },

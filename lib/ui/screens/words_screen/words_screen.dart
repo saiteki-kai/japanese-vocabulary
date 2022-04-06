@@ -29,7 +29,7 @@ class _WordScreenState extends State<WordScreen> {
     AppDatabase.instance.store.then((store) {
       //initializeDB(store);
       bloc = BlocProvider.of<WordBloc>(context);
-      bloc?.add(WordRetrived());
+      bloc?.add(WordRetrieved());
     });
     super.initState();
   }
@@ -43,7 +43,7 @@ class _WordScreenState extends State<WordScreen> {
   @override
   void didUpdateWidget(covariant WordScreen oldWidget) {
     super.didUpdateWidget(oldWidget);
-    bloc?.add(WordRetrived());
+    bloc?.add(WordRetrieved());
   }
 
   @override

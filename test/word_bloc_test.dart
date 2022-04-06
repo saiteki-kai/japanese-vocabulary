@@ -49,7 +49,7 @@ void main() {
   blocTest<WordBloc, WordState>(
     'emits [Wordloading, Wordloaded] when WordRetrived is added.',
     build: () => bloc,
-    act: (bloc) => bloc.add(WordRetrived()),
+    act: (bloc) => bloc.add(WordRetrieved()),
     expect: () => <WordState>[WordLoading(), WordLoaded(words)],
   );
 
@@ -57,7 +57,7 @@ void main() {
     'emits [Wordloading, Wordloaded] when WordRetrived is added when store is empty.',
     setUp: () async => (await store).box<Word>().removeAll(),
     build: () => bloc,
-    act: (bloc) => bloc.add(WordRetrived()),
+    act: (bloc) => bloc.add(WordRetrieved()),
     expect: () => <WordState>[WordLoading(), const WordLoaded([])],
   );
 }
