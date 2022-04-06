@@ -57,7 +57,7 @@ void main() async {
     'emits [Wordloading, Wordloaded] when WordRetrived is added.',
     build: () => bloc,
     act: (bloc) => bloc.add(WordRetrieved()),
-    expect: () => <WordState>[WordLoading(), WordLoaded(box.getAll())],
+    expect: () => <WordState>[WordLoading(), WordsLoaded(box.getAll())],
   );
 
   blocTest<WordBloc, WordState>(
@@ -65,7 +65,7 @@ void main() async {
     setUp: () async => box.removeAll(),
     build: () => bloc,
     act: (bloc) => bloc.add(WordRetrieved()),
-    expect: () => <WordState>[WordLoading(), const WordLoaded([])],
+    expect: () => <WordState>[WordLoading(), const WordsLoaded([])],
   );
 
   blocTest<WordBloc, WordState>(

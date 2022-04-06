@@ -7,7 +7,13 @@ abstract class WordEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetWord extends WordEvent {}
+class GetWordEvent extends WordEvent {
+  const GetWordEvent({required this.wordId});
+  final int wordId;
+
+  @override
+  List<Object> get props => [wordId];
+}
 
 class AddWordEvent extends WordEvent {
   final Word word;

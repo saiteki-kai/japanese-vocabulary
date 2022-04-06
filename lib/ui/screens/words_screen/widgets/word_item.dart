@@ -27,7 +27,7 @@ class WordItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (word != null) {
-          AutoRouter.of(context).push(WordDetailsScreen(word: word!));
+          AutoRouter.of(context).push(WordDetailsScreen(wordId: word!.id));
         }
       },
       child: Padding(

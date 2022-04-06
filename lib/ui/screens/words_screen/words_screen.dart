@@ -11,39 +11,21 @@ import 'widgets/word_item.dart';
 /// allows you to view all the words in the dictionary through a scrolling list
 /// that shows the text of the word,
 /// the next revision date and an average of the accuracy of the last two revisions.
-class WordScreen extends StatefulWidget {
+class WordScreen extends StatelessWidget {
   const WordScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<WordScreen> createState() => _WordScreenState();
-}
-
-class _WordScreenState extends State<WordScreen> {
-  WordBloc? bloc;
-
-  @override
-  void initState() {
-    bloc = BlocProvider.of<WordBloc>(context);
-    bloc?.add(WordRetrieved());
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    bloc?.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    BlocProvider.of<WordBloc>(context).add(WordRetrieved());
+
     return ScreenLayout(
       appBar: AppBar(title: const Text("Words"), elevation: 0),
       padding: EdgeInsets.zero,
       child: BlocBuilder<WordBloc, WordState>(
         builder: (context, state) {
-          if (state is WordLoaded) {
+          if (state is WordsLoaded) {
             return ListView.builder(
               itemCount: state.words.length,
               itemBuilder: (context, index) {
