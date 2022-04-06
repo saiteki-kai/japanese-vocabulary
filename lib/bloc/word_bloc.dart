@@ -7,6 +7,7 @@ import '../data/models/word.dart';
 part 'word_event.dart';
 part 'word_state.dart';
 
+/// This [WordBloc] manages the business logic.
 class WordBloc extends Bloc<WordEvent, WordState> {
   final WordRepository repository;
 

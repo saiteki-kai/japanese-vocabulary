@@ -9,8 +9,10 @@ abstract class WordState extends Equatable {
 
 class WordInitial extends WordState {}
 
+/// This [WordLoading] defines the loading of the [WordState].
 class WordLoading extends WordState {}
 
+/// This [WordLoaded] returns a list of [Word].
 class WordLoaded extends WordState {
   final List<Word> words;
   const WordLoaded(this.words);
