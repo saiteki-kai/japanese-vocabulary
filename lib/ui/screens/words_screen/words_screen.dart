@@ -1,6 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/word_bloc.dart';
+import '../../../config/routes.gr.dart';
 import '../../../data/models/word.dart';
 import '../../widgets/screen_layout.dart';
 import 'widgets/word_item.dart';

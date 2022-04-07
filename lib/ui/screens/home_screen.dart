@@ -1,56 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/word_bloc.dart';
 import '../../config/routes.gr.dart';
-import '../../data/models/review.dart';
 import '../../data/models/word.dart';
+import '../../objectbox.g.dart';
 
 /// Widget for the basic definition of the [WordScreen].
 ///
 /// This widget is called the [AppBar] and the [FloatingActionButton]
 /// button to insert a new [Word] in the vocabulary.
 class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
-
-  final Word word = () {
-    final Word word = Word(
-      id: 0,
-      text: "言葉",
-      reading: "ことば",
-      jlpt: 5,
-      meaning: "word; phrase; expression; term",
-      pos: "Noun",
-    );
-
-    final mRev = Review(
-      id: 0,
-      ef: 2.5,
-      correctAnswers: 0,
-      incorrectAnswers: 0,
-      interval: 0,
-      nextDate: null,
-      repetition: 0,
-      type: "meaning",
-    );
-
-    final rRev = Review(
-      id: 0,
-      ef: 2.5,
-      correctAnswers: 0,
-      incorrectAnswers: 0,
-      interval: 0,
-      nextDate: null,
-      repetition: 0,
-      type: "reading",
-    );
-
-    mRev.word.target = word;
-    rRev.word.target = word;
-
-    word.meaningReview.target = mRev;
-    word.readingReview.target = rRev;
-
-    return word;
-  }();
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,32 +20,45 @@ class HomeScreen extends StatelessWidget {
         ReviewScreen(),
         WordScreen(),
       ],
-      bottomNavigationBuilder: (_, tabsRouter) {
-        return BottomNavigationBar(
-          currentIndex: tabsRouter.activeIndex,
-          onTap: tabsRouter.setActiveIndex,
-          items: const [
-            BottomNavigationBarItem(
-              label: 'Reviews',
-              icon: Icon(Icons.replay),
-            ),
-            BottomNavigationBarItem(
-              label: 'Words',
-              icon: Icon(Icons.list),
-            ),
-          ],
+      builder: (context, child, animation) {
+        final tabsRouter = AutoTabsRouter.of(context);
+        return Scaffold(
+          body: child,
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: tabsRouter.activeIndex,
+            onTap: (index) => _onTap(index, context, tabsRouter),
+            items: const [
+              BottomNavigationBarItem(
+                label: 'Reviews',
+                icon: Icon(Icons.replay),
+              ),
+              BottomNavigationBarItem(
+                label: 'Words',
+                icon: Icon(Icons.list),
+              ),
+            ],
+          ),
+          floatingActionButton: tabsRouter.activeIndex == 1
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FloatingActionButton(
+                    child: const Icon(Icons.add),
+                    backgroundColor: Colors.amber,
+                    onPressed: () {
+                      AutoRouter.of(context).push(const WordInsertScreen());
+                    },
+                  ),
+                )
+              : const SizedBox(),
         );
       },
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FloatingActionButton(
-          child: const Icon(Icons.add),
-          backgroundColor: Colors.amber,
-          onPressed: () {
-            AutoRouter.of(context).push(const WordInsertScreen());
-          },
-        ),
-      ),
     );
+  }
+
+  void _onTap(int index, context, tabsRouter) {
+    if (index == 1) {
+      BlocProvider.of<WordBloc>(context).add(WordRetrieved());
+    }
+    tabsRouter.setActiveIndex(index);
   }
 }
