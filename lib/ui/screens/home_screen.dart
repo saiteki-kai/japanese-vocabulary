@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/word_bloc.dart';
 import '../../config/routes.gr.dart';
 import '../../data/models/word.dart';
-import '../../objectbox.g.dart';
 
 /// Widget for the basic definition of the [WordScreen].
 ///
