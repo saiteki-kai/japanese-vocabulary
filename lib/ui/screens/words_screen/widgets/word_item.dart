@@ -4,6 +4,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../../config/routes.gr.dart';
 import '../../../../data/models/word.dart';
+import '../../../../utils/colors.dart';
 
 /// A widget that displays a [Word].
 ///
@@ -40,7 +41,7 @@ class WordItem extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8, left: 8, bottom: 8),
-                  child: Text(word?.text ?? "Error",
+                  child: Text(word?.text ?? "Loading...",
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
@@ -56,15 +57,16 @@ class WordItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: CircularPercentIndicator(
-                    radius: 25,
-                    lineWidth: 25 / 4,
+                    radius: 28,
+                    lineWidth: 28 / 4,
                     circularStrokeCap: CircularStrokeCap.butt,
                     center: Text(
                       '${((word?.meanAccuracy ?? 0.0) * 100).round()}%',
                       textAlign: TextAlign.center,
                     ),
                     percent: word?.meanAccuracy ?? 0.0,
-                    progressColor: Colors.greenAccent,
+                    progressColor:
+                        CustomColors.colorPercent(word?.meanAccuracy ?? 0.0),
                   ),
                 ),
               ],
