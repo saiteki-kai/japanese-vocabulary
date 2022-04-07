@@ -1,8 +1,8 @@
 # Japanese vocabulary
 
 <!-- ## Badges -->
-[![pipeline](https://gitlab.com/saiteki-kai/japanese-vocabulary/badges/ci/pipeline.svg)](https://gitlab.com/saiteki-kai/japanese-vocabulary/-/pipelines)
-[![coverage](https://gitlab.com/saiteki-kai/japanese-vocabulary/badges/ci/coverage.svg)]()
+[![pipeline status](https://gitlab.com/saiteki-kai/japanese-vocabulary/badges/main/pipeline.svg)](https://gitlab.com/saiteki-kai/japanese-vocabulary/-/commits/main)
+[![coverage report](https://gitlab.com/saiteki-kai/japanese-vocabulary/badges/main/coverage.svg)](https://gitlab.com/saiteki-kai/japanese-vocabulary/-/commits/main)
 <!--[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Latest Release](https://gitlab.com/saiteki-kai/japanese-vocabulary/-/badges/release.svg)](https://gitlab.com/saiteki-kai/japanese-vocabulary/-/releases)-->
 
