@@ -41,7 +41,7 @@ class WordItem extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 8, left: 8, bottom: 8),
-                  child: Text(word?.text ?? "Error",
+                  child: Text(word?.text ?? "Loading...",
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
