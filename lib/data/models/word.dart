@@ -43,7 +43,7 @@ class Word {
   final readingReview = ToOne<Review>();
 
   double get meanAccuracy {
-    if (meaningReview.target != null || readingReview.target != null) {
+    if (meaningReview.target == null || readingReview.target == null) {
       return 0.0;
     }
     return (meaningReview.target!.getReviewAccuracy() +

@@ -4,6 +4,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 import '../../../../config/routes.gr.dart';
 import '../../../../data/models/word.dart';
+import '../../../../utils/colors.dart';
 
 /// A widget that displays a [Word].
 ///
@@ -64,7 +65,8 @@ class WordItem extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     percent: word?.meanAccuracy ?? 0.0,
-                    progressColor: Colors.greenAccent,
+                    progressColor:
+                        CustomColors.colorPercent(word?.meanAccuracy ?? 0.0),
                   ),
                 ),
               ],
