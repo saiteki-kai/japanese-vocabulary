@@ -57,8 +57,8 @@ class WordItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: CircularPercentIndicator(
-                    radius: 25,
-                    lineWidth: 25 / 4,
+                    radius: 28,
+                    lineWidth: 28 / 4,
                     circularStrokeCap: CircularStrokeCap.butt,
                     center: Text(
                       '${((word?.meanAccuracy ?? 0.0) * 100).round()}%',
