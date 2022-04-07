@@ -9,6 +9,6 @@ void main() {
         const MaterialApp(home: Scaffold(body: WordItem(word: null))));
 
     expect(find.byType(CircularPercentIndicator), findsOneWidget);
-    expect(find.text("Error"), findsOneWidget);
+    expect(find.text("Loading..."), findsOneWidget);
   });
 }
