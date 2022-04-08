@@ -93,13 +93,13 @@ bash <(curl -s https://raw.githubusercontent.com/objectbox/objectbox-dart/main/i
 Unit/Widget test
 
 ```bash
-flutter test —no-sound-null-safety
+flutter test --no-sound-null-safety
 ```
 
 Integration tests
 
 ```bash
-flutter test integration_test/ —no-sound-null-safety
+flutter test integration_test/ --no-sound-null-safety
 ```
 
 ## Generate the documentation
@@ -121,13 +121,13 @@ Now you can see the documentation at <http://localhost:8080>
 Debug mode:
 
 ```bash
-flutter run —no-sound-null-safety
+flutter run --no-sound-null-safety
 ```
 
 Release mode:
 
 ```bash
-flutter run --release —no-sound-null-safety
+flutter run --release --no-sound-null-safety
 ```
 
 
