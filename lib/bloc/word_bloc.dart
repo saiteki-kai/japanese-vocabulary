@@ -10,8 +10,8 @@ part 'word_state.dart';
 /// This [WordBloc] manages the business logic.
 class WordBloc extends Bloc<WordEvent, WordState> {
   WordBloc({required this.repository}) : super(WordInitial()) {
-    on<AddWordEvent>(_onAddWordEvent);
     on<WordRetrieved>(_onRetrieved);
+    on<AddWordEvent>(_onAddWordEvent);
     on<GetWordEvent>(_onGetWord);
   }
 
@@ -32,19 +32,20 @@ class WordBloc extends Bloc<WordEvent, WordState> {
     }
   }
 
-  void _onRetrieved(WordRetrieved event, emit) async {
+  void _onRetrieved(WordRetrieved _, Emitter<WordState> emit) async {
     emit(WordLoading());
     final words = await repository.getWords();
-    emit(WordsLoaded(words));
+    emit(WordsLoaded(words: words));
   }
 
-  void _onGetWord(GetWordEvent event, emit) async {
+  void _onGetWord(GetWordEvent event, Emitter<WordState> emit) async {
     emit(WordLoading());
+
     final word = await repository.getWord(event.wordId);
     if (word != null) {
-      emit(WordLoaded(word));
+      emit(WordLoaded(word: word));
     } else {
-      emit(const WordError("word not found!"));
+      emit(const WordError(message: "word not found!"));
     }
   }
 }

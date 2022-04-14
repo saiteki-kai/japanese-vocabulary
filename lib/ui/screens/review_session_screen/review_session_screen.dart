@@ -110,7 +110,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   ///
   /// The [_hideAnswer] and [_selectedQuality] are reset.
   void _nextReview(Review review, int quality) {
-    _bloc?.add(ReviewSessionUpdated(review, quality));
+    _bloc?.add(ReviewSessionUpdated(review: review, quality: quality));
 
     _hideAnswer.value = true;
     _selectedQuality.value = -1;

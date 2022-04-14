@@ -25,7 +25,10 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
   ///
   /// Returns the [ReviewLoaded] with the first review of the session.
   /// If the session is empty returns [ReviewError].
-  void _onSessionStarted(_, emit) async {
+  void _onSessionStarted(
+    ReviewSessionStarted _,
+    Emitter<ReviewState> emit,
+  ) async {
     emit(ReviewLoading());
 
     final reviews = await repository.getTodayReviews();
@@ -45,7 +48,10 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
   ///
   /// Returns a [ReviewLoaded] with next word to review or [ReviewFinished]
   /// if the session has ended.
-  void _onSessionUpdated(ReviewSessionUpdated event, emit) async {
+  void _onSessionUpdated(
+    ReviewSessionUpdated event,
+    Emitter<ReviewState> emit,
+  ) async {
     final review = SM2.schedule(event.review, event.quality);
     await repository.updateReview(review);
 
