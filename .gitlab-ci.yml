@@ -57,7 +57,7 @@ code-quality:
   needs: [flutter_dependencies]
   script:
     - pub global activate dart_code_metrics
-    - metrics --reporter=gitlab lib -r codeclimate > gl-code-quality-report.json
+    - metrics lib --reporter=gitlab --exclude={/**.g.dart,/**.template.dart,/**.gr.dart} > gl-code-quality-report.json
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
