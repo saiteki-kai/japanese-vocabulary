@@ -31,8 +31,8 @@ class WordStatisticsTab extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              StatsWidget(review: _meaningReview),
-              StatsWidget(review: _readingReview),
+              if (_meaningReview != null) StatsWidget(review: _meaningReview!),
+              if (_readingReview != null) StatsWidget(review: _readingReview!),
             ],
           ),
         ),
