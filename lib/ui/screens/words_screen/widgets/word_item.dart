@@ -45,6 +45,7 @@ class WordItem extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8.0),
+                  Text(DatesUtils.format(word.nextReview)),
                 ],
               ),
               CircularPercentIndicator(

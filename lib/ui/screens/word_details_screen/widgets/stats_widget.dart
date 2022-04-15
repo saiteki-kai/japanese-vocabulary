@@ -39,7 +39,7 @@ class StatsWidget extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontWeight: FontWeight.w500,
-                color: Colors.amber[400],
+                color: CustomColors.accentColor,
               ),
             ),
           ),
@@ -72,17 +72,7 @@ class StatsWidget extends StatelessWidget {
                 TitleSubtitleWidget(
                   title: "Next Review",
                   titleTextStyle: const TextStyle(fontWeight: FontWeight.w500),
-                    titleTextStyle:
-                        const TextStyle(fontWeight: FontWeight.w500),
-                    subtitle:
-                        '${review?.nextDate?.day ?? '--'} / ${review?.nextDate?.month ?? '--'} / ${review?.nextDate?.year ?? '----'} ',
-                    padding: const EdgeInsets.all(8.0),
-                  ),
-                  CircularPercentIndicator(
-                    radius: 32,
-                    lineWidth: 32 / 4,
-                    circularStrokeCap: CircularStrokeCap.butt,
-                    center: Text(
+                  subtitle: DatesUtils.format(review.nextDate),
                   padding: const EdgeInsets.all(8.0),
                 ),
                 CircularPercentIndicator(
