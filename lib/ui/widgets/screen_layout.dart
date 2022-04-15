@@ -26,8 +26,10 @@ class ScreenLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).primaryColor,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
