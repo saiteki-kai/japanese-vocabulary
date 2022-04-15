@@ -21,11 +21,12 @@ class HomeScreen extends StatelessWidget {
       ],
       builder: (context, child, animation) {
         final tabsRouter = AutoTabsRouter.of(context);
+
         return Scaffold(
           body: child,
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: tabsRouter.activeIndex,
-            onTap: (index) => _onTap(index, context, tabsRouter),
+            onTap: (index) => _onTap(context, index, tabsRouter),
             items: const [
               BottomNavigationBarItem(
                 label: 'Reviews',
@@ -37,24 +38,33 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          floatingActionButton: tabsRouter.activeIndex == 1
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FloatingActionButton(
-                    child: const Icon(Icons.add),
-                    backgroundColor: Colors.amber,
-                    onPressed: () {
-                      AutoRouter.of(context).push(const WordInsertScreen());
-                    },
-                  ),
-                )
-              : const SizedBox(),
+          floatingActionButton: _floatingActionButton(
+            show: tabsRouter.activeIndex == 1,
+            onPressed: () {
+              AutoRouter.of(context).push(const WordInsertScreen());
+            },
+          ),
         );
       },
     );
   }
 
-  void _onTap(int index, context, tabsRouter) {
+  Widget _floatingActionButton({bool show = false, VoidCallback? onPressed}) {
+    if (show) {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FloatingActionButton(
+          child: const Icon(Icons.add),
+          backgroundColor: Colors.amber,
+          onPressed: onPressed,
+        ),
+      );
+    }
+
+    return const SizedBox();
+  }
+
+  void _onTap(context, int index, tabsRouter) {
     if (index == 1) {
       BlocProvider.of<WordBloc>(context).add(WordRetrieved());
     }

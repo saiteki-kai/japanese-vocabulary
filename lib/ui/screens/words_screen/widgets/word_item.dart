@@ -26,11 +26,7 @@ class WordItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        if (word != null) {
-          AutoRouter.of(context).push(WordDetailsScreen(wordId: word!.id));
-        }
-      },
+      onTap: () => _onWordPressed(context),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
@@ -72,6 +68,10 @@ class WordItem extends StatelessWidget {
               ],
             ),
           ],
+
+  void _onWordPressed(context) {
+    AutoRouter.of(context).push(WordDetailsScreen(wordId: word.id));
+  }
         ),
       ),
     );

@@ -35,10 +35,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
-        BlocProvider.of<WordBloc>(context).add(WordRetrieved());
-        return Future.value(true);
-      },
+      onWillPop: _onBack,
       child: BlocBuilder<WordBloc, WordState>(
         bloc: BlocProvider.of(context)
           ..add(GetWordEvent(wordId: widget.wordId)),
@@ -93,5 +90,11 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
         },
       ),
     );
+  }
+
+  Future<bool> _onBack() {
+    _bloc?.add(WordRetrieved());
+
+    return Future.value(true);
   }
 }
