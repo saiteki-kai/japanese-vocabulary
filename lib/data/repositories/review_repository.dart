@@ -9,6 +9,7 @@ class ReviewRepository {
   /// Returns all reviews
   Future<List<Review>> getAllReviews() async {
     final store = await _store;
+
     return store.box<Review>().getAll();
   }
 

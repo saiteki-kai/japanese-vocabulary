@@ -30,6 +30,7 @@ class WordScreen extends StatelessWidget {
               itemCount: state.words.length,
               itemBuilder: (context, index) {
                 final Word word = state.words[index];
+
                 return WordItem(word: word);
               },
               padding: EdgeInsets.zero,

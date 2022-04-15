@@ -46,6 +46,7 @@ class Word {
     if (meaningReview.target == null || readingReview.target == null) {
       return 0.0;
     }
+
     return (meaningReview.target!.getReviewAccuracy() +
             readingReview.target!.getReviewAccuracy()) /
         2;
@@ -65,7 +66,10 @@ class Word {
       r2 = readingReview.target!.nextDate!.millisecondsSinceEpoch;
     }
 
-    if (r1 < r2) return readingReview.target!.nextDate;
+    if (r1 < r2) {
+      return readingReview.target!.nextDate;
+    }
+
     return readingReview.target!.nextDate;
   }
 

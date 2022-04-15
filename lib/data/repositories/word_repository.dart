@@ -11,7 +11,8 @@ class WordRepository {
   ///
   /// It creates a meaning and a reading review associated to this word
   Future<int> addWord(Word word) async {
-    final box = (await _store).box<Word>();
+    final store = await _store;
+    final box = store.box<Word>();
 
     final Review meaning = Review(
       ef: 2.5,
@@ -41,7 +42,9 @@ class WordRepository {
 
   /// This method returns all the words in the repository
   Future<List<Word>> getWords() async {
-    final box = (await _store).box<Word>();
+    final store = await _store;
+    final box = store.box<Word>();
+
     return box.getAll();
   }
 
@@ -49,11 +52,11 @@ class WordRepository {
   ///
   /// Returns null if the word not exists or the [id] is not valid.
   Future<Word?> getWord(int id) async {
-    if (id <= 0) {
-      return null;
-    } else {
-      final box = (await _store).box<Word>();
-      return box.get(id);
-    }
+    if (id <= 0) return null;
+
+    final store = await _store;
+    final box = store.box<Word>();
+
+    return box.get(id);
   }
 }
