@@ -5,7 +5,7 @@ import 'package:japanese_vocabulary/data/app_database.dart';
 import 'package:japanese_vocabulary/data/models/review.dart';
 import 'package:japanese_vocabulary/data/repositories/review_repository.dart';
 
-import 'utils/params.dart';
+import '../test/utils/params.dart';
 
 void main() async {
   late ReviewBloc bloc;
