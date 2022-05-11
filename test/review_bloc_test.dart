@@ -5,7 +5,7 @@ import 'package:japanese_vocabulary/data/app_database.dart';
 import 'package:japanese_vocabulary/data/models/review.dart';
 import 'package:japanese_vocabulary/data/repositories/review_repository.dart';
 
-import 'utils/review.dart';
+import 'utils/params.dart';
 
 void main() async {
   late ReviewBloc bloc;
@@ -16,9 +16,9 @@ void main() async {
   setUp(() {
     bloc = ReviewBloc(repository: ReviewRepository());
     box.removeAll();
-    box.put(ReviewUtils.nullDateReview);
-    box.put(ReviewUtils.review1);
-    box.put(ReviewUtils.review2);
+    box.put(nullDateReview);
+    box.put(review1);
+    box.put(review2);
   });
 
   tearDown(() {
@@ -32,7 +32,7 @@ void main() async {
     act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: ReviewUtils.nullDateReview, isLast: false),
+      ReviewLoaded(review: nullDateReview, isLast: false),
     ],
   );
 
@@ -41,11 +41,11 @@ void main() async {
     build: () => bloc,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
-      ..add(ReviewSessionUpdated(review: ReviewUtils.review1, quality: 4)),
+      ..add(ReviewSessionUpdated(review: review1, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: ReviewUtils.nullDateReview, isLast: false),
-      ReviewLoaded(review: ReviewUtils.review1, isLast: true),
+      ReviewLoaded(review: nullDateReview, isLast: false),
+      ReviewLoaded(review: review1, isLast: true),
     ],
   );
 
@@ -54,12 +54,12 @@ void main() async {
     build: () => bloc,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
-      ..add(ReviewSessionUpdated(review: ReviewUtils.review1, quality: 4))
-      ..add(ReviewSessionUpdated(review: ReviewUtils.review2, quality: 4)),
+      ..add(ReviewSessionUpdated(review: review1, quality: 4))
+      ..add(ReviewSessionUpdated(review: review2, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: ReviewUtils.nullDateReview, isLast: false),
-      ReviewLoaded(review: ReviewUtils.review1, isLast: true),
+      ReviewLoaded(review: nullDateReview, isLast: false),
+      ReviewLoaded(review: review1, isLast: true),
       ReviewFinished(),
     ],
   );
@@ -79,7 +79,7 @@ void main() async {
     'emits [ReviewFinished] when ReviewUpdated is added and ReviewRetrieved is not added previously.',
     build: () => bloc,
     act: (bloc) => bloc.add(
-      ReviewSessionUpdated(review: ReviewUtils.review1, quality: 4),
+      ReviewSessionUpdated(review: review1, quality: 4),
     ),
     expect: () => <ReviewState>[ReviewFinished()],
   );

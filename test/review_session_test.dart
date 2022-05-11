@@ -13,10 +13,7 @@ import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/sho
 import 'package:japanese_vocabulary/ui/widgets/loading_indicator.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'utils/review.dart';
-
-class MockReviewBloc extends MockBloc<ReviewEvent, ReviewState>
-    implements ReviewBloc {}
+import 'utils/params.dart';
 
 void main() {
   late ReviewBloc bloc;
@@ -67,9 +64,9 @@ void main() {
   });
 
   testWidgets("check correct answer", (WidgetTester tester) async {
-    await setUpWidget(tester, ReviewUtils.meaningReviewWithWord);
+    await setUpWidget(tester, meaningReviewWithWord);
 
-    final answer = ReviewUtils.meaningReviewWithWord.word.target?.meaning;
+    final answer = meaningReviewWithWord.word.target?.meaning;
     expect(answer, isNotNull);
 
     final reviewAnswerFinder = find.widgetWithText(ReviewAnswer, answer!);
@@ -82,7 +79,7 @@ void main() {
   });
 
   testWidgets("show / hide answer", (WidgetTester tester) async {
-    await setUpWidget(tester, ReviewUtils.review1);
+    await setUpWidget(tester, review1);
 
     final reviewItemFinder = find.byType(ReviewItem);
     expect(
@@ -164,7 +161,7 @@ void main() {
 
     testWidgets("show next button when the current review is not the last",
         (WidgetTester tester) async {
-      await setUpWidget(tester, ReviewUtils.review1, isLast: false);
+      await setUpWidget(tester, review1, isLast: false);
 
       final buttons = await findButtons(find);
       final nextButtonFinder = buttons[0];
@@ -176,7 +173,7 @@ void main() {
 
     testWidgets("show summary button when the current review is the last",
         (WidgetTester tester) async {
-      await setUpWidget(tester, ReviewUtils.review1, isLast: true);
+      await setUpWidget(tester, review1, isLast: true);
 
       final buttons = await findButtons(find);
       final nextButtonFinder = buttons[0];
@@ -189,7 +186,7 @@ void main() {
 
   testWidgets("the review is updated when the next button is tapped.",
       (WidgetTester tester) async {
-    final review = ReviewUtils.meaningReviewWithWord;
+    final review = meaningReviewWithWord;
     await setUpWidget(tester, review);
 
     final wordText = review.word.target!.text;

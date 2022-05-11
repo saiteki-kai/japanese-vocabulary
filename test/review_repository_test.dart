@@ -3,7 +3,7 @@ import 'package:japanese_vocabulary/data/app_database.dart';
 import 'package:japanese_vocabulary/data/models/review.dart';
 import 'package:japanese_vocabulary/data/repositories/review_repository.dart';
 
-import 'utils/review.dart';
+import 'utils/params.dart';
 
 void main() async {
   final store = await AppDatabase.instance.store;
@@ -13,9 +13,9 @@ void main() async {
 
   setUp(() {
     store.box<Review>().removeAll();
-    box.put(ReviewUtils.nullDateReview);
-    box.put(ReviewUtils.review1);
-    box.put(ReviewUtils.review2);
+    box.put(nullDateReview);
+    box.put(review1);
+    box.put(review2);
   });
 
   tearDown(() {
@@ -72,7 +72,7 @@ void main() async {
     });
 
     test("review not present in the database", () async {
-      final newReview = ReviewUtils.createReviewByDate(null);
+      final newReview = createReviewByDate(null);
       final id3 = await repo.updateReview(newReview);
       expect(id3, equals(4));
     });
