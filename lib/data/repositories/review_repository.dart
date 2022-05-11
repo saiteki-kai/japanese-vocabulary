@@ -7,7 +7,7 @@ class ReviewRepository {
   Future<Store> get _store async => await AppDatabase.instance.store;
 
   /// Returns all reviews
-  Future<List<Review>> getAllReviews() async {
+  Future<List<Review>> getReviews() async {
     final store = await _store;
 
     return store.box<Review>().getAll();
