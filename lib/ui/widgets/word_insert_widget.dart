@@ -76,7 +76,7 @@ class _WordInsertState extends State<WordInsert> {
           ],
         ),
         padding: EdgeInsets.zero,
-        child: BlocConsumer<WordBloc, WordState>(
+        child: BlocBuilder<WordBloc, WordState>(
           builder: (context, state) {
             return GestureDetector(
               onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -152,18 +152,9 @@ class _WordInsertState extends State<WordInsert> {
               ),
             );
           },
-          listener: _blocListener,
-          buildWhen: (previous, current) => current is! WordAdded,
         ),
       ),
     );
-  }
-
-  void _blocListener(context, state) {
-    if (state is WordAdded) {
-      _bloc?.add(WordRetrieved());
-      AutoRouter.of(context).pop();
-    }
   }
 
   void _onChanged(int value) {
@@ -182,7 +173,8 @@ class _WordInsertState extends State<WordInsert> {
     final posTmp = posSelected.map((e) => _posNames[e]).join(",");
     _wordToAdd.pos = posTmp;
 
-    _bloc?.add(AddWordEvent(word: _wordToAdd));
+    _bloc?.add(WordAdded(word: _wordToAdd));
+    AutoRouter.of(context).pop();
   }
 }
 
