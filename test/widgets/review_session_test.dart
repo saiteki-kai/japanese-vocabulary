@@ -12,8 +12,8 @@ import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/sho
 import 'package:japanese_vocabulary/ui/widgets/loading_indicator.dart';
 import 'package:mocktail/mocktail.dart';
 
-import 'utils/mocks.dart';
-import 'utils/params.dart';
+import '../utils/mocks.dart';
+import '../utils/params.dart';
 
 void main() {
   late ReviewBloc bloc;
