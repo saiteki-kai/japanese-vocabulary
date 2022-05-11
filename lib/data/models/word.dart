@@ -43,34 +43,34 @@ class Word {
   final readingReview = ToOne<Review>();
 
   double get meanAccuracy {
-    if (meaningReview.target == null || readingReview.target == null) {
-      return 0.0;
+    final acc1 = meaningReview.target?.getReviewAccuracy() ?? 0.0;
+    final acc2 = readingReview.target?.getReviewAccuracy() ?? 0.0;
+
+    if (meaningReview.target != null && readingReview.target != null) {
+      return (acc1 + acc2) / 2;
     }
 
-    return (meaningReview.target!.getReviewAccuracy() +
-            readingReview.target!.getReviewAccuracy()) /
-        2;
+    return acc1 + acc2;
   }
 
   DateTime? get nextReview {
-    if (meaningReview.target?.nextDate == null &&
-        readingReview.target?.nextDate == null) return null;
+    final meaningNextDate = meaningReview.target?.nextDate;
+    final readingNextDate = readingReview.target?.nextDate;
 
-    var r1 = 8640000000000000; // maxMillisecondsSinceEpoch
-    var r2 = 8640000000000000; // maxMillisecondsSinceEpoch
+    if (meaningNextDate == null && readingNextDate == null) {
+      return null;
+    }
 
-    if (meaningReview.target?.nextDate != null) {
-      r1 = meaningReview.target!.nextDate!.millisecondsSinceEpoch;
-    }
-    if (readingReview.target?.nextDate != null) {
-      r2 = readingReview.target!.nextDate!.millisecondsSinceEpoch;
-    }
+    const maxMilliseconds = 8640000000000000;
+
+    final r1 = meaningNextDate?.millisecondsSinceEpoch ?? maxMilliseconds;
+    final r2 = readingNextDate?.millisecondsSinceEpoch ?? maxMilliseconds;
 
     if (r1 < r2) {
-      return readingReview.target!.nextDate;
+      return meaningNextDate;
     }
 
-    return readingReview.target!.nextDate;
+    return readingNextDate;
   }
 
   Word copyWith({
