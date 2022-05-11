@@ -35,7 +35,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
   void initState() {
     _tabController = TabController(vsync: this, length: 2);
     _bloc = BlocProvider.of<WordBloc>(context);
-    _bloc!.add(GetWordEvent(wordId: widget.wordId));
+    _bloc!.add(WordRetrieved(wordId: widget.wordId));
 
     super.initState();
   }
@@ -76,7 +76,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
   }
 
   Future<bool> _onBack() {
-    _bloc?.add(WordRetrieved());
+    _bloc?.add(WordsRetrieved());
 
     return Future.value(true);
   }

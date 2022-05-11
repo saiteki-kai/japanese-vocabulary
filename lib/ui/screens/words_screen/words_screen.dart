@@ -18,7 +18,7 @@ class WordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<WordBloc>(context).add(WordRetrieved());
+    BlocProvider.of<WordBloc>(context).add(WordsRetrieved());
 
     return ScreenLayout(
       appBar: AppBar(title: const Text("Words"), elevation: 0),

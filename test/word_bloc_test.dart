@@ -56,7 +56,7 @@ void main() async {
   blocTest<WordBloc, WordState>(
     'emits [Wordloading, Wordloaded] when WordRetrived is added.',
     build: () => bloc,
-    act: (bloc) => bloc.add(WordRetrieved()),
+    act: (bloc) => bloc.add(WordsRetrieved()),
     expect: () => <WordState>[WordLoading(), WordsLoaded(words: box.getAll())],
   );
 
@@ -64,23 +64,26 @@ void main() async {
     'emits [Wordloading, Wordloaded] when WordRetrived is added when store is empty.',
     setUp: () async => box.removeAll(),
     build: () => bloc,
-    act: (bloc) => bloc.add(WordRetrieved()),
+    act: (bloc) => bloc.add(WordsRetrieved()),
     expect: () => <WordState>[WordLoading(), const WordsLoaded(words: [])],
   );
 
   blocTest<WordBloc, WordState>(
     'Testing insertion of a word correctly set',
     setUp: () => {box.removeAll()}, // to ensure words inside the db is empty.
+    seed: () => const WordsLoaded(words: []),
     build: () => bloc,
-    act: (bloc) => bloc.add(AddWordEvent(word: words[0])),
-    expect: () => <WordState>[WordAdded()],
+    act: (bloc) => bloc.add(WordAdded(word: words[0])),
+    expect: () => <WordState>[
+      WordsLoaded(words: [words[0]]),
+    ],
   );
 
   blocTest<WordBloc, WordState>(
     'Testing insertion of a word with empty fields',
     setUp: () => {box.removeAll()}, // to ensure words inside the db is empty.
     build: () => bloc,
-    act: (bloc) => bloc.add(AddWordEvent(word: invalidWord)),
+    act: (bloc) => bloc.add(WordAdded(word: invalidWord)),
     expect: () => <WordState>[WordInitial()],
   );
 }

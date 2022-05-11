@@ -9,8 +9,6 @@ abstract class WordState extends Equatable {
 
 class WordInitial extends WordState {}
 
-class WordAdded extends WordState {}
-
 /// This [WordLoading] defines the loading of the [WordState].
 class WordLoading extends WordState {}
 
