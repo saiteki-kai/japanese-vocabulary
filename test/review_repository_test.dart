@@ -23,11 +23,11 @@ void main() async {
   });
 
   test("get all reviews", () async {
-    List<Review> reviews = await repo.getAllReviews();
+    List<Review> reviews = await repo.getReviews();
     expect(reviews.length, 3);
 
     store.box<Review>().removeAll();
-    reviews = await repo.getAllReviews();
+    reviews = await repo.getReviews();
     expect(reviews.length, 0);
   });
 
@@ -40,7 +40,7 @@ void main() async {
         lessThan(DateTime.now().millisecondsSinceEpoch));
 
     store.box<Review>().removeAll();
-    reviews = await repo.getAllReviews();
+    reviews = await repo.getReviews();
     expect(reviews.length, 0);
   });
 

@@ -11,9 +11,7 @@ class ReviewScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          onPressed: () {
-            AutoRouter.of(context).push(const ReviewSessionScreen());
-          },
+          onPressed: () => _onStartSession(context),
           child: const Padding(
             padding: EdgeInsets.all(16.0),
             child: Text("Start review session"),
@@ -21,5 +19,9 @@ class ReviewScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onStartSession(context) {
+    AutoRouter.of(context).push(const ReviewSessionScreen());
   }
 }

@@ -13,7 +13,7 @@ class ReviewSessionStarted extends ReviewEvent {}
 /// Update a review and returns the next review in the session.
 class ReviewSessionUpdated extends ReviewEvent {
   /// Creates a [ReviewEvent] with a [review] to update based on the [quality].
-  const ReviewSessionUpdated(this.review, this.quality);
+  const ReviewSessionUpdated({required this.review, required this.quality});
 
   /// The review to update.
   final Review review;

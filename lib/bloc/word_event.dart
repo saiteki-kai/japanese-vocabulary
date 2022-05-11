@@ -7,21 +7,21 @@ abstract class WordEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetWordEvent extends WordEvent {
-  const GetWordEvent({required this.wordId});
+class WordRetrieved extends WordEvent {
+  const WordRetrieved({required this.wordId});
   final int wordId;
 
   @override
   List<Object> get props => [wordId];
 }
 
-class AddWordEvent extends WordEvent {
+class WordAdded extends WordEvent {
   final Word word;
-  const AddWordEvent({required this.word});
+  const WordAdded({required this.word});
 
   @override
   List<Object> get props => [word];
 }
 
-/// This [WordRetrieved] manages the events concerning the [Word].
-class WordRetrieved extends WordEvent {}
+/// This [WordsRetrieved] manages the events concerning the [Word].
+class WordsRetrieved extends WordEvent {}

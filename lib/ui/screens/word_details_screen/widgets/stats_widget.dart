@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'stats_item_widget.dart';
-import 'title_subtitle_widget.dart';
+
 import '../../../../data/models/review.dart';
 import '../../../../utils/colors.dart';
+import '../../../../utils/date.dart';
+import 'stats_item_widget.dart';
+import 'title_subtitle_widget.dart';
 
 /// A widget that displays the statistics of a [Review] associated to a [Word].
 ///
@@ -19,8 +21,10 @@ class StatsWidget extends StatelessWidget {
     required this.review,
   }) : super(key: key);
 
-  /// The [review] from which statistics will be displayed, must not be null.
-  final Review? review;
+  /// The [review] from which statistics will be displayed.
+  final Review review;
+
+  double get accuracy => review.getReviewAccuracy();
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +37,11 @@ class StatsWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Text(
-              review?.type.toUpperCase() ?? "",
+              review.type.toUpperCase(),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w500,
-                color: Colors.amber[400],
+                color: CustomColors.accentColor,
               ),
             ),
           ),
@@ -45,43 +49,47 @@ class StatsWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               StatsItemWidget(
-                  label: "Easiness", value: (review?.ef.toStringAsPrecision(2) ?? 0).toString()),
+                label: "Easiness",
+                value: review.ef.toStringAsPrecision(2),
+              ),
               StatsItemWidget(
-                  label: "Streak", value: (review?.repetition ?? 0).toString()),
+                label: "Streak",
+                value: review.repetition.toString(),
+              ),
               StatsItemWidget(
-                  label: "Correct",
-                  value: (review?.correctAnswers ?? 0).toString()),
+                label: "Correct",
+                value: review.correctAnswers.toString(),
+              ),
               StatsItemWidget(
-                  label: "Incorrect",
-                  value: (review?.incorrectAnswers ?? 0).toString()),
+                label: "Incorrect",
+                value: review.incorrectAnswers.toString(),
+              ),
             ],
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  TitleSubtitleWidget(
-                    title: "Next Review",
-                    titleTextStyle:
-                        const TextStyle(fontWeight: FontWeight.w500),
-                    subtitle:
-                        '${review?.nextDate?.day ?? '--'} / ${review?.nextDate?.month ?? '--'} / ${review?.nextDate?.year ?? '----'} ',
-                    padding: const EdgeInsets.all(8.0),
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TitleSubtitleWidget(
+                  title: "Next Review",
+                  titleTextStyle: const TextStyle(fontWeight: FontWeight.w500),
+                  subtitle: DatesUtils.format(review.nextDate),
+                  padding: const EdgeInsets.all(8.0),
+                ),
+                CircularPercentIndicator(
+                  radius: 32,
+                  lineWidth: 32 / 4,
+                  circularStrokeCap: CircularStrokeCap.butt,
+                  center: Text(
+                    '${(accuracy * 100).round()}%',
+                    textAlign: TextAlign.center,
                   ),
-                  CircularPercentIndicator(
-                    radius: 32,
-                    lineWidth: 32 / 4,
-                    circularStrokeCap: CircularStrokeCap.butt,
-                    center: Text(
-                      '${((review?.getReviewAccuracy() ?? 0.0) * 100).round()}%',
-                      textAlign: TextAlign.center,
-                    ),
-                    percent: review?.getReviewAccuracy() ?? 0.0,
-                    progressColor: CustomColors.colorPercent(
-                        review?.getReviewAccuracy() ?? 0.0),
-                  ),
-                ]),
+                  percent: accuracy,
+                  progressColor: CustomColors.colorPercent(accuracy),
+                ),
+              ],
+            ),
           ),
         ],
       ),

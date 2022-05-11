@@ -18,7 +18,7 @@ class WordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<WordBloc>(context).add(WordRetrieved());
+    BlocProvider.of<WordBloc>(context).add(WordsRetrieved());
 
     return ScreenLayout(
       appBar: AppBar(title: const Text("Words"), elevation: 0),
@@ -30,6 +30,7 @@ class WordScreen extends StatelessWidget {
               itemCount: state.words.length,
               itemBuilder: (context, index) {
                 final Word word = state.words[index];
+
                 return WordItem(word: word);
               },
               padding: EdgeInsets.zero,

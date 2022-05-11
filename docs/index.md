@@ -12,6 +12,10 @@ You can find the entire repository [here](https://gitlab.com/saiteki-kai/japanes
 * Marino Mario
 * Pietrasanta Davide
 
+## Demo
+
+![Demo](./images/demo.gif)
+
 ## Architecture
 
 ![Architecture](./images/High-level%20Architecture.png)
@@ -62,7 +66,7 @@ lib
 
 ![Pipelines](./images/pipelines.png)
 
-Around **06:01min**
+Around **06:38min**
 
 ## Installation
 
@@ -89,13 +93,13 @@ bash <(curl -s https://raw.githubusercontent.com/objectbox/objectbox-dart/main/i
 Unit/Widget test
 
 ```bash
-flutter test
+flutter test --no-sound-null-safety
 ```
 
 Integration tests
 
 ```bash
-flutter test integration_test/
+flutter test integration_test/ --no-sound-null-safety
 ```
 
 ## Generate the documentation
@@ -105,7 +109,27 @@ dart pub global activate dartdoc
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
 dartdoc
+
+dart pub global activate dhttpd
+dhttpd --path doc/api
 ```
+
+Now you can see the documentation at <http://localhost:8080>
+
+## Run the application
+
+Debug mode:
+
+```bash
+flutter run --no-sound-null-safety
+```
+
+Release mode:
+
+```bash
+flutter run --release --no-sound-null-safety
+```
+
 
 ## Bug Reports
 

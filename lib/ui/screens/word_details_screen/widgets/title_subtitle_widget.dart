@@ -16,8 +16,7 @@ import 'package:flutter/material.dart';
 /// TitleSubtitleWidget(
 ///   title: "Next Review",
 ///   titleTextStyle: const TextStyle(fontWeight: FontWeight.w500),
-///   subtitle:
-///      '${review?.nextDate?.day ?? '--'} / ${review?.nextDate?.month ?? '--'} / ${review?.nextDate?.year ?? '----'} ',
+///   subtitle: DatesUtils.format(word.nextReview),
 ///   padding: const EdgeInsets.all(8.0),
 ///  )
 class TitleSubtitleWidget extends StatelessWidget {
@@ -105,7 +104,7 @@ class TitleSubtitleWidget extends StatelessWidget {
             subtitle,
             textAlign: subtitleTextAlign,
             style: subtitleTextStyle,
-          )
+          ),
         ],
       ),
     );

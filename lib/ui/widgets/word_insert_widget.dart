@@ -45,10 +45,10 @@ class _WordInsertState extends State<WordInsert> {
     "suf",
     "vi",
     "vs-s",
-    "vt"
+    "vt",
   ];
 
-  WordBloc? bloc;
+  WordBloc? _bloc;
 
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _readingController = TextEditingController();
@@ -57,7 +57,7 @@ class _WordInsertState extends State<WordInsert> {
 
   @override
   void initState() {
-    bloc = BlocProvider.of<WordBloc>(context);
+    _bloc = BlocProvider.of<WordBloc>(context);
     super.initState();
   }
 
@@ -67,111 +67,59 @@ class _WordInsertState extends State<WordInsert> {
       body: ScreenLayout(
         appBar: AppBar(
           elevation: 0,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Insert a word'),
-              IconButton(
-                onPressed: () {
-                  _wordToAdd.jlpt = _jlptValue;
-                  _wordToAdd.meaning = _meaningController.text;
-                  _wordToAdd.reading = _readingController.text;
-                  _wordToAdd.text = _textController.text;
-                  final posSelected = _posController.selectedIndexes;
-
-                  // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
-                  final posTmp = posSelected.map((e) => _posNames[e]).join(",");
-                  _wordToAdd.pos = posTmp;
-
-                  bloc?.add(AddWordEvent(word: _wordToAdd));
-                },
-                icon: const Icon(
-                  Icons.check,
-                  color: Colors.white,
-                ),
-              )
-            ],
-          ),
+          title: const Text('Insert a word'),
+          actions: [
+            IconButton(
+              onPressed: _onPressed,
+              icon: const Icon(Icons.check, color: Colors.white),
+            ),
+          ],
         ),
         padding: EdgeInsets.zero,
-        child: BlocConsumer<WordBloc, WordState>(
+        child: BlocBuilder<WordBloc, WordState>(
           builder: (context, state) {
             return GestureDetector(
               onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-              child: Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(24)),
-                ),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      verticalDirection: VerticalDirection.down,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            "Text",
-                          ),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Column(
+                    children: [
+                      _FormItem(
+                        title: "Text",
+                        field: TextField(
+                          controller: _textController,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: TextField(
-                            controller: _textController,
-                          ),
+                      ),
+                      _FormItem(
+                        title: "Reading",
+                        field: TextField(
+                          controller: _readingController,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            "Reading",
-                          ),
+                      ),
+                      _FormItem(
+                        title: "Meaning",
+                        field: TextField(
+                          controller: _meaningController,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: TextField(
-                            controller: _readingController,
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            "Meaning",
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: TextField(
-                            controller: _meaningController,
-                          ),
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            "Part of speech",
-                          ),
-                        ),
-                        Center(
+                      ),
+                      _FormItem(
+                        title: "Part of speech",
+                        field: Center(
                           child: GroupButton(
                             options: GroupButtonOptions(
                               borderRadius: BorderRadius.circular(8),
                             ),
                             isRadio: false,
-                            onSelected: (index, isSelected) {},
+                            onSelected: _onPosSelected,
                             buttons: _posNames,
                             controller: _posController,
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            "JLPT",
-                          ),
-                        ),
-                        Center(
+                      ),
+                      _FormItem(
+                        title: "JLPT",
+                        field: Center(
                           child: ChipsChoice<int>.single(
                             value: _jlptValue,
                             wrapped: true,
@@ -182,7 +130,10 @@ class _WordInsertState extends State<WordInsert> {
                               brightness: Brightness.dark,
                               borderRadius: BorderRadius.circular(8.0),
                               margin: const EdgeInsets.only(
-                                  left: 4.0, right: 4.0, bottom: 8.0),
+                                left: 4.0,
+                                right: 4.0,
+                                bottom: 8.0,
+                              ),
                             ),
                             choiceItems: const [
                               C2Choice(value: 5, label: 'N5'),
@@ -191,29 +142,72 @@ class _WordInsertState extends State<WordInsert> {
                               C2Choice(value: 2, label: 'N2'),
                               C2Choice(value: 1, label: 'N1'),
                             ],
-                            onChanged: (int value) {
-                              /// Updates the currently selected value
-                              setState(() => _jlptValue = value);
-                            },
+                            onChanged: _onChanged,
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             );
           },
-          listener: (context, state) {
-            if (state is WordAdded) {
-              bloc?.add(WordRetrieved());
-              AutoRouter.of(context).pop();
-            }
-          },
-          buildWhen: (previous, current) {
-            return current is! WordAdded;
-          },
         ),
+      ),
+    );
+  }
+
+  void _onChanged(int value) {
+    /// Updates the currently selected value
+    setState(() => _jlptValue = value);
+  }
+
+  void _onPressed() {
+    _wordToAdd.jlpt = _jlptValue;
+    _wordToAdd.meaning = _meaningController.text;
+    _wordToAdd.reading = _readingController.text;
+    _wordToAdd.text = _textController.text;
+    final posSelected = _posController.selectedIndexes;
+
+    // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
+    final posTmp = posSelected.map((e) => _posNames[e]).join(",");
+    _wordToAdd.pos = posTmp;
+
+    _bloc?.add(WordAdded(word: _wordToAdd));
+    AutoRouter.of(context).pop();
+  }
+
+  void _onPosSelected(int _, bool __) {
+    return;
+  }
+}
+
+class _FormItem extends StatelessWidget {
+  const _FormItem({
+    Key? key,
+    required this.title,
+    required this.field,
+  }) : super(key: key);
+
+  /// The name of the field placed on top.
+  final String title;
+
+  /// The form field.
+  final Widget field;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(title),
+          ),
+          field,
+        ],
       ),
     );
   }

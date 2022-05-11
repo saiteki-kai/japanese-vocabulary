@@ -56,5 +56,4 @@ class AppDatabase {
       await dir.delete(recursive: true);
     }
   }
-
 }

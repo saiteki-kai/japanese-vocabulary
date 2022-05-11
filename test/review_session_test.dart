@@ -250,6 +250,8 @@ void main() {
     await tester.tap(nextReviewButtonFinder.first);
     await tester.pump();
 
-    verify(() => bloc.add(ReviewSessionUpdated(review, 4))).called(1);
+    verify(() {
+      bloc.add(ReviewSessionUpdated(review: review, quality: 4));
+    }).called(1);
   });
 }

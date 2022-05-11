@@ -26,6 +26,8 @@ class ReviewQualitySelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return ValueListenableBuilder(
       valueListenable: disabled,
       builder: (BuildContext _, bool value, Widget? __) {
@@ -35,11 +37,9 @@ class ReviewQualitySelector extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
             spacing: 4.0,
             buttonWidth: 50,
-            unselectedColor: Theme.of(context).primaryColorLight,
-            unselectedTextStyle: Theme.of(context)
-                .textTheme
-                .button
-                ?.copyWith(color: Theme.of(context).primaryColor),
+            unselectedColor: theme.primaryColorLight,
+            unselectedTextStyle:
+                theme.textTheme.button?.copyWith(color: theme.primaryColor),
           ),
           controller: GroupButtonController(
             disabledIndexes: value ? _options : [],
