@@ -104,7 +104,7 @@ class TitleSubtitleWidget extends StatelessWidget {
             subtitle,
             textAlign: subtitleTextAlign,
             style: subtitleTextStyle,
-          )
+          ),
         ],
       ),
     );

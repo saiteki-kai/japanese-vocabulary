@@ -45,7 +45,7 @@ class _WordInsertState extends State<WordInsert> {
     "suf",
     "vi",
     "vs-s",
-    "vt"
+    "vt",
   ];
 
   WordBloc? _bloc;
@@ -72,7 +72,7 @@ class _WordInsertState extends State<WordInsert> {
             IconButton(
               onPressed: _onPressed,
               icon: const Icon(Icons.check, color: Colors.white),
-            )
+            ),
           ],
         ),
         padding: EdgeInsets.zero,
@@ -111,7 +111,7 @@ class _WordInsertState extends State<WordInsert> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             isRadio: false,
-                            onSelected: (index, isSelected) {},
+                            onSelected: _onPosSelected,
                             buttons: _posNames,
                             controller: _posController,
                           ),
@@ -175,6 +175,10 @@ class _WordInsertState extends State<WordInsert> {
 
     _bloc?.add(WordAdded(word: _wordToAdd));
     AutoRouter.of(context).pop();
+  }
+
+  void _onPosSelected(int _, bool __) {
+    return;
   }
 }
 

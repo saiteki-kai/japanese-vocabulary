@@ -35,7 +35,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
   void initState() {
     _tabController = TabController(vsync: this, length: 2);
     _bloc = BlocProvider.of<WordBloc>(context);
-    _bloc!.add(WordRetrieved(wordId: widget.wordId));
+    _bloc?.add(WordRetrieved(wordId: widget.wordId));
 
     super.initState();
   }

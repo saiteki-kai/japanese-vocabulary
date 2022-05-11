@@ -24,6 +24,8 @@ class StatsWidget extends StatelessWidget {
   /// The [review] from which statistics will be displayed.
   final Review review;
 
+  double get accuracy => review.getReviewAccuracy();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -80,12 +82,11 @@ class StatsWidget extends StatelessWidget {
                   lineWidth: 32 / 4,
                   circularStrokeCap: CircularStrokeCap.butt,
                   center: Text(
-                    '${(review.getReviewAccuracy() * 100).round()}%',
+                    '${(accuracy * 100).round()}%',
                     textAlign: TextAlign.center,
                   ),
-                  percent: review.getReviewAccuracy(),
-                  progressColor:
-                      CustomColors.colorPercent(review.getReviewAccuracy()),
+                  percent: accuracy,
+                  progressColor: CustomColors.colorPercent(accuracy),
                 ),
               ],
             ),
