@@ -2,8 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';
 import 'package:flutter/material.dart';
-// ignore: import_of_legacy_library_into_null_safe
-import 'package:chips_choice/chips_choice.dart';
 import '../../bloc/word_bloc.dart';
 import '../../data/models/word.dart';
 import 'screen_layout.dart';
@@ -20,8 +18,12 @@ class WordInsert extends StatefulWidget {
 class _WordInsertState extends State<WordInsert> {
   final _wordToAdd = Word(jlpt: 5, text: "", reading: "", meaning: "", pos: "");
 
-  /// The currently selected jlpt value
-  int _jlptValue = 5;
+  /// The currently selected jlpt button index
+  int _jlptIndex = 0;
+
+  /// The list of selectable jlpt levels
+  final List<String> _jlptNames = ["N5", "N4", "N3", "N2", "N1"];
+  final _jlptValues = [5, 4, 3, 2, 1];
 
   /// The list of the selectable parts of speech names
   final List<String> _posNames = [
@@ -49,11 +51,11 @@ class _WordInsertState extends State<WordInsert> {
   ];
 
   WordBloc? _bloc;
-
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _readingController = TextEditingController();
   final TextEditingController _meaningController = TextEditingController();
   final GroupButtonController _posController = GroupButtonController();
+  final GroupButtonController _jlptController = GroupButtonController();
 
   @override
   void initState() {
@@ -63,6 +65,8 @@ class _WordInsertState extends State<WordInsert> {
 
   @override
   Widget build(BuildContext context) {
+    _jlptController.selectIndex(_jlptIndex);
+
     return Scaffold(
       body: ScreenLayout(
         appBar: AppBar(
@@ -120,29 +124,15 @@ class _WordInsertState extends State<WordInsert> {
                       _FormItem(
                         title: "JLPT",
                         field: Center(
-                          child: ChipsChoice<int>.single(
-                            value: _jlptValue,
-                            wrapped: true,
-                            padding: EdgeInsets.zero,
-                            choiceStyle: C2ChoiceStyle(
-                              color: Colors.indigo,
-                              borderColor: Colors.indigo[400],
-                              brightness: Brightness.dark,
-                              borderRadius: BorderRadius.circular(8.0),
-                              margin: const EdgeInsets.only(
-                                left: 4.0,
-                                right: 4.0,
-                                bottom: 8.0,
-                              ),
+                          child: GroupButton(
+                            options: GroupButtonOptions(
+                              borderRadius: BorderRadius.circular(8),
+                              buttonWidth: 50,
                             ),
-                            choiceItems: const [
-                              C2Choice(value: 5, label: 'N5'),
-                              C2Choice(value: 4, label: 'N4'),
-                              C2Choice(value: 3, label: 'N3'),
-                              C2Choice(value: 2, label: 'N2'),
-                              C2Choice(value: 1, label: 'N1'),
-                            ],
-                            onChanged: _onChanged,
+                            isRadio: true,
+                            controller: _jlptController,
+                            onSelected: _onJlptSelected,
+                            buttons: _jlptNames,
                           ),
                         ),
                       ),
@@ -157,13 +147,8 @@ class _WordInsertState extends State<WordInsert> {
     );
   }
 
-  void _onChanged(int value) {
-    /// Updates the currently selected value
-    setState(() => _jlptValue = value);
-  }
-
   void _onPressed() {
-    _wordToAdd.jlpt = _jlptValue;
+    _wordToAdd.jlpt = _jlptValues[_jlptIndex];
     _wordToAdd.meaning = _meaningController.text;
     _wordToAdd.reading = _readingController.text;
     _wordToAdd.text = _textController.text;
@@ -179,6 +164,11 @@ class _WordInsertState extends State<WordInsert> {
 
   void _onPosSelected(int _, bool __) {
     return;
+  }
+
+  void _onJlptSelected(int index, bool __) {
+    /// Updates the currently selected JLPT level value
+    setState(() => _jlptIndex = index);
   }
 }
 
