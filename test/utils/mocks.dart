@@ -21,6 +21,12 @@ class MockWordBloc extends MockBloc<WordEvent, WordState> implements WordBloc {}
 class MockReviewBloc extends MockBloc<ReviewEvent, ReviewState>
     implements ReviewBloc {}
 
+class MockQueryBuilder<T> extends Mock implements QueryBuilder<T> {}
+
+class MockQuery<T> extends Mock implements Query<T> {}
+
+class MockStore extends Mock implements Store {}
+
 class FakeWord extends Fake implements Word {}
 
 class FakeReview extends Fake implements Review {}

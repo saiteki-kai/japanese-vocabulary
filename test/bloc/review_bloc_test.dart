@@ -37,6 +37,7 @@ void main() async {
 
   tearDown(() {
     bloc.close();
+    reset(repo);
   });
 
   blocTest<ReviewBloc, ReviewState>(
