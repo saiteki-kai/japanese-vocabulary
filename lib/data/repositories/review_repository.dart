@@ -1,12 +1,13 @@
 import '../../objectbox.g.dart';
-import '../app_database.dart';
 import '../models/review.dart';
 
 class ReviewRepository {
-  /// A database instance.
-  Future<Store> get _store async => await AppDatabase.instance.store;
+  const ReviewRepository({required Future<Store> store}) : _store = store;
 
-  /// Returns all reviews
+  // A database instance.
+  final Future<Store> _store;
+
+  /// Returns all reviews.
   Future<List<Review>> getReviews() async {
     final store = await _store;
 

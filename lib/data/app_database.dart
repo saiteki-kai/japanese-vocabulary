@@ -55,5 +55,7 @@ class AppDatabase {
     if (dir.existsSync()) {
       await dir.delete(recursive: true);
     }
+
+    _completer = null;
   }
 }

@@ -1,11 +1,12 @@
 import '../../objectbox.g.dart';
-import '../app_database.dart';
 import '../../data/models/word.dart';
 import '../../data/models/review.dart';
 
 class WordRepository {
-  /// A database instance.
-  Future<Store> get _store => AppDatabase.instance.store;
+  const WordRepository({required Future<Store> store}) : _store = store;
+
+  // A database instance.
+  final Future<Store> _store;
 
   /// The method that allows the insertion of a word in the repository
   ///
