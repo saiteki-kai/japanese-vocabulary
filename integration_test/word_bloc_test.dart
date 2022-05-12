@@ -6,8 +6,8 @@ import 'package:japanese_vocabulary/data/models/word.dart';
 import 'package:japanese_vocabulary/data/repositories/word_repository.dart';
 
 void main() async {
-  final wordRepository = WordRepository();
   final store = await AppDatabase.instance.store;
+  final wordRepository = WordRepository(store: Future.value(store));
   final box = store.box<Word>();
 
   late WordBloc bloc;

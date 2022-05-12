@@ -9,8 +9,7 @@ void main() async {
   late Store store;
   late Box<Word> wordBox;
   late Box<Review> reviewBox;
-
-  final wordRepository = WordRepository();
+  late WordRepository repo;
 
   final List<Word> words = [
     Word(
@@ -42,6 +41,8 @@ void main() async {
   // At the start of each test the db have zero reviews.
   init() async {
     store = await AppDatabase.instance.store;
+    repo = WordRepository(store: Future.value(store));
+
     wordBox = store.box<Word>();
     reviewBox = store.box<Review>();
     wordBox.putMany(words);
@@ -58,7 +59,7 @@ void main() async {
     test("get words length", () async {
       await init();
 
-      final res = await wordRepository.getWords();
+      final res = await repo.getWords();
       expect(res.length, 3);
     });
 
@@ -66,25 +67,24 @@ void main() async {
       await init();
 
       wordBox.removeAll();
-      final res = await wordRepository.getWords();
+      final res = await repo.getWords();
       expect(res.length, 0);
     });
   });
 
   group("get word", () {
-
     test("get word with existing id", () async {
       await init();
 
-      final res1 = await wordRepository.getWord(1);
+      final res1 = await repo.getWord(1);
       expect(res1, isNotNull);
       expect(res1!.id, 1);
 
-      final res2 = await wordRepository.getWord(2);
+      final res2 = await repo.getWord(2);
       expect(res2, isNotNull);
       expect(res2!.id, 2);
 
-      final res3 = await wordRepository.getWord(3);
+      final res3 = await repo.getWord(3);
       expect(res3, isNotNull);
       expect(res3!.id, 3);
     });
@@ -92,26 +92,26 @@ void main() async {
     test("get word with not valid id", () async {
       await init();
 
-      final res1 = await wordRepository.getWord(0);
+      final res1 = await repo.getWord(0);
       expect(res1, isNull);
 
-      final res2 = await wordRepository.getWord(-1);
+      final res2 = await repo.getWord(-1);
       expect(res2, isNull);
 
-      final res3 = await wordRepository.getWord(-100);
+      final res3 = await repo.getWord(-100);
       expect(res3, isNull);
     });
 
     test("get word with not existing id", () async {
       await init();
 
-      final res1 = await wordRepository.getWord(4);
+      final res1 = await repo.getWord(4);
       expect(res1, isNull);
 
-      final res2 = await wordRepository.getWord(5);
+      final res2 = await repo.getWord(5);
       expect(res2, isNull);
 
-      final res3 = await wordRepository.getWord(42);
+      final res3 = await repo.getWord(42);
       expect(res3, isNull);
     });
   });
@@ -124,7 +124,7 @@ void main() async {
       reviewBox.removeAll();
       expect(wordBox.getAll().length, 0);
 
-      final res = await wordRepository.addWord(words[0]);
+      final res = await repo.addWord(words[0]);
       expect(res, 1, reason: "Id should've been 1");
       expect(wordBox.getAll().length, 1, reason: "# elements should've been 1");
     });
@@ -134,7 +134,7 @@ void main() async {
 
       wordBox.removeAll();
       reviewBox.removeAll();
-      final res = await wordRepository.addWord(words[0]);
+      final res = await repo.addWord(words[0]);
       final word = wordBox.get(res);
 
       expect(word?.meaningReview.target, isNotNull);
@@ -143,5 +143,4 @@ void main() async {
       expect(reviewBox.getAll().length, 2);
     });
   });
-
 }

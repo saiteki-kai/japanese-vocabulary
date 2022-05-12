@@ -14,7 +14,7 @@ void main() async {
   final box = store.box<Review>();
 
   setUp(() {
-    bloc = ReviewBloc(repository: ReviewRepository());
+    bloc = ReviewBloc(repository: ReviewRepository(store: Future.value(store)));
     box.removeAll();
     box.put(nullDateReview);
     box.put(review1);
@@ -24,6 +24,7 @@ void main() async {
   tearDown(() {
     bloc.close();
     box.removeAll();
+    AppDatabase.instance.deleteDatabase();
   });
 
   blocTest<ReviewBloc, ReviewState>(
@@ -79,7 +80,7 @@ void main() async {
     'emits [ReviewFinished] when ReviewUpdated is added and ReviewRetrieved is not added previously.',
     build: () => bloc,
     act: (bloc) => bloc.add(
-      ReviewSessionUpdated(review: review1, quality: 4),
+      ReviewSessionUpdated(review: review1..id = 1, quality: 4),
     ),
     expect: () => <ReviewState>[ReviewFinished()],
   );
