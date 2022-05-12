@@ -9,7 +9,7 @@ void main() async {
   final store = await AppDatabase.instance.store;
 
   final box = store.box<Review>();
-  final repo = ReviewRepository(store: Future.value(store));
+  final repo = ReviewRepository(box: Future.value(box));
 
   setUp(() {
     store.box<Review>().removeAll();

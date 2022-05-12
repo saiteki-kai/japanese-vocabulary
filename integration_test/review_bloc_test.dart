@@ -14,7 +14,7 @@ void main() async {
   final box = store.box<Review>();
 
   setUp(() {
-    bloc = ReviewBloc(repository: ReviewRepository(store: Future.value(store)));
+    bloc = ReviewBloc(repository: ReviewRepository(box: Future.value(box)));
     box.removeAll();
     box.put(nullDateReview);
     box.put(review1);

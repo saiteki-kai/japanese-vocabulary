@@ -8,18 +8,15 @@ import '../utils/mocks.dart';
 import '../utils/params.dart';
 
 void main() async {
-  late Store store;
-  late ReviewRepository repo;
   late Box<Review> box;
+  late ReviewRepository repo;
 
   final allReviews = [nullDateReview, review1, review2];
   final todayReviews = [nullDateReview, review1];
 
   setUp(() {
-    store = MockStore();
     box = MockReviewBox();
-    when(() => store.box<Review>()).thenReturn(box);
-    repo = ReviewRepository(store: Future.value(store));
+    repo = ReviewRepository(box: Future.value(box));
     registerFallbackValue(FakeReview());
   });
 
@@ -32,6 +29,8 @@ void main() async {
 
     final reviews = await repo.getReviews();
     expect(reviews, equals(allReviews));
+
+    verify(box.getAll).called(1);
   });
 
   test("get today's reviews", () async {
@@ -51,8 +50,6 @@ void main() async {
       lessThan(DateTime.now().millisecondsSinceEpoch),
       reason: "The date must be less than the current one",
     );
-
-    verify(() => box.query(any()).build().find()).called(1);
   });
 
   test("empty all reviews", () async {
@@ -72,8 +69,6 @@ void main() async {
 
     final reviews = await repo.getTodayReviews();
     expect(reviews, equals([]));
-
-    verify(() => box.query(any()).build().find()).called(1);
   });
 
   test("update a review", () async {

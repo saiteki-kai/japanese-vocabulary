@@ -41,7 +41,7 @@ void main() async {
   // At the start of each test the db have zero reviews.
   init() async {
     store = await AppDatabase.instance.store;
-    repo = WordRepository(store: Future.value(store));
+    repo = WordRepository(box: Future.value(store.box<Word>()));
 
     wordBox = store.box<Word>();
     reviewBox = store.box<Review>();

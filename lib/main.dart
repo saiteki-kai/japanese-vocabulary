@@ -6,6 +6,8 @@ import 'config/routes.gr.dart';
 import 'bloc/review_bloc.dart';
 import 'bloc/word_bloc.dart';
 import 'data/app_database.dart';
+import 'data/models/review.dart';
+import 'data/models/word.dart';
 import 'data/repositories/review_repository.dart';
 import 'data/repositories/word_repository.dart';
 
@@ -24,12 +26,16 @@ class JapaneseVocabularyApp extends StatelessWidget {
       providers: [
         RepositoryProvider<WordRepository>(
           create: (context) => WordRepository(
-            store: AppDatabase.instance.store,
+            box: AppDatabase.instance.store.then((s) {
+              return Future.value(s.box<Word>());
+            }),
           ),
         ),
         RepositoryProvider<ReviewRepository>(
           create: (context) => ReviewRepository(
-            store: AppDatabase.instance.store,
+            box: AppDatabase.instance.store.then((s) {
+              return Future.value(s.box<Review>());
+            }),
           ),
         ),
       ],
