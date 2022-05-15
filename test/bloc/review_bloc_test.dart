@@ -16,7 +16,7 @@ void main() async {
     when(repo.getTodayReviews).thenAnswer((_) async => []);
   }
 
-  void setUpWithWords() {
+  void setUpWithReviews() {
     when(repo.getReviews).thenAnswer((_) async {
       return [nullDateReview, review1, review2];
     });
@@ -43,7 +43,7 @@ void main() async {
   blocTest<ReviewBloc, ReviewState>(
     'emits [ReviewLoading, ReviewLoaded] when ReviewSessionStarted is added.',
     build: () => bloc,
-    setUp: setUpWithWords,
+    setUp: setUpWithReviews,
     act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
@@ -58,7 +58,7 @@ void main() async {
   blocTest<ReviewBloc, ReviewState>(
     'emits [ReviewLoaded, ReviewLoaded] when [ReviewSessionStarted, ReviewSessionUpdated] are added.',
     build: () => bloc,
-    setUp: setUpWithWords,
+    setUp: setUpWithReviews,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
       ..add(ReviewSessionUpdated(review: review1, quality: 4)),
@@ -76,7 +76,7 @@ void main() async {
   blocTest<ReviewBloc, ReviewState>(
     'emits [ReviewLoaded, ReviewLoaded, ReviewLoaded, ReviewFinished] when ReviewSessionUpdated is added twice and the session is finished.',
     build: () => bloc,
-    setUp: setUpWithWords,
+    setUp: setUpWithReviews,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
       ..add(ReviewSessionUpdated(review: review1, quality: 4))
@@ -111,7 +111,7 @@ void main() async {
   blocTest<ReviewBloc, ReviewState>(
     'emits [ReviewFinished] when ReviewUpdated is added and ReviewSessionStarted is not added previously.',
     build: () => bloc,
-    setUp: setUpWithWords,
+    setUp: setUpWithReviews,
     act: (bloc) => bloc.add(
       ReviewSessionUpdated(review: review1, quality: 4),
     ),
