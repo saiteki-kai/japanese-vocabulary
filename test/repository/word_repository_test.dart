@@ -14,7 +14,7 @@ void main() async {
   setUp(() {
     box = MockWordBox();
     repo = WordRepository(box: Future.value(box));
-    registerFallbackValue(FakeReview());
+    registerFallbackValue(FakeWord());
   });
 
   tearDown(() {
@@ -37,7 +37,6 @@ void main() async {
     });
   });
 
-
   group("get word", () {
     test("get word with existing id", () async {
       when(() => box.get(1)).thenReturn(word1);
@@ -58,6 +57,16 @@ void main() async {
 
       final word2 = await repo.getWord(-1);
       expect(word2, isNull);
+    });
+  });
+
+  group('insert word', () {
+    test('simple insertion', () async {
+      when(() => box.put(any()))
+          .thenAnswer((inv) => inv.positionalArguments[0].id);
+
+      final id = await repo.addWord(word1);
+      expect(id, word1.id, reason: "Id should've been ${word1.id}");
     });
   });
 }
