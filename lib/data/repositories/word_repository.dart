@@ -54,6 +54,7 @@ class WordRepository {
     if (id <= 0) return null;
 
     final box = await _box;
+
     return box.get(id);
   }
 }
