@@ -4,86 +4,76 @@ import 'package:japanese_vocabulary/bloc/word_bloc.dart';
 import 'package:japanese_vocabulary/data/app_database.dart';
 import 'package:japanese_vocabulary/data/models/word.dart';
 import 'package:japanese_vocabulary/data/repositories/word_repository.dart';
+import 'package:japanese_vocabulary/objectbox.g.dart';
+
+import '../test/utils/params.dart';
 
 void main() async {
-  final store = await AppDatabase.instance.store;
-  final box = store.box<Word>();
-  final wordRepository = WordRepository(box: Future.value(box));
-
+  late Store store;
   late WordBloc bloc;
-  final List<Word> words = [];
-  final invalidWord = Word(
-    text: "言葉",
-    reading: "",
-    jlpt: 5,
-    meaning: "",
-    pos: "Noun",
-  );
+  late WordRepository repo;
 
   setUp(() async {
-    bloc = WordBloc(repository: wordRepository);
-    words.add(Word(
-      text: "言葉",
-      reading: "ことば",
-      jlpt: 5,
-      meaning: "word; phrase; expression; term",
-      pos: "Noun",
-    ));
-    words.add(Word(
-      text: "復習",
-      reading: "ふくしゅう",
-      jlpt: 4,
-      meaning: "review (of learned material); revision",
-      pos: "Noun, Suru verb",
-    ));
-    words.add(Word(
-      text: "普通",
-      reading: "ふつう",
-      jlpt: 4,
-      meaning: "normal; ordinary; regular",
-      pos: "Noun, Na-adjective",
-    ));
-
-    box.removeAll();
-    box.putMany(words);
+    store = await AppDatabase.instance.store;
+    repo = WordRepository(box: Future.value(store.box<Word>()));
+    bloc = WordBloc(repository: repo);
   });
 
   tearDown(() async {
-    box.removeAll();
     bloc.close();
+    store.close();
+    await AppDatabase.instance.deleteDatabase();
   });
 
-  blocTest<WordBloc, WordState>(
-    'emits [Wordloading, Wordloaded] when WordRetrived is added.',
-    build: () => bloc,
-    act: (bloc) => bloc.add(WordsRetrieved()),
-    expect: () => <WordState>[WordLoading(), WordsLoaded(words: box.getAll())],
-  );
+  setUpWithWords() {
+    repo.addWord(word1);
+    repo.addWord(word2);
+    repo.addWord(word3);
+  }
 
   blocTest<WordBloc, WordState>(
-    'emits [Wordloading, Wordloaded] when WordRetrived is added when store is empty.',
-    setUp: () async => box.removeAll(),
+    'emits [WordLoading, WordLoaded] when WordRetrieved is added.',
     build: () => bloc,
+    setUp: setUpWithWords,
     act: (bloc) => bloc.add(WordsRetrieved()),
-    expect: () => <WordState>[WordLoading(), const WordsLoaded(words: [])],
-  );
-
-  blocTest<WordBloc, WordState>(
-    'Testing insertion of a word correctly set',
-    setUp: () => {box.removeAll()}, // to ensure words inside the db is empty.
-    seed: () => const WordsLoaded(words: []),
-    build: () => bloc,
-    act: (bloc) => bloc.add(WordAdded(word: words[0])),
     expect: () => <WordState>[
-      WordsLoaded(words: [words[0]]),
+      WordLoading(),
+      WordsLoaded(
+        words: [
+          word1..id = 1,
+          word2..id = 2,
+          word3..id = 3,
+        ],
+      ),
     ],
   );
 
   blocTest<WordBloc, WordState>(
-    'Testing insertion of a word with empty fields',
-    setUp: () => {box.removeAll()}, // to ensure words inside the db is empty.
+    'emits [WordLoading, WordLoaded] when WordRetrived is added when store is empty.',
+    build: () => bloc,
+    act: (bloc) => bloc.add(WordsRetrieved()),
+    expect: () => <WordState>[
+      WordLoading(),
+      const WordsLoaded(words: []),
+    ],
+  );
+
+  blocTest<WordBloc, WordState>(
+    'emits [WordLoaded] when WordAdded is added when store is empty.',
+    seed: () => const WordsLoaded(words: []),
+    build: () => bloc,
+    act: (bloc) => bloc.add(WordAdded(word: word1)),
+    expect: () => <WordState>[
+      WordsLoaded(words: [word1..id = 1]),
+    ],
+  );
+
+  blocTest<WordBloc, WordState>(
+    'emits [WordInitial] when WordAdded is added when the word is invalid.',
     build: () => bloc,
     act: (bloc) => bloc.add(WordAdded(word: invalidWord)),
-    expect: () => <WordState>[WordInitial()],
+    expect: () => <WordState>[
+      WordInitial(),
+    ],
   );
 }

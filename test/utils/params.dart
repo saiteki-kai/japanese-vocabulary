@@ -1,6 +1,56 @@
 import 'package:japanese_vocabulary/data/models/review.dart';
 import 'package:japanese_vocabulary/data/models/word.dart';
 
+Word get emptyWord {
+  return Word(
+    jlpt: 0,
+    meaning: "",
+    pos: "",
+    reading: "",
+    text: "",
+  );
+}
+
+Word get invalidWord {
+  return Word(
+    text: "言葉",
+    reading: "",
+    jlpt: 5,
+    meaning: "",
+    pos: "Noun",
+  );
+}
+
+Word get word1 {
+  return Word(
+    text: "言葉",
+    reading: "ことば",
+    jlpt: 5,
+    meaning: "word; phrase; expression; term",
+    pos: "Noun",
+  );
+}
+
+Word get word2 {
+  return Word(
+    text: "復習",
+    reading: "ふくしゅう",
+    jlpt: 4,
+    meaning: "review (of learned material); revision",
+    pos: "Noun, Suru verb",
+  );
+}
+
+Word get word3 {
+  return Word(
+    text: "普通",
+    reading: "ふつう",
+    jlpt: 4,
+    meaning: "normal; ordinary; regular",
+    pos: "Noun, Na-adjective",
+  );
+}
+
 Review createReviewByDate(
   DateTime? date, {
   Word? word,
@@ -32,14 +82,7 @@ Review get readingReviewWithWord {
   return createReviewByDate(
     null,
     type: "reading",
-    word: Word(
-      jlpt: 3,
-      meaning: "word; phrase; expression; term",
-      pos: "noun",
-      reading: "ことば",
-      text: "言葉",
-      id: 0,
-    ),
+    word: word2,
   );
 }
 
@@ -47,59 +90,6 @@ Review get meaningReviewWithWord {
   return createReviewByDate(
     null,
     type: "meaning",
-    word: Word(
-      jlpt: 3,
-      meaning: "word; phrase; expression; term",
-      pos: "noun",
-      reading: "ことば",
-      text: "言葉",
-      id: 0,
-    ),
+    word: word1,
   );
-}
-
-Word get emptyWord {
-  return Word(
-    jlpt: 0,
-    meaning: "",
-    pos: "",
-    reading: "",
-    text: "",
-  );
-}
-
-Word get invalidWord {
-  return Word(
-    text: "言葉",
-    reading: "",
-    jlpt: 5,
-    meaning: "",
-    pos: "Noun",
-  );
-}
-
-List<Word> get exampleWords {
-  return [
-    Word(
-      text: "言葉",
-      reading: "ことば",
-      jlpt: 5,
-      meaning: "word; phrase; expression; term",
-      pos: "Noun",
-    ),
-    Word(
-      text: "復習",
-      reading: "ふくしゅう",
-      jlpt: 4,
-      meaning: "review (of learned material); revision",
-      pos: "Noun, Suru verb",
-    ),
-    Word(
-      text: "普通",
-      reading: "ふつう",
-      jlpt: 4,
-      meaning: "normal; ordinary; regular",
-      pos: "Noun, Na-adjective",
-    )
-  ];
 }

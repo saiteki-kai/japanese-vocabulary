@@ -5,7 +5,7 @@ import 'package:japanese_vocabulary/data/models/word.dart';
 import 'package:japanese_vocabulary/data/repositories/word_repository.dart';
 import 'package:japanese_vocabulary/objectbox.g.dart';
 
-import '../test/utils/params.dart';
+import 'utils/params.dart';
 
 void main() async {
   late Store store;
@@ -13,16 +13,25 @@ void main() async {
   late Box<Review> reviewBox;
   late WordRepository repo;
 
+  // Init conditions for each test.
+  //
   // At the start of each test the db have no words or reviews.
   setUp(() async {
     store = await AppDatabase.instance.store;
     wordBox = store.box<Word>();
     reviewBox = store.box<Review>();
     repo = WordRepository(box: Future.value(wordBox));
+
+    reviewBox.removeAll();
+    wordBox.removeAll();
   });
 
-  // Deletes the database at the end of each test
+  // This is done to facilitate testing.
+  //
+  // otherwise the incremental id should be taken into account.
   tearDown(() async {
+    reviewBox.removeAll();
+    wordBox.removeAll();
     store.close();
     await AppDatabase.instance.deleteDatabase();
   });

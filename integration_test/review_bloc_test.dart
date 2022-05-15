@@ -10,31 +10,31 @@ import '../test/utils/params.dart';
 
 void main() async {
   late Store store;
-  late Box<Review> box;
+  late ReviewRepository repo;
   late ReviewBloc bloc;
 
   setUp(() async {
     store = await AppDatabase.instance.store;
-    box = store.box<Review>();
-
-    bloc = ReviewBloc(repository: ReviewRepository(box: Future.value(box)));
-
-    box.removeAll();
-    box.put(nullDateReview);
-    box.put(review1);
-    box.put(review2);
+    repo = ReviewRepository(box: Future.value(store.box<Review>()));
+    bloc = ReviewBloc(repository: repo);
   });
 
   tearDown(() async {
     bloc.close();
-    box.removeAll();
     store.close();
     await AppDatabase.instance.deleteDatabase();
   });
 
+  setUpWithReviews() {
+    repo.updateReview(nullDateReview);
+    repo.updateReview(review1);
+    repo.updateReview(review2);
+  }
+
   blocTest<ReviewBloc, ReviewState>(
     'emits [ReviewLoading, ReviewLoaded] when ReviewRetrieved is added.',
     build: () => bloc,
+    setUp: setUpWithReviews,
     act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
@@ -45,6 +45,7 @@ void main() async {
   blocTest<ReviewBloc, ReviewState>(
     'emits [ReviewLoaded, ReviewLoaded] when ReviewSessionUpdated is added.',
     build: () => bloc,
+    setUp: setUpWithReviews,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
       ..add(ReviewSessionUpdated(review: review1, quality: 4)),
@@ -58,6 +59,7 @@ void main() async {
   blocTest<ReviewBloc, ReviewState>(
     'emits [ReviewLoaded, ReviewLoaded] when ReviewSessionUpdated is added.',
     build: () => bloc,
+    setUp: setUpWithReviews,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
       ..add(ReviewSessionUpdated(review: review1, quality: 4))
@@ -73,7 +75,6 @@ void main() async {
   blocTest<ReviewBloc, ReviewState>(
     'emits [ReviewLoading, ReviewError] when ReviewSessionStarted is added and session is empty.',
     build: () => bloc,
-    setUp: () => box.removeAll(),
     act: (bloc) => bloc..add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
@@ -84,9 +85,11 @@ void main() async {
   blocTest<ReviewBloc, ReviewState>(
     'emits [ReviewFinished] when ReviewUpdated is added and ReviewRetrieved is not added previously.',
     build: () => bloc,
-    act: (bloc) => bloc.add(
-      ReviewSessionUpdated(review: review1..id = 1, quality: 4),
-    ),
-    expect: () => <ReviewState>[ReviewFinished()],
+    setUp: setUpWithReviews,
+    act: (bloc) =>
+        bloc..add(ReviewSessionUpdated(review: review1..id = 1, quality: 4)),
+    expect: () => <ReviewState>[
+      ReviewFinished(),
+    ],
   );
 }
