@@ -21,14 +21,29 @@ void main() async {
     reset(box);
   });
 
-  group("get word", () {
-    final exampleWord = exampleWords[0];
+  group("get words", () {
+    test("not empty list", () async {
+      final words = [word1, word2, word3];
+      when(box.getAll).thenReturn(words);
 
+      final res = await repo.getWords();
+      expect(res, equals(words));
+    });
+
+    test("empty list", () async {
+      when(box.getAll).thenReturn([]);
+      final res = await repo.getWords();
+      expect(res, equals([]));
+    });
+  });
+
+
+  group("get word", () {
     test("get word with existing id", () async {
-      when(() => box.get(1)).thenReturn(exampleWord);
+      when(() => box.get(1)).thenReturn(word1);
 
       final word = await repo.getWord(1);
-      expect(word, equals(exampleWord));
+      expect(word, equals(word1));
     });
 
     test("get word with id zero", () async {
