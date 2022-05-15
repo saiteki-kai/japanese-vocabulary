@@ -26,16 +26,12 @@ class JapaneseVocabularyApp extends StatelessWidget {
       providers: [
         RepositoryProvider<WordRepository>(
           create: (context) => WordRepository(
-            box: AppDatabase.instance.store.then((s) {
-              return Future.value(s.box<Word>());
-            }),
+            box: AppDatabase.getBox<Word>(),
           ),
         ),
         RepositoryProvider<ReviewRepository>(
           create: (context) => ReviewRepository(
-            box: AppDatabase.instance.store.then((s) {
-              return Future.value(s.box<Review>());
-            }),
+            box: AppDatabase.getBox<Review>(),
           ),
         ),
       ],

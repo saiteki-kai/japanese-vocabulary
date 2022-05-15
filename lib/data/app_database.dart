@@ -58,4 +58,10 @@ class AppDatabase {
 
     _completer = null;
   }
+
+  static Future<Box<T>> getBox<T>() async {
+    final store = await instance.store;
+
+    return store.box<T>();
+  }
 }
