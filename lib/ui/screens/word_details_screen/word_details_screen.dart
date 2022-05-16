@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../../bloc/word_bloc.dart';
 import '../../../data/models/word.dart';
 import '../../widgets/loading_indicator.dart';
 import '../../widgets/screen_layout.dart';
 import './widgets/word_stats_tab.dart';
-import 'widgets/word_details_appbar.dart';
-import 'widgets/word_details_tab.dart';
+import './widgets/word_details_appbar.dart';
+import './widgets/word_details_tab.dart';
 
 /// A widget that displays the details and the statistics of a [Word] from the associated reviews.
 ///
