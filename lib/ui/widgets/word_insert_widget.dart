@@ -9,7 +9,10 @@ import 'screen_layout.dart';
 /// A widget that allows the user to add a new [Word] they want to learn.
 class WordInsert extends StatefulWidget {
   /// Creates a word insert widget.
-  const WordInsert({Key? key}) : super(key: key);
+  const WordInsert({Key? key, this.wordToAdd}) : super(key: key);
+
+  /// Word passed to the widget in case the fields need to be pre-filled (i.e. edit functionality)
+  final Word? wordToAdd;
 
   @override
   State<WordInsert> createState() => _WordInsertState();
@@ -65,6 +68,20 @@ class _WordInsertState extends State<WordInsert> {
 
   @override
   Widget build(BuildContext context) {
+    final wordToAdd = widget.wordToAdd;
+
+    /// If a word has been passed, fill in the fields
+    if (wordToAdd != null) {
+      _wordToAdd.id = wordToAdd.id;
+      _textController.text = wordToAdd.text;
+      _readingController.text = wordToAdd.text;
+      _meaningController.text = wordToAdd.meaning;
+      _jlptIndex = _jlptValues.indexOf(wordToAdd.jlpt);
+      final posNamesToSelect = wordToAdd.pos.split(',');
+      final indexesToSelect = posNamesToSelect.map(_posNames.indexOf).toList();
+      _posController.selectIndexes(indexesToSelect);
+    }
+
     _jlptController.selectIndex(_jlptIndex);
 
     return Scaffold(

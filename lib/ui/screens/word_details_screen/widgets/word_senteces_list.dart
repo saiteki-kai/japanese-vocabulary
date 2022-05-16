@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:japanese_vocabulary/ui/screens/word_details_screen/widgets/sentence_item.dart';
+import 'sentence_item.dart';
 import '../../../../bloc/sentence_bloc.dart';
 import '../../../../data/models/sentence.dart';
 import '../../../../data/models/word.dart';
