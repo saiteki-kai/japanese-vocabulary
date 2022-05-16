@@ -23,6 +23,9 @@ void main() async {
     repo = MockWordRepository();
     bloc = WordBloc(repository: repo);
     registerFallbackValue(FakeWord());
+
+    when(() => repo.addWord(any()))
+        .thenAnswer((inv) async => inv.positionalArguments[0].id);
   });
 
   tearDown(() async {
