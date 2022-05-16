@@ -43,6 +43,7 @@ class Word {
   /// Review related to reading of this word.
   final readingReview = ToOne<Review>();
 
+  /// Sentences related to this
   final sentences = ToMany<Sentence>();
 
   double get meanAccuracy {
