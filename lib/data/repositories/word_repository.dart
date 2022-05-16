@@ -1,18 +1,18 @@
 import '../../objectbox.g.dart';
-import '../app_database.dart';
 import '../../data/models/word.dart';
 import '../../data/models/review.dart';
 
 class WordRepository {
-  /// A database instance.
-  Future<Store> get _store => AppDatabase.instance.store;
+  const WordRepository({required Future<Box<Word>> box}) : _box = box;
+
+  // A database instance.
+  final Future<Box<Word>> _box;
 
   /// The method that allows the insertion of a word in the repository
   ///
   /// It creates a meaning and a reading review associated to this word
   Future<int> addWord(Word word) async {
-    final store = await _store;
-    final box = store.box<Word>();
+    final box = await _box;
 
     final Review meaning = Review(
       ef: 2.5,
@@ -42,8 +42,7 @@ class WordRepository {
 
   /// This method returns all the words in the repository
   Future<List<Word>> getWords() async {
-    final store = await _store;
-    final box = store.box<Word>();
+    final box = await _box;
 
     return box.getAll();
   }
@@ -54,8 +53,7 @@ class WordRepository {
   Future<Word?> getWord(int id) async {
     if (id <= 0) return null;
 
-    final store = await _store;
-    final box = store.box<Word>();
+    final box = await _box;
 
     return box.get(id);
   }

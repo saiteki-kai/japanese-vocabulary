@@ -2,31 +2,37 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:japanese_vocabulary/data/app_database.dart';
 import 'package:japanese_vocabulary/data/models/review.dart';
 import 'package:japanese_vocabulary/data/repositories/review_repository.dart';
+import 'package:japanese_vocabulary/objectbox.g.dart';
 
-import 'utils/review.dart';
+import '../test/utils/params.dart';
 
 void main() async {
-  final store = await AppDatabase.instance.store;
+  late Store store;
+  late Box<Review> box;
+  late ReviewRepository repo;
 
-  final box = store.box<Review>();
-  final repo = ReviewRepository();
+  setUp(() async {
+    store = await AppDatabase.instance.store;
+    box = store.box<Review>();
+    repo = ReviewRepository(box: Future.value(box));
 
-  setUp(() {
-    store.box<Review>().removeAll();
-    box.put(ReviewUtils.nullDateReview);
-    box.put(ReviewUtils.review1);
-    box.put(ReviewUtils.review2);
+    box.removeAll();
+    box.put(nullDateReview);
+    box.put(review1);
+    box.put(review2);
   });
 
-  tearDown(() {
-    store.box<Review>().removeAll();
+  tearDown(() async {
+    box.removeAll();
+    store.close();
+    await AppDatabase.instance.deleteDatabase();
   });
 
   test("get all reviews", () async {
     List<Review> reviews = await repo.getReviews();
     expect(reviews.length, 3);
 
-    store.box<Review>().removeAll();
+    box.removeAll();
     reviews = await repo.getReviews();
     expect(reviews.length, 0);
   });
@@ -39,7 +45,7 @@ void main() async {
     expect(notNullReview.nextDate?.millisecondsSinceEpoch ?? double.infinity,
         lessThan(DateTime.now().millisecondsSinceEpoch));
 
-    store.box<Review>().removeAll();
+    box.removeAll();
     reviews = await repo.getReviews();
     expect(reviews.length, 0);
   });
@@ -72,9 +78,11 @@ void main() async {
     });
 
     test("review not present in the database", () async {
-      final newReview = ReviewUtils.createReviewByDate(null);
+      final newReview = createReviewByDate(null);
       final id3 = await repo.updateReview(newReview);
+
       expect(id3, equals(4));
+      expect(box.getAll().length, 4);
     });
   });
 }

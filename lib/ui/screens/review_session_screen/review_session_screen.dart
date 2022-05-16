@@ -29,7 +29,9 @@ class ReviewSessionScreen extends StatefulWidget implements AutoRouteWrapper {
   @override
   Widget wrappedRoute(BuildContext context) {
     return BlocProvider(
-      create: (context) => ReviewBloc(repository: ReviewRepository()),
+      create: (context) => ReviewBloc(
+        repository: RepositoryProvider.of<ReviewRepository>(context),
+      ),
       child: this,
     );
   }

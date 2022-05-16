@@ -3,11 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:japanese_vocabulary/data/models/review.dart';
 import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_item.dart';
 import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_type_tag.dart';
-import 'utils/review.dart';
+import '../utils/params.dart';
 
 void main() {
-  final readingReview = ReviewUtils.readingReviewWithWord;
-  final meaningReview = ReviewUtils.meaningReviewWithWord;
+  final readingReview = readingReviewWithWord;
+  final meaningReview = meaningReviewWithWord;
 
   for (Review review in [readingReview, meaningReview]) {
     testWidgets("check reading review information",
