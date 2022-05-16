@@ -1,6 +1,7 @@
 import 'package:objectbox/objectbox.dart';
 
 import './review.dart';
+import 'sentence.dart';
 
 @Entity()
 class Word {
@@ -41,6 +42,8 @@ class Word {
 
   /// Review related to reading of this word.
   final readingReview = ToOne<Review>();
+
+  final sentences = ToMany<Sentence>();
 
   double get meanAccuracy {
     final acc1 = meaningReview.target?.getReviewAccuracy() ?? 0.0;
