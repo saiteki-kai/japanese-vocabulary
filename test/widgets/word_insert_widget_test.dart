@@ -54,7 +54,7 @@ void main() {
     expect(jlptBool, true);
   });
 
-  testWidgets("word1 as param", (WidgetTester tester) async {
+  testWidgets("valid word with no pos as param", (WidgetTester tester) async {
     final state = WordInitial();
     when(() => bloc.state).thenReturn(state);
 
@@ -66,22 +66,19 @@ void main() {
     final textCheck =
         (tester.widget(find.byKey(const Key("text"))) as TextField)
             .controller
-            ?.text
-            .compareTo("言葉");
+            ?.text;
     final readingCheck =
         (tester.widget(find.byKey(const Key("reading"))) as TextField)
             .controller
-            ?.text
-            .compareTo("ことば");
+            ?.text;
     final meaningCheck =
         (tester.widget(find.byKey(const Key("meaning"))) as TextField)
             .controller
-            ?.text
-            .compareTo("word; phrase; expression; term");
+            ?.text;
 
-    expect(textCheck, 0);
-    expect(readingCheck, 0);
-    expect(meaningCheck, 0);
+    expect(textCheck, equals("言葉"));
+    expect(readingCheck, equals("ことば"));
+    expect(meaningCheck, equals("word; phrase; expression; term"));
 
     final itemsFinder2 = find.byType(GroupButton);
     final posBool = (tester.widget(itemsFinder2.first) as GroupButton)
@@ -96,34 +93,31 @@ void main() {
     expect(jlptBool, true);
   });
 
-  testWidgets("word4 as param", (WidgetTester tester) async {
+  testWidgets("word with valid pos as param", (WidgetTester tester) async {
     final state = WordInitial();
     when(() => bloc.state).thenReturn(state);
 
     await setUpWidget(tester, word4);
 
     final itemsFinder = find.widgetWithText(TextField, "");
-    expect(itemsFinder, findsNWidgets(0));
+    expect(itemsFinder, findsNothing);
 
     final textCheck =
         (tester.widget(find.byKey(const Key("text"))) as TextField)
             .controller
-            ?.text
-            .compareTo("普通");
+            ?.text;
     final readingCheck =
         (tester.widget(find.byKey(const Key("reading"))) as TextField)
             .controller
-            ?.text
-            .compareTo("ふつう");
+            ?.text;
     final meaningCheck =
         (tester.widget(find.byKey(const Key("meaning"))) as TextField)
             .controller
-            ?.text
-            .compareTo("normal; ordinary; regular");
+            ?.text;
 
-    expect(textCheck, 0);
-    expect(readingCheck, 0);
-    expect(meaningCheck, 0);
+    expect(textCheck, equals("普通"));
+    expect(readingCheck, equals("ふつう"));
+    expect(meaningCheck, equals("normal; ordinary; regular"));
 
     final itemsFinder2 = find.byType(GroupButton);
     final posBool = (tester.widget(itemsFinder2.first) as GroupButton)
