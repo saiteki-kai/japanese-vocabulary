@@ -80,11 +80,12 @@ class _WordInsertState extends State<WordInsert> {
       _firstBuild = false;
       _wordToAdd.id = wordToAdd.id;
       _textController.text = wordToAdd.text;
-      _readingController.text = wordToAdd.text;
+      _readingController.text = wordToAdd.reading;
       _meaningController.text = wordToAdd.meaning;
       _jlptIndex = _jlptValues.indexOf(wordToAdd.jlpt);
       final posNamesToSelect = wordToAdd.pos.split(',');
       _posSelected.addAll(posNamesToSelect.map(_posNames.indexOf).toList());
+      _posSelected.remove(-1);
       _posController.selectIndexes(_posSelected);
     }
 
@@ -115,18 +116,21 @@ class _WordInsertState extends State<WordInsert> {
                       _FormItem(
                         title: "Text",
                         field: TextField(
+                          key: const Key("text"),
                           controller: _textController,
                         ),
                       ),
                       _FormItem(
                         title: "Reading",
                         field: TextField(
+                          key: const Key("reading"),
                           controller: _readingController,
                         ),
                       ),
                       _FormItem(
                         title: "Meaning",
                         field: TextField(
+                          key: const Key("meaning"),
                           controller: _meaningController,
                         ),
                       ),
@@ -134,6 +138,7 @@ class _WordInsertState extends State<WordInsert> {
                         title: "Part of speech",
                         field: Center(
                           child: GroupButton(
+                            key: const Key("pos"),
                             options: GroupButtonOptions(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -148,6 +153,7 @@ class _WordInsertState extends State<WordInsert> {
                         title: "JLPT",
                         field: Center(
                           child: GroupButton(
+                            key: const Key("jlpt"),
                             options: GroupButtonOptions(
                               borderRadius: BorderRadius.circular(8),
                               buttonWidth: 50,
