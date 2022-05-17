@@ -13,8 +13,9 @@ class WordRepository {
   /// It creates a meaning and a reading review associated to this word
   Future<int> addWord(Word word) async {
     final box = await _box;
-
-    if (word.readingReview.target == null) {
+    final readingReview = word.readingReview;
+    final meaningReview = word.meaningReview;
+    if (readingReview.target == null) {
       final Review meaning = Review(
         ef: 2.5,
         interval: 0,
@@ -34,11 +35,12 @@ class WordRepository {
         nextDate: DateTime.now(),
       );
 
-      word.meaningReview.target = meaning;
-      word.readingReview.target = reading;
+      meaningReview.target = meaning;
+      readingReview.target = reading;
       meaning.word.target = word;
       reading.word.target = word;
     }
+
     return box.put(word);
   }
 

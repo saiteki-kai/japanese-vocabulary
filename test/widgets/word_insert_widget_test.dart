@@ -54,7 +54,7 @@ void main() {
     expect(jlptBool, true);
   });
 
-  testWidgets("valid word with no pos as param", (WidgetTester tester) async {
+  testWidgets("valid word with invalid pos as param", (WidgetTester tester) async {
     final state = WordInitial();
     when(() => bloc.state).thenReturn(state);
 
