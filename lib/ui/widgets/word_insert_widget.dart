@@ -24,6 +24,9 @@ class _WordInsertState extends State<WordInsert> {
   /// The currently selected jlpt button index
   int _jlptIndex = 0;
 
+  /// The list of seleected pos
+  final List<int> _posSelected = [];
+
   /// The list of selectable jlpt levels
   final List<String> _jlptNames = ["N5", "N4", "N3", "N2", "N1"];
   final _jlptValues = [5, 4, 3, 2, 1];
@@ -60,6 +63,8 @@ class _WordInsertState extends State<WordInsert> {
   final GroupButtonController _posController = GroupButtonController();
   final GroupButtonController _jlptController = GroupButtonController();
 
+  bool _firstBuild = true;
+
   @override
   void initState() {
     _bloc = BlocProvider.of<WordBloc>(context);
@@ -71,15 +76,17 @@ class _WordInsertState extends State<WordInsert> {
     final wordToAdd = widget.wordToAdd;
 
     /// If a word has been passed, fill in the fields
-    if (wordToAdd != null) {
+    if (_firstBuild && wordToAdd != null) {
+      _firstBuild = false;
       _wordToAdd.id = wordToAdd.id;
       _textController.text = wordToAdd.text;
-      _readingController.text = wordToAdd.text;
+      _readingController.text = wordToAdd.reading;
       _meaningController.text = wordToAdd.meaning;
       _jlptIndex = _jlptValues.indexOf(wordToAdd.jlpt);
       final posNamesToSelect = wordToAdd.pos.split(',');
-      final indexesToSelect = posNamesToSelect.map(_posNames.indexOf).toList();
-      _posController.selectIndexes(indexesToSelect);
+      _posSelected.addAll(posNamesToSelect.map(_posNames.indexOf).toList());
+      _posSelected.remove(-1);
+      _posController.selectIndexes(_posSelected);
     }
 
     _jlptController.selectIndex(_jlptIndex);
@@ -109,18 +116,21 @@ class _WordInsertState extends State<WordInsert> {
                       _FormItem(
                         title: "Text",
                         field: TextField(
+                          key: const Key("text"),
                           controller: _textController,
                         ),
                       ),
                       _FormItem(
                         title: "Reading",
                         field: TextField(
+                          key: const Key("reading"),
                           controller: _readingController,
                         ),
                       ),
                       _FormItem(
                         title: "Meaning",
                         field: TextField(
+                          key: const Key("meaning"),
                           controller: _meaningController,
                         ),
                       ),
@@ -128,6 +138,7 @@ class _WordInsertState extends State<WordInsert> {
                         title: "Part of speech",
                         field: Center(
                           child: GroupButton(
+                            key: const Key("pos"),
                             options: GroupButtonOptions(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -142,6 +153,7 @@ class _WordInsertState extends State<WordInsert> {
                         title: "JLPT",
                         field: Center(
                           child: GroupButton(
+                            key: const Key("jlpt"),
                             options: GroupButtonOptions(
                               borderRadius: BorderRadius.circular(8),
                               buttonWidth: 50,
@@ -169,18 +181,24 @@ class _WordInsertState extends State<WordInsert> {
     _wordToAdd.meaning = _meaningController.text;
     _wordToAdd.reading = _readingController.text;
     _wordToAdd.text = _textController.text;
-    final posSelected = _posController.selectedIndexes;
 
     // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
-    final posTmp = posSelected.map((e) => _posNames[e]).join(",");
+    _posSelected.remove(-1);
+    final posTmp = _posSelected.map((e) => _posNames[e]).join(",");
     _wordToAdd.pos = posTmp;
 
     _bloc?.add(WordAdded(word: _wordToAdd));
     AutoRouter.of(context).pop();
   }
 
-  void _onPosSelected(int _, bool __) {
-    return;
+  void _onPosSelected(int index, bool selected) {
+    setState(() {
+      if (selected) {
+        _posSelected.add(index);
+      } else {
+        _posSelected.remove(index);
+      }
+    });
   }
 
   void _onJlptSelected(int index, bool __) {

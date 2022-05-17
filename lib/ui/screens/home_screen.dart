@@ -41,7 +41,7 @@ class HomeScreen extends StatelessWidget {
           floatingActionButton: _floatingActionButton(
             show: tabsRouter.activeIndex == 1,
             onPressed: () {
-              AutoRouter.of(context).push(const WordInsertScreen());
+              AutoRouter.of(context).push(WordInsertScreen());
             },
           ),
         );

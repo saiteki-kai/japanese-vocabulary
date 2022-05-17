@@ -13,29 +13,33 @@ class WordRepository {
   /// It creates a meaning and a reading review associated to this word
   Future<int> addWord(Word word) async {
     final box = await _box;
+    final readingReview = word.readingReview;
+    final meaningReview = word.meaningReview;
+    if (readingReview.target == null) {
+      final Review meaning = Review(
+        ef: 2.5,
+        interval: 0,
+        repetition: 0,
+        correctAnswers: 0,
+        incorrectAnswers: 0,
+        type: 'meaning',
+        nextDate: DateTime.now(),
+      );
+      final Review reading = Review(
+        ef: 2.5,
+        interval: 0,
+        repetition: 0,
+        correctAnswers: 0,
+        incorrectAnswers: 0,
+        type: 'reading',
+        nextDate: DateTime.now(),
+      );
 
-    final Review meaning = Review(
-      ef: 2.5,
-      interval: 0,
-      repetition: 0,
-      correctAnswers: 0,
-      incorrectAnswers: 0,
-      type: 'meaning',
-      nextDate: DateTime.now(),
-    );
-    final Review reading = Review(
-      ef: 2.5,
-      interval: 0,
-      repetition: 0,
-      correctAnswers: 0,
-      incorrectAnswers: 0,
-      type: 'reading',
-      nextDate: DateTime.now(),
-    );
-    word.meaningReview.target = meaning;
-    word.readingReview.target = reading;
-    meaning.word.target = word;
-    reading.word.target = word;
+      meaningReview.target = meaning;
+      readingReview.target = reading;
+      meaning.word.target = word;
+      reading.word.target = word;
+    }
 
     return box.put(word);
   }
