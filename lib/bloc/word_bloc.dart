@@ -28,10 +28,13 @@ class WordBloc extends Bloc<WordEvent, WordState> {
       emit(WordInitial());
     } else {
       final state = this.state;
-
       if (state is WordsLoaded) {
         await repository.addWord(event.word);
         emit(WordsLoaded(words: [...state.words, event.word]));
+      }
+      if (state is WordLoaded) {
+        await repository.addWord(event.word);
+        emit(WordLoaded(word: event.word));
       }
     }
   }
