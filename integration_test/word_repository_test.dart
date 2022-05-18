@@ -96,4 +96,31 @@ void main() async {
       expect(reviewBox.getAll().length, 2);
     });
   });
+
+  test('simple edit', () async {
+    expect(wordBox.getAll().length, 0);
+
+    final res = await repo.addWord(word5);
+    expect(res, 1, reason: "Id should've been 1");
+    expect(wordBox.getAll().length, 1, reason: "# elements should've been 1");
+    final word = wordBox.get(res);
+
+    word!.text = "Gracias";
+    word.reading = "Gra see uhs";
+    word.jlpt = 1;
+    word.meaning = "Thanks";
+    word.pos = "n, vi";
+
+    final res2 = await repo.addWord(word);
+    final wordEdited = wordBox.get(res2);
+
+    expect(wordEdited?.text, "Gracias");
+    expect(wordEdited?.reading, "Gra see uhs");
+    expect(wordEdited?.jlpt, 1);
+    expect(wordEdited?.meaning, "Thanks");
+    expect(wordEdited?.pos, "n, vi");
+
+    expect(res2, 1, reason: "Id should've been 1");
+    expect(wordBox.getAll().length, 1, reason: "# elements should've been 1");
+  });
 }
