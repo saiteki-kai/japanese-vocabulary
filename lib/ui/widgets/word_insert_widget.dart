@@ -20,9 +20,10 @@ class WordInsert extends StatefulWidget {
 
 class _WordInsertState extends State<WordInsert> {
   final _wordToAdd = Word(jlpt: 5, text: "", reading: "", meaning: "", pos: "");
+  bool editing = false;
 
   /// The currently selected jlpt button index
-  int _jlptIndex = 0;
+  int _jlptIndex = -1;
 
   /// The list of seleected pos
   final List<int> _posSelected = [];
@@ -63,21 +64,15 @@ class _WordInsertState extends State<WordInsert> {
   final GroupButtonController _posController = GroupButtonController();
   final GroupButtonController _jlptController = GroupButtonController();
 
-  bool _firstBuild = true;
-
   @override
   void initState() {
     _bloc = BlocProvider.of<WordBloc>(context);
     super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     final wordToAdd = widget.wordToAdd;
+    if (wordToAdd != null) {
+      editing = true;
 
-    /// If a word has been passed, fill in the fields
-    if (_firstBuild && wordToAdd != null) {
-      _firstBuild = false;
+      /// If a word has been passed, fill in the fields
       _wordToAdd.id = wordToAdd.id;
       _textController.text = wordToAdd.text;
       _readingController.text = wordToAdd.reading;
@@ -87,15 +82,20 @@ class _WordInsertState extends State<WordInsert> {
       _posSelected.addAll(posNamesToSelect.map(_posNames.indexOf).toList());
       _posSelected.remove(-1);
       _posController.selectIndexes(_posSelected);
+
+      _bloc?.add(WordRetrieved(wordId: _wordToAdd.id));
     }
 
     _jlptController.selectIndex(_jlptIndex);
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: ScreenLayout(
         appBar: AppBar(
           elevation: 0,
-          title: const Text('Insert a word'),
+          title: title(editing),
           actions: [
             IconButton(
               onPressed: _onPressed,
@@ -159,6 +159,7 @@ class _WordInsertState extends State<WordInsert> {
                               buttonWidth: 50,
                             ),
                             isRadio: true,
+                            enableDeselect: true,
                             controller: _jlptController,
                             onSelected: _onJlptSelected,
                             buttons: _jlptNames,
@@ -187,7 +188,14 @@ class _WordInsertState extends State<WordInsert> {
     final posTmp = _posSelected.map((e) => _posNames[e]).join(",");
     _wordToAdd.pos = posTmp;
 
-    _bloc?.add(WordAdded(word: _wordToAdd));
+    if (editing) {
+      // Edit
+      _bloc?.add(WordEdited(word: _wordToAdd));
+    } else {
+      // Insert
+      _bloc?.add(WordAdded(word: _wordToAdd));
+    }
+
     AutoRouter.of(context).pop();
   }
 
@@ -203,7 +211,17 @@ class _WordInsertState extends State<WordInsert> {
 
   void _onJlptSelected(int index, bool __) {
     /// Updates the currently selected JLPT level value
-    setState(() => _jlptIndex = index);
+    _jlptController.selectedIndex!;
+    _jlptIndex = index;
+  }
+
+  Text title(bool editing) {
+    /// Updates the currently title
+    if (editing) {
+      return const Text('Edit a word');
+    }
+
+    return const Text('Insert a word');
   }
 }
 

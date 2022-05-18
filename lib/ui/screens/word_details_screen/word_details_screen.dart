@@ -53,6 +53,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
                 appBar: WordDetailsAppBar(
                   title: word.text,
                   tabController: _tabController,
+                  word: word,
                 ),
                 padding: EdgeInsets.zero,
                 child: TabBarView(

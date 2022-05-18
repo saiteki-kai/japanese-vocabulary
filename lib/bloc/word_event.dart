@@ -23,5 +23,13 @@ class WordAdded extends WordEvent {
   List<Object> get props => [word];
 }
 
+class WordEdited extends WordEvent {
+  final Word word;
+  const WordEdited({required this.word});
+
+  @override
+  List<Object> get props => [word];
+}
+
 /// This [WordsRetrieved] manages the events concerning the [Word].
 class WordsRetrieved extends WordEvent {}

@@ -16,8 +16,10 @@ class _WordInsertScreenState extends State<WordInsertScreen> {
   @override
   Widget build(BuildContext context) {
     /// Creates a word insert screen widget.
-    return WordInsert(
-      wordToAdd: widget.word,
-    );
+    if (widget.word != null) {
+      return WordInsert(wordToAdd: widget.word);
+    }
+
+    return const WordInsert();
   }
 }

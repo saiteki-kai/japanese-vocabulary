@@ -121,12 +121,46 @@
           "indexId": "7:6191155656918217405"
         }
       ],
+      "relations": [
+        {
+          "id": "1:5447745159720244462",
+          "name": "sentences",
+          "targetId": "3:2910719874990896511"
+        }
+      ]
+    },
+    {
+      "id": "3:2910719874990896511",
+      "lastPropertyId": "3:1587867639545368310",
+      "name": "Sentence",
+      "properties": [
+        {
+          "id": "1:1798835920010056590",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:3055940177294087492",
+          "name": "text",
+          "type": 9,
+          "flags": 2048,
+          "indexId": "9:2869844162158547169"
+        },
+        {
+          "id": "3:1587867639545368310",
+          "name": "translation",
+          "type": 9,
+          "flags": 2048,
+          "indexId": "10:662167108612592094"
+        }
+      ],
       "relations": []
     }
   ],
-  "lastEntityId": "2:401038334785999611",
-  "lastIndexId": "8:8729763161222566721",
-  "lastRelationId": "0:0",
+  "lastEntityId": "3:2910719874990896511",
+  "lastIndexId": "10:662167108612592094",
+  "lastRelationId": "1:5447745159720244462",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
