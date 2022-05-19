@@ -104,6 +104,7 @@ void main() async {
 
   blocTest<WordBloc, WordState>(
     'emits [WordLoaded] when WordAdded is added multiple times.',
+    seed: () => const WordsLoaded(words: []),
     build: () => bloc,
     setUp: setUpEmpty,
     act: (bloc) => {
@@ -111,12 +112,13 @@ void main() async {
       bloc.add(WordAdded(word: word2)),
     },
     verify: (_) {
-      verifyNever(() => repo.addWord(any()));
+      verify(() => repo.addWord(any())).called(2);
     },
   );
 
   blocTest<WordBloc, WordState>(
     'emits [WordLoaded] when WordAdded is added multiple times and store not empty.',
+    seed: () => const WordsLoaded(words: []),
     build: () => bloc,
     setUp: setUpWithWords,
     act: (bloc) => {
@@ -124,7 +126,7 @@ void main() async {
       bloc.add(WordAdded(word: word5)),
     },
     verify: (_) {
-      verifyNever(() => repo.addWord(any()));
+      verify(() => repo.addWord(any())).called(2);
     },
   );
 }
