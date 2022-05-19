@@ -72,10 +72,14 @@ void main() async {
     test('simple edit', () async {
       when(() => box.put(any()))
           .thenAnswer((inv) => inv.positionalArguments[0].id);
-      when(() => box.get(0)).thenReturn(word5);
+      when(() => box.put(word5)).thenReturn(5);
+      when(() => box.get(5)).thenReturn(word5);
 
-      final word = box.get(word5.id);
-      expect(word, equals(word5));
+      final id = await repo.addWord(word5);
+      expect(id, 5, reason: "Id should've been 5");
+      verify(() => box.put(any())).called(1);
+
+      final word = await repo.getWord(5);
 
       word!.text = "Gracias";
       word.reading = "Gra see uhs";
@@ -83,8 +87,11 @@ void main() async {
       word.meaning = "Thanks";
       word.pos = "n, vi";
 
+      when(() => box.put(word)).thenReturn(5);
+      when(() => box.get(5)).thenReturn(word);
+
       final id2 = await repo.addWord(word);
-      final wordEdited = box.get(id2);
+      final wordEdited = await repo.getWord(id2);
 
       expect(wordEdited?.text, "Gracias");
       expect(wordEdited?.reading, "Gra see uhs");
@@ -92,7 +99,8 @@ void main() async {
       expect(wordEdited?.meaning, "Thanks");
       expect(wordEdited?.pos, "n, vi");
 
-      expect(id2, word1.id, reason: "Id should've been ${word1.id}");
+      expect(id2, 5, reason: "Id should've been 5");
+      verify(() => box.put(any())).called(1);
     });
   });
 }
