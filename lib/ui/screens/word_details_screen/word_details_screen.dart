@@ -98,7 +98,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
           SizedBox(
             width: 300.0,
             child: TextField(
-              key: const Key("sentence-text"),
+              key: const Key("sentence-text-d"),
               decoration: const InputDecoration(
                 hintText: "Sentence",
               ),
@@ -109,7 +109,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
             height: 4,
           ),
           TextField(
-            key: const Key("sentence-translation"),
+            key: const Key("sentence-translation-d"),
             decoration: const InputDecoration(
               hintText: "Translation",
             ),
@@ -132,6 +132,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
     if (text.isNotEmpty && translation.isNotEmpty) {
       setState(() {
         word.sentences.add(Sentence(text: text, translation: translation));
+        _bloc?.add(WordAdded(word: word));
         _sentenceTextController.clear();
         _sentenceTranslationController.clear();
         Navigator.pop(context);

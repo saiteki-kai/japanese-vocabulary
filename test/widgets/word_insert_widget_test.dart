@@ -132,4 +132,45 @@ void main() {
     expect(posBool, true);
     expect(jlptBool, true);
   });
+  testWidgets("add sentence with empty or partially filled fields",
+      (WidgetTester tester) async {
+    print("prima del danno");
+    final textController =
+        (tester.widget(find.byKey(const Key("sentence-text-i"))) as TextField)
+            .controller;
+    /*final translationController = (tester
+            .widget(find.byKey(const Key("sentence-translation"))) as TextField)
+        .controller;*/
+    print("A");
+    // case: empty fields
+    await tester.tap(find.byType(IconButton).last);
+    await tester.pump();
+    print("B");
+    Finder sentences = find.byElementType(SizedBox);
+    expect(sentences, findsNWidgets(1));
+    print("C");
+    // case: only sentence text
+    await tester.enterText(find.byKey(const Key("sentence-text-i")), "test");
+    print("D");
+    await tester.tap(find.byType(IconButton).last);
+    await tester.pump();
+    print("E");
+    sentences = find.byElementType(SizedBox);
+    print("F");
+    expect(sentences, findsNWidgets(1));
+
+    textController?.clear();
+
+    // case: only translation
+    await tester.enterText(
+        find.byKey(const Key("sentence-translation-i")), "test");
+    print("G");
+    await tester.tap(find.byType(IconButton).last);
+    await tester.pump();
+    print("H");
+
+    sentences = find.byElementType(SizedBox);
+    print("I");
+    expect(sentences, findsNWidgets(1));
+  });
 }

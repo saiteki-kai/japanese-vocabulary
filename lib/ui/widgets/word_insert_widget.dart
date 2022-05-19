@@ -187,7 +187,7 @@ class _WordInsertState extends State<WordInsert> {
                                     verticalDirection: VerticalDirection.down,
                                     children: [
                                       TextField(
-                                        key: const Key("sentence-text"),
+                                        key: const Key("sentence-text-i"),
                                         decoration: const InputDecoration(
                                           hintText: "Sentence",
                                         ),
@@ -197,7 +197,8 @@ class _WordInsertState extends State<WordInsert> {
                                         height: 4,
                                       ),
                                       TextField(
-                                        key: const Key("sentence-translation"),
+                                        key:
+                                            const Key("sentence-translation-i"),
                                         decoration: const InputDecoration(
                                           hintText: "Translation",
                                         ),
