@@ -95,32 +95,84 @@ void main() async {
       expect(wordBox.getAll().length, 1);
       expect(reviewBox.getAll().length, 2);
     });
+
+    test('simple edit', () async {
+      expect(wordBox.getAll().length, 0);
+
+      await repo.addWord(word2);
+      final res = await repo.addWord(word5);
+      await repo.addWord(word4);
+      expect(res, 2, reason: "Id should've been 2");
+      expect(wordBox.getAll().length, 3, reason: "# elements should've been 3");
+
+      final word = wordBox.get(res);
+
+      word!.text = "Gracias";
+      word.reading = "Gra see uhs";
+      word.jlpt = 1;
+      word.meaning = "Thanks";
+      word.pos = "n, vi";
+
+      final res2 = await repo.addWord(word);
+      final wordEdited = wordBox.get(res2);
+
+      expect(wordEdited?.text, "Gracias");
+      expect(wordEdited?.reading, "Gra see uhs");
+      expect(wordEdited?.jlpt, 1);
+      expect(wordEdited?.meaning, "Thanks");
+      expect(wordEdited?.pos, "n, vi");
+
+      expect(res2, 2, reason: "Id should've been 2");
+      expect(wordBox.getAll().length, 3, reason: "# elements should've been 3");
+    });
   });
 
-  test('simple edit', () async {
-    expect(wordBox.getAll().length, 0);
+  group('insert word with not empty db', () {
+    setUp(() {
+      wordBox.put(word1);
+      wordBox.put(word2);
+      wordBox.put(word3);
+    });
 
-    final res = await repo.addWord(word5);
-    expect(res, 1, reason: "Id should've been 1");
-    expect(wordBox.getAll().length, 1, reason: "# elements should've been 1");
-    final word = wordBox.get(res);
+    test('insertion with not empty db', () async {
+      expect(wordBox.getAll().length, 3, reason: "# elements should've been 3");
+      final res = await repo.addWord(word5);
+      expect(wordBox.getAll().length, 4, reason: "# elements should've been 4");
+      expect(res, 4, reason: "Id should've been 4");
 
-    word!.text = "Gracias";
-    word.reading = "Gra see uhs";
-    word.jlpt = 1;
-    word.meaning = "Thanks";
-    word.pos = "n, vi";
+      final wordAdded = wordBox.get(res);
+      expect(wordAdded?.text, "gracias");
+      expect(wordAdded?.reading, "gra see uhs");
+      expect(wordAdded?.jlpt, 2);
+      expect(wordAdded?.meaning, "thanks");
+      expect(wordAdded?.pos, "n");
 
-    final res2 = await repo.addWord(word);
-    final wordEdited = wordBox.get(res2);
+      expect(res, 4, reason: "Id should've been 4");
+      expect(wordBox.getAll().length, 4, reason: "# elements should've been 4");
+    });
 
-    expect(wordEdited?.text, "Gracias");
-    expect(wordEdited?.reading, "Gra see uhs");
-    expect(wordEdited?.jlpt, 1);
-    expect(wordEdited?.meaning, "Thanks");
-    expect(wordEdited?.pos, "n, vi");
+    test('edit with not empty db', () async {
+      expect(wordBox.getAll().length, 3, reason: "# elements should've been 3");
 
-    expect(res2, 1, reason: "Id should've been 1");
-    expect(wordBox.getAll().length, 1, reason: "# elements should've been 1");
+      final word = wordBox.get(2);
+
+      word!.text = "Gracias";
+      word.reading = "Gra see uhs";
+      word.jlpt = 1;
+      word.meaning = "Thanks";
+      word.pos = "n, vi";
+
+      final res2 = await repo.addWord(word);
+      final wordEdited = wordBox.get(res2);
+
+      expect(wordEdited?.text, "Gracias");
+      expect(wordEdited?.reading, "Gra see uhs");
+      expect(wordEdited?.jlpt, 1);
+      expect(wordEdited?.meaning, "Thanks");
+      expect(wordEdited?.pos, "n, vi");
+
+      expect(res2, 2, reason: "Id should've been 2");
+      expect(wordBox.getAll().length, 3, reason: "# elements should've been 3");
+    });
   });
 }

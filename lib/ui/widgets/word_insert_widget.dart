@@ -21,6 +21,7 @@ class WordInsert extends StatefulWidget {
 class _WordInsertState extends State<WordInsert> {
   final _wordToAdd = Word(jlpt: 5, text: "", reading: "", meaning: "", pos: "");
   bool editing = false;
+  bool readyToBuild = false;
 
   /// The currently selected jlpt button index
   int _jlptIndex = -1;
@@ -178,25 +179,33 @@ class _WordInsertState extends State<WordInsert> {
   }
 
   void _onPressed() {
-    _wordToAdd.jlpt = _jlptValues[_jlptIndex];
-    _wordToAdd.meaning = _meaningController.text;
-    _wordToAdd.reading = _readingController.text;
     _wordToAdd.text = _textController.text;
+    _wordToAdd.reading = _readingController.text;
+    _wordToAdd.meaning = _meaningController.text;
 
+    if (_wordToAdd.text.isNotEmpty &&
+        _wordToAdd.reading.isNotEmpty &&
+        _wordToAdd.meaning.isNotEmpty) {
+      // Just to check if all the mandatory fields are not empty
+      readyToBuild = true;
+    }
+
+    _wordToAdd.jlpt = _jlptValues[_jlptIndex];
     // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
     _posSelected.remove(-1);
     final posTmp = _posSelected.map((e) => _posNames[e]).join(",");
     _wordToAdd.pos = posTmp;
 
-    if (editing) {
+    // If the mandatory fields are not compiled it doesn't insert or edit
+    if (editing && readyToBuild) {
       // Edit
       _bloc?.add(WordEdited(word: _wordToAdd));
-    } else {
+      AutoRouter.of(context).pop();
+    } else if (readyToBuild) {
       // Insert
       _bloc?.add(WordAdded(word: _wordToAdd));
+      AutoRouter.of(context).pop();
     }
-
-    AutoRouter.of(context).pop();
   }
 
   void _onPosSelected(int index, bool selected) {

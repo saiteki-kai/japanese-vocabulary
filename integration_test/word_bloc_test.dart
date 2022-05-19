@@ -88,6 +88,16 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
+    'emits [WordLoaded] when WordEdited is added when store is not empty.',
+    build: () => bloc,
+    setUp: setUpWithWords,
+    act: (bloc) => bloc.add(WordEdited(word: word2)),
+    expect: () => <WordState>[
+      WordLoaded(word: word2..id = 4),
+    ],
+  );
+
+  blocTest<WordBloc, WordState>(
     'emits [WordInitial] when WordEdited is added when the word is invalid.',
     build: () => bloc,
     act: (bloc) => bloc.add(WordEdited(word: invalidWord)),
