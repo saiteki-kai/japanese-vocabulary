@@ -19,10 +19,6 @@ class SentenceBloc extends Bloc<SentenceEvent, SentenceState> {
       SentencesRetrieved event, Emitter<SentenceState> emit) async {
     emit(SentencesLoading());
 
-    if (event.word.sentences.isNotEmpty) {
-      emit(SentencesLoaded(sentences: event.word.sentences));
-    } else {
-      emit(const SentenceError(message: "sentence not found!"));
-    }
+    emit(SentencesLoaded(sentences: event.word.sentences));
   }
 }

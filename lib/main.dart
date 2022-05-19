@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'bloc/sentence_bloc.dart';
 import 'config/routes.gr.dart';
 import 'bloc/review_bloc.dart';
 import 'bloc/word_bloc.dart';
@@ -45,6 +46,11 @@ class JapaneseVocabularyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => ReviewBloc(
               repository: RepositoryProvider.of<ReviewRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => SentenceBloc(
+              repository: RepositoryProvider.of<WordRepository>(context),
             ),
           ),
         ],

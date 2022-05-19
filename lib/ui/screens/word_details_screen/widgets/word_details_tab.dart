@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../data/models/word.dart';
 import '../../../../utils/colors.dart';
 import '../../word_details_screen/widgets/title_subtitle_widget.dart';
+import 'senteces_list.dart';
 
 /// A widget that displays the details of a [Word].
 ///
@@ -22,56 +23,63 @@ class WordDetailsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Card(
-          margin: const EdgeInsets.all(16.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          wordDetailsCard(word),
+          SentencesList(word: word),
+        ],
+      ),
+    );
+  }
+
+  Card wordDetailsCard(Word word) {
+    return Card(
+      margin: const EdgeInsets.all(16.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        word.text,
-                        style: const TextStyle(fontSize: 24.0),
-                      ),
-                    ),
-                    Text("N${word.jlpt}"),
-                  ],
+                Expanded(
+                  child: Text(
+                    word.text,
+                    style: const TextStyle(fontSize: 24.0),
+                  ),
                 ),
-                TitleSubtitleWidget(
-                  title: "Reading",
-                  titleTextStyle: _textStyle,
-                  subtitle: word.reading,
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                ),
-                TitleSubtitleWidget(
-                  title: "Meaning",
-                  titleTextStyle: _textStyle,
-                  subtitle: word.meaning,
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                ),
-                TitleSubtitleWidget(
-                  title: "Part of speech",
-                  titleTextStyle: _textStyle,
-                  subtitle: word.pos,
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                ),
+                Text("N${word.jlpt}"),
               ],
             ),
-          ),
+            TitleSubtitleWidget(
+              title: "Reading",
+              titleTextStyle: _textStyle,
+              subtitle: word.reading,
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            TitleSubtitleWidget(
+              title: "Meaning",
+              titleTextStyle: _textStyle,
+              subtitle: word.meaning,
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+            TitleSubtitleWidget(
+              title: "Part of speech",
+              titleTextStyle: _textStyle,
+              subtitle: word.pos,
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              crossAxisAlignment: CrossAxisAlignment.start,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }
