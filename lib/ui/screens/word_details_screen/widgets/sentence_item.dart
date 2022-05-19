@@ -25,6 +25,7 @@ class SentenceItem extends StatelessWidget {
                 children: [
                   Text(
                     sentence.text,
+                    key: const Key("textSentenceTest"),
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

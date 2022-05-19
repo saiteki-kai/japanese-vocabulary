@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../data/models/word.dart';
 import '../../../../utils/colors.dart';
 import '../../word_details_screen/widgets/title_subtitle_widget.dart';
-import 'senteces_list.dart';
+import 'sentences_list.dart';
 
 /// A widget that displays the details of a [Word].
 ///

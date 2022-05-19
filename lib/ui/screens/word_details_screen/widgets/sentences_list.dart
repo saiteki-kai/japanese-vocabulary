@@ -33,6 +33,7 @@ class SentencesList extends StatelessWidget {
                 children: const [
                   Text(
                     "No senteces found",
+                    key: Key("noSentenceTest"),
                     style: TextStyle(
                       fontSize: 20,
                     ),
