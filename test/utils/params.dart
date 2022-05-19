@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:japanese_vocabulary/data/models/review.dart';
+import 'package:japanese_vocabulary/data/models/sentence.dart';
 import 'package:japanese_vocabulary/data/models/word.dart';
 
 Word get emptyWord {
@@ -46,6 +48,30 @@ Word get word3 {
     text: "普通",
     reading: "ふつう",
     jlpt: 4,
+    meaning: "normal; ordinary; regular",
+    pos: "Noun, Na-adjective",
+  );
+}
+
+Word get wordSentence {
+  final word = Word(
+    text: "sentence",
+    reading: "reading",
+    jlpt: 3,
+    meaning: "normal; ordinary; regular",
+    pos: "Noun, Na-adjective",
+  );
+  final sentence =
+      Sentence(text: "sentence text", translation: "sentence traslation");
+  word.sentences.add(sentence);
+  return word;
+}
+
+Word get wordNoSentence {
+  return Word(
+    text: "sentence",
+    reading: "reading",
+    jlpt: 3,
     meaning: "normal; ordinary; regular",
     pos: "Noun, Na-adjective",
   );
