@@ -87,4 +87,43 @@ void main() async {
       verifyNever(() => repo.addWord(any()));
     },
   );
+
+  blocTest<WordBloc, WordState>(
+    'emits [WordLoaded] when WordEdited is added when store is empty.',
+    seed: () => const WordsLoaded(words: []),
+    build: () => bloc,
+    act: (bloc) => bloc.add(WordEdited(word: word1)),
+    expect: () => <WordState>[
+      WordLoaded(word: word1),
+    ],
+    verify: (_) {
+      verify(() => repo.addWord(any())).called(1);
+    },
+  );
+
+  blocTest<WordBloc, WordState>(
+    'emits [WordLoaded] when WordEdited is added when store is not empty.',
+    build: () => bloc,
+    setUp: setUpWithWords,
+    act: (bloc) => bloc.add(WordEdited(word: word1)),
+    expect: () => <WordState>[
+      WordLoaded(word: word1),
+    ],
+    verify: (_) {
+      verify(() => repo.addWord(any())).called(1);
+    },
+  );
+
+  blocTest<WordBloc, WordState>(
+    'emits [WordInitial] when WordEdited is added when the word is invalid.',
+    build: () => bloc,
+    setUp: setUpEmpty,
+    act: (bloc) => bloc.add(WordEdited(word: invalidWord)),
+    expect: () => <WordState>[
+      WordInitial(),
+    ],
+    verify: (_) {
+      verifyNever(() => repo.addWord(any()));
+    },
+  );
 }
