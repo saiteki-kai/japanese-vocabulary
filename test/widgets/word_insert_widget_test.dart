@@ -40,7 +40,7 @@ void main() {
 
     await setUpWidget(tester, null);
     final itemsFinder = find.widgetWithText(TextField, "");
-    expect(itemsFinder, findsNWidgets(3));
+    expect(itemsFinder, findsNWidgets(5));
     final itemsFinder2 = find.byType(GroupButton);
     final posBool = (tester.widget(itemsFinder2.first) as GroupButton)
         .controller
@@ -54,14 +54,15 @@ void main() {
     expect(jlptBool, true);
   });
 
-  testWidgets("valid word with invalid pos as param", (WidgetTester tester) async {
+  testWidgets("valid word with invalid pos as param",
+      (WidgetTester tester) async {
     final state = WordInitial();
     when(() => bloc.state).thenReturn(state);
 
     await setUpWidget(tester, word1);
 
     final itemsFinder = find.widgetWithText(TextField, "");
-    expect(itemsFinder, findsNWidgets(0));
+    expect(itemsFinder, findsNWidgets(2));
 
     final textCheck =
         (tester.widget(find.byKey(const Key("text"))) as TextField)
@@ -100,7 +101,7 @@ void main() {
     await setUpWidget(tester, word4);
 
     final itemsFinder = find.widgetWithText(TextField, "");
-    expect(itemsFinder, findsNothing);
+    expect(itemsFinder, findsNWidgets(2));
 
     final textCheck =
         (tester.widget(find.byKey(const Key("text"))) as TextField)

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';
 import 'package:flutter/material.dart';
 import '../../bloc/word_bloc.dart';
+import '../../data/models/sentence.dart';
 import '../../data/models/word.dart';
 import 'screen_layout.dart';
 
@@ -30,6 +31,9 @@ class _WordInsertState extends State<WordInsert> {
   /// The list of selectable jlpt levels
   final List<String> _jlptNames = ["N5", "N4", "N3", "N2", "N1"];
   final _jlptValues = [5, 4, 3, 2, 1];
+
+  /// The list of example sentences that will be associated to the word
+  final List<Sentence> _sentences = [];
 
   /// The list of the selectable parts of speech names
   final List<String> _posNames = [
@@ -60,6 +64,9 @@ class _WordInsertState extends State<WordInsert> {
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _readingController = TextEditingController();
   final TextEditingController _meaningController = TextEditingController();
+  final TextEditingController _sentenceTextController = TextEditingController();
+  final TextEditingController _sentenceTranslationController =
+      TextEditingController();
   final GroupButtonController _posController = GroupButtonController();
   final GroupButtonController _jlptController = GroupButtonController();
 
@@ -87,6 +94,7 @@ class _WordInsertState extends State<WordInsert> {
       _posSelected.addAll(posNamesToSelect.map(_posNames.indexOf).toList());
       _posSelected.remove(-1);
       _posController.selectIndexes(_posSelected);
+      _sentences.addAll(wordToAdd.sentences);
     }
 
     _jlptController.selectIndex(_jlptIndex);
@@ -165,6 +173,78 @@ class _WordInsertState extends State<WordInsert> {
                           ),
                         ),
                       ),
+                      _FormItem(
+                        title: "Examples",
+                        field: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    verticalDirection: VerticalDirection.down,
+                                    children: [
+                                      TextField(
+                                        key: const Key("sentence-text"),
+                                        decoration: const InputDecoration(
+                                          hintText: "Sentence",
+                                        ),
+                                        controller: _sentenceTextController,
+                                      ),
+                                      const SizedBox(
+                                        height: 4,
+                                      ),
+                                      TextField(
+                                        key: const Key("sentence-translation"),
+                                        decoration: const InputDecoration(
+                                          hintText: "Translation",
+                                        ),
+                                        controller:
+                                            _sentenceTranslationController,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed: _onAddSentencePressed,
+                                  icon: const Icon(Icons.add,
+                                      color: Colors.black),
+                                )
+                              ],
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _sentences.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  verticalDirection: VerticalDirection.down,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        _sentences[index].text,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                    Flexible(
+                                      child:
+                                          Text(_sentences[index].translation),
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -185,10 +265,26 @@ class _WordInsertState extends State<WordInsert> {
     // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
     _posSelected.remove(-1);
     final posTmp = _posSelected.map((e) => _posNames[e]).join(",");
+
     _wordToAdd.pos = posTmp;
+    _wordToAdd.sentences.addAll(_sentences);
 
     _bloc?.add(WordAdded(word: _wordToAdd));
     AutoRouter.of(context).pop();
+  }
+
+  void _onAddSentencePressed() {
+    /// Adds a new example sentence
+    final text = _sentenceTextController.text;
+    final translation = _sentenceTranslationController.text;
+    FocusScope.of(context).requestFocus(FocusNode());
+    if (text.isNotEmpty && translation.isNotEmpty) {
+      setState(() {
+        _sentences.add(Sentence(text: text, translation: translation));
+        _sentenceTextController.clear();
+        _sentenceTranslationController.clear();
+      });
+    }
   }
 
   void _onPosSelected(int index, bool selected) {
