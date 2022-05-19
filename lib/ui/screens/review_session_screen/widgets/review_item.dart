@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../data/models/review.dart';
+import '../../../../utils/hints.dart';
+import 'review_hint_button.dart';
 import 'review_type_tag.dart';
 import 'show_button.dart';
 
@@ -17,6 +19,8 @@ class ReviewItem extends StatelessWidget {
     required this.review,
     required this.hidden,
     required this.onToggleAnswer,
+    required this.hint,
+    required this.onAskHint,
   }) : super(key: key);
 
   /// The [review] of the word to show.
@@ -27,6 +31,12 @@ class ReviewItem extends StatelessWidget {
 
   /// Called when the [ShowButton] is tapped.
   final VoidCallback? onToggleAnswer;
+
+  /// A [Hint] value containing the current hint to show.
+  final ValueListenable<Hint> hint;
+
+  /// Called when the [ReviewHintButton] is tapped.
+  final VoidCallback? onAskHint;
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +52,9 @@ class ReviewItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                ReviewHintButton(hint: hint, onPressed: onAskHint),
                 ReviewTypeTag(review: review),
               ],
             ),
