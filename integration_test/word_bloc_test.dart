@@ -69,6 +69,19 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
+    'emits [WordLoaded] when WordAdded is added when store is not empty.',
+    seed: () => const WordsLoaded(words: []),
+    build: () => bloc,
+    setUp: setUpWithWords,
+    act: (bloc) => bloc.add(WordAdded(word: word4)),
+    expect: () => <WordState>[
+      WordsLoaded(words: [
+        word4..id = 4,
+      ]),
+    ],
+  );
+
+  blocTest<WordBloc, WordState>(
     'emits [WordInitial] when WordAdded is added when the word is invalid.',
     build: () => bloc,
     act: (bloc) => bloc.add(WordAdded(word: invalidWord)),
@@ -78,31 +91,41 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoaded] when WordEdited is added when store is empty.',
+    'emits [WordLoaded] when WordAdded is added multiple times.',
     seed: () => const WordsLoaded(words: []),
     build: () => bloc,
-    act: (bloc) => bloc.add(WordEdited(word: word1)),
+    act: (bloc) => {
+      bloc.add(WordAdded(word: word1)),
+      bloc.add(WordAdded(word: word2)),
+    },
     expect: () => <WordState>[
-      WordLoaded(word: word1..id = 1),
+      WordsLoaded(words: [
+        word1..id = 1,
+      ]),
+      WordsLoaded(words: [
+        word1..id = 1,
+        word2..id = 2,
+      ]),
     ],
   );
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoaded] when WordEdited is added when store is not empty.',
+    'emits [WordLoaded] when WordAdded is added multiple times and store not empty.',
+    seed: () => const WordsLoaded(words: []),
     build: () => bloc,
     setUp: setUpWithWords,
-    act: (bloc) => bloc.add(WordEdited(word: word2)),
+    act: (bloc) => {
+      bloc.add(WordAdded(word: word4)),
+      bloc.add(WordAdded(word: word5)),
+    },
     expect: () => <WordState>[
-      WordLoaded(word: word2..id = 4),
-    ],
-  );
-
-  blocTest<WordBloc, WordState>(
-    'emits [WordInitial] when WordEdited is added when the word is invalid.',
-    build: () => bloc,
-    act: (bloc) => bloc.add(WordEdited(word: invalidWord)),
-    expect: () => <WordState>[
-      WordInitial(),
+      WordsLoaded(words: [
+        word4..id = 4,
+      ]),
+      WordsLoaded(words: [
+        word4..id = 4,
+        word5..id = 5,
+      ]),
     ],
   );
 }

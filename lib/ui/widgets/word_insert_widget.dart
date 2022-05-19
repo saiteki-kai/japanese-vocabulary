@@ -20,8 +20,8 @@ class WordInsert extends StatefulWidget {
 
 class _WordInsertState extends State<WordInsert> {
   final _wordToAdd = Word(jlpt: 5, text: "", reading: "", meaning: "", pos: "");
-  bool editing = false;
   bool readyToBuild = false;
+  Text titleInsert = const Text("Insert a word");
 
   /// The currently selected jlpt button index
   int _jlptIndex = -1;
@@ -71,7 +71,7 @@ class _WordInsertState extends State<WordInsert> {
     super.initState();
     final wordToAdd = widget.wordToAdd;
     if (wordToAdd != null) {
-      editing = true;
+      titleInsert = const Text("Edit a word");
 
       /// If a word has been passed, fill in the fields
       _wordToAdd.id = wordToAdd.id;
@@ -96,7 +96,7 @@ class _WordInsertState extends State<WordInsert> {
       body: ScreenLayout(
         appBar: AppBar(
           elevation: 0,
-          title: title(editing),
+          title: titleInsert,
           actions: [
             IconButton(
               onPressed: _onPressed,
@@ -198,11 +198,7 @@ class _WordInsertState extends State<WordInsert> {
 
     // If the mandatory fields are not compiled it doesn't insert or edit
     // Also doens't change route.
-    if (editing && readyToBuild) {
-      // Edit
-      _bloc?.add(WordEdited(word: _wordToAdd));
-      AutoRouter.of(context).pop();
-    } else if (readyToBuild) {
+    if (readyToBuild) {
       // Insert
       _bloc?.add(WordAdded(word: _wordToAdd));
       AutoRouter.of(context).pop();
@@ -223,15 +219,6 @@ class _WordInsertState extends State<WordInsert> {
     /// Updates the currently selected JLPT level value
     _jlptController.selectedIndex!;
     _jlptIndex = index;
-  }
-
-  Text title(bool editing) {
-    /// Updates the currently title
-    if (editing) {
-      return const Text('Edit a word');
-    }
-
-    return const Text('Insert a word');
   }
 }
 

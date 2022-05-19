@@ -132,27 +132,4 @@ void main() {
     expect(posBool, true);
     expect(jlptBool, true);
   });
-
-  testWidgets("latin valid word as param", (WidgetTester tester) async {
-    final state = WordInitial();
-    when(() => bloc.state).thenReturn(state);
-
-    await setUpWidget(tester, word5);
-    final itemsFinder1 = find.byType(TextField);
-    final text = tester.widget(itemsFinder1.first) as TextField;
-    final reading = tester.widget(itemsFinder1.at(1)) as TextField;
-    final meaning = tester.widget(itemsFinder1.last) as TextField;
-    expect(text.controller?.text, "gracias");
-    expect(reading.controller?.text, "gra see uhs");
-    expect(meaning.controller?.text, "thanks");
-    final itemsFinder2 = find.byType(GroupButton);
-    final pos = (tester.widget(itemsFinder2.first) as GroupButton)
-        .controller
-        ?.selectedIndexes;
-    final jlpt = (tester.widget(itemsFinder2.last) as GroupButton)
-        .controller
-        ?.selectedIndexes;
-    expect(pos, [11]);
-    expect(jlpt, [3]);
-  });
 }
