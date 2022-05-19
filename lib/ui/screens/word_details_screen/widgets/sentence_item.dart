@@ -33,8 +33,7 @@ class SentenceItem extends StatelessWidget {
                   Text(
                     sentence.translation,
                     style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
                     ),
                   ),
                 ],
