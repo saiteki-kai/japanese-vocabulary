@@ -197,6 +197,7 @@ class _WordInsertState extends State<WordInsert> {
     _wordToAdd.pos = posTmp;
 
     // If the mandatory fields are not compiled it doesn't insert or edit
+    // Also doens't change route.
     if (editing && readyToBuild) {
       // Edit
       _bloc?.add(WordEdited(word: _wordToAdd));
