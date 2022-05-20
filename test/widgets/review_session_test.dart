@@ -63,6 +63,12 @@ void main() {
     expect(loadingFinder, findsOneWidget);
   });
 
+  testWidgets("review without associated words", (WidgetTester tester) async {
+    await setUpWidget(tester, review1);
+
+    expect(find.text("Error"), findsOneWidget);
+  });
+
   testWidgets("check correct answer", (WidgetTester tester) async {
     await setUpWidget(tester, meaningReviewWithWord);
 
@@ -79,7 +85,7 @@ void main() {
   });
 
   testWidgets("show / hide answer", (WidgetTester tester) async {
-    await setUpWidget(tester, review1);
+    await setUpWidget(tester, readingReviewWithWord);
 
     final reviewItemFinder = find.byType(ReviewItem);
     expect(
@@ -161,7 +167,7 @@ void main() {
 
     testWidgets("show next button when the current review is not the last",
         (WidgetTester tester) async {
-      await setUpWidget(tester, review1, isLast: false);
+      await setUpWidget(tester, readingReviewWithWord, isLast: false);
 
       final buttons = await findButtons(find);
       final nextButtonFinder = buttons[0];
@@ -173,7 +179,7 @@ void main() {
 
     testWidgets("show summary button when the current review is the last",
         (WidgetTester tester) async {
-      await setUpWidget(tester, review1, isLast: true);
+      await setUpWidget(tester, readingReviewWithWord, isLast: true);
 
       final buttons = await findButtons(find);
       final nextButtonFinder = buttons[0];
