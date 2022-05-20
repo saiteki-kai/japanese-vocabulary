@@ -8,7 +8,7 @@ variables:
 
 stages:
   - install
-  - docs
+  - doc
   - verify
   - test
 
@@ -31,18 +31,19 @@ flutter_dependencies:
     - flutter pub get
 
 pages:
-  stage: docs
+  stage: doc
   image: python:3.9
   before_script: []
   script:
-  - pip install -r ./docs/requirements.txt
+  - pip install -r ./doc/requirements.txt
   - mkdocs build --strict --verbose
   artifacts:
     paths:
     - public
 #  only:
-#  - main
+# - main
 #  - 23-autogenerate-documentation-from-code
+#  - /^sprint
 #  - /^sprint-[0-9]+$
 #  - /^sprint_[0-9]+$
 
