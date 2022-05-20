@@ -61,6 +61,16 @@ Word get word4 {
   );
 }
 
+Word get word5 {
+  return Word(
+    text: "gracias",
+    reading: "gra see uhs",
+    jlpt: 2,
+    meaning: "thanks",
+    pos: "n",
+  );
+}
+
 Review createReviewByDate(
   DateTime? date, {
   Word? word,

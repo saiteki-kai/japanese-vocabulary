@@ -68,5 +68,24 @@ void main() async {
       final id = await repo.addWord(word1);
       expect(id, word1.id, reason: "Id should've been ${word1.id}");
     });
+
+    test('simple edit', () async {
+      when(() => box.put(any()))
+          .thenAnswer((inv) => inv.positionalArguments[0].id);
+
+      final id = await repo.addWord(word1);
+      expect(id, word1.id, reason: "Id should've been ${word1.id}");
+
+      final word = word1;
+
+      word.text = "Gracias";
+      word.reading = "Gra see uhs";
+      word.jlpt = 1;
+      word.meaning = "Thanks";
+      word.pos = "n, vi";
+
+      final id2 = await repo.addWord(word1);
+      expect(id2, id, reason: "Id should've been $id2");
+    });
   });
 }
