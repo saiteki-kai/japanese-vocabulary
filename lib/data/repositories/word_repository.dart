@@ -40,6 +40,7 @@ class WordRepository {
       meaning.word.target = word;
       reading.word.target = word;
     }
+
     return box.put(word);
   }
 

@@ -6,6 +6,7 @@ import '../../bloc/word_bloc.dart';
 import '../../data/models/sentence.dart';
 import '../../data/models/word.dart';
 import 'screen_layout.dart';
+import 'sentence.dart';
 
 /// A widget that allows the user to add a new [Word] they want to learn.
 class WordInsert extends StatefulWidget {
@@ -103,9 +104,14 @@ class _WordInsertState extends State<WordInsert> {
       body: ScreenLayout(
         appBar: AppBar(
           elevation: 0,
-          title: const Text('Insert a word'),
+          title: const Text(
+            'Insert a word',
+          ),
           actions: [
             IconButton(
+              key: const Key(
+                "word-button",
+              ),
               onPressed: _onPressed,
               icon: const Icon(Icons.check, color: Colors.white),
             ),
@@ -124,21 +130,27 @@ class _WordInsertState extends State<WordInsert> {
                       _FormItem(
                         title: "Text",
                         field: TextField(
-                          key: const Key("text"),
+                          key: const Key(
+                            "text",
+                          ),
                           controller: _textController,
                         ),
                       ),
                       _FormItem(
                         title: "Reading",
                         field: TextField(
-                          key: const Key("reading"),
+                          key: const Key(
+                            "reading",
+                          ),
                           controller: _readingController,
                         ),
                       ),
                       _FormItem(
                         title: "Meaning",
                         field: TextField(
-                          key: const Key("meaning"),
+                          key: const Key(
+                            "meaning",
+                          ),
                           controller: _meaningController,
                         ),
                       ),
@@ -146,7 +158,9 @@ class _WordInsertState extends State<WordInsert> {
                         title: "Part of speech",
                         field: Center(
                           child: GroupButton(
-                            key: const Key("pos"),
+                            key: const Key(
+                              "pos",
+                            ),
                             options: GroupButtonOptions(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -161,7 +175,9 @@ class _WordInsertState extends State<WordInsert> {
                         title: "JLPT",
                         field: Center(
                           child: GroupButton(
-                            key: const Key("jlpt"),
+                            key: const Key(
+                              "jlpt",
+                            ),
                             options: GroupButtonOptions(
                               borderRadius: BorderRadius.circular(8),
                               buttonWidth: 50,
@@ -187,7 +203,9 @@ class _WordInsertState extends State<WordInsert> {
                                     verticalDirection: VerticalDirection.down,
                                     children: [
                                       TextField(
-                                        key: const Key("sentence-text-i"),
+                                        key: const Key(
+                                          "sentence-text-i",
+                                        ),
                                         decoration: const InputDecoration(
                                           hintText: "Sentence",
                                         ),
@@ -197,8 +215,9 @@ class _WordInsertState extends State<WordInsert> {
                                         height: 4,
                                       ),
                                       TextField(
-                                        key:
-                                            const Key("sentence-translation-i"),
+                                        key: const Key(
+                                          "sentence-translation-i",
+                                        ),
                                         decoration: const InputDecoration(
                                           hintText: "Translation",
                                         ),
@@ -209,37 +228,34 @@ class _WordInsertState extends State<WordInsert> {
                                   ),
                                 ),
                                 IconButton(
+                                  key: const Key(
+                                    "sentence-button",
+                                  ),
                                   onPressed: _onAddSentencePressed,
-                                  icon: const Icon(Icons.add,
-                                      color: Colors.black),
-                                )
+                                  icon: const Icon(
+                                    Icons.add,
+                                    color: Colors.black,
+                                  ),
+                                ),
                               ],
                             ),
                             ListView.builder(
                               shrinkWrap: true,
+                              key: const Key(
+                                "sentence-listview",
+                              ),
                               itemCount: _sentences.length,
                               itemBuilder: (context, index) {
-                                return Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  verticalDirection: VerticalDirection.down,
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        _sentences[index].text,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                return SentenceItem(
+                                  text: Text(
+                                    _sentences[index].text,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
                                     ),
-                                    Flexible(
-                                      child:
-                                          Text(_sentences[index].translation),
-                                    ),
-                                    const SizedBox(
-                                      height: 8,
-                                    ),
-                                  ],
+                                  ),
+                                  translation: Text(
+                                    _sentences[index].translation,
+                                  ),
                                 );
                               },
                             ),
@@ -270,8 +286,12 @@ class _WordInsertState extends State<WordInsert> {
     _wordToAdd.pos = posTmp;
     _wordToAdd.sentences.addAll(_sentences);
 
-    _bloc?.add(WordAdded(word: _wordToAdd));
-    AutoRouter.of(context).pop();
+    if (_wordToAdd.text.isNotEmpty &&
+        _wordToAdd.reading.isNotEmpty &&
+        _wordToAdd.meaning.isNotEmpty) {
+      _bloc?.add(WordAdded(word: _wordToAdd));
+      AutoRouter.of(context).pop();
+    }
   }
 
   void _onAddSentencePressed() {

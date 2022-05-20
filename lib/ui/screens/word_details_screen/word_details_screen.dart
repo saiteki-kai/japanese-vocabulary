@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/word_bloc.dart';
 import '../../../data/models/sentence.dart';
 import '../../../data/models/word.dart';
-import '../../../utils/util_functions.dart';
+import '../../../utils/utils.dart';
 import '../../widgets/loading_indicator.dart';
 import '../../widgets/screen_layout.dart';
 import './widgets/word_stats_tab.dart';

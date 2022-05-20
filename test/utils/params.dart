@@ -1,4 +1,5 @@
 import 'package:japanese_vocabulary/data/models/review.dart';
+import 'package:japanese_vocabulary/data/models/sentence.dart';
 import 'package:japanese_vocabulary/data/models/word.dart';
 
 Word get emptyWord {
@@ -59,6 +60,20 @@ Word get word4 {
     meaning: "normal; ordinary; regular",
     pos: "n,adj-na",
   );
+}
+
+Word get wordSentences {
+  final word = Word(
+    text: "普通",
+    reading: "ふつう",
+    jlpt: 4,
+    meaning: "normal; ordinary; regular",
+    pos: "n,adj-na",
+  );
+  word.sentences.add(Sentence(text: "text1", translation: "translation1"));
+  word.sentences.add(Sentence(text: "text2", translation: "translation2"));
+
+  return word;
 }
 
 Review createReviewByDate(
