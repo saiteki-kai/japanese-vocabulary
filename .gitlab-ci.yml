@@ -40,11 +40,11 @@ pages:
   artifacts:
     paths:
     - public
-  only:
-  - main
-  - /^sprint-[0-9]+$
-  - /^sprint_[0-9]+$
-  - 23-autogenerate-documentation-from-code
+#  only:
+#  - main
+#  - 23-autogenerate-documentation-from-code
+#  - /^sprint-[0-9]+$
+#  - /^sprint_[0-9]+$
 
 lint:
   image: cirrusci/flutter:2.10.3
