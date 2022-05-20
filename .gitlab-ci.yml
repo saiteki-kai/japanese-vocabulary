@@ -35,14 +35,16 @@ pages:
   image: python:3.9
   before_script: []
   script:
-  - pip install -r ./docs/requirements.txt
+  - pip install -r ./doc/requirements.txt
   - mkdocs build --strict --verbose
   artifacts:
     paths:
     - public
   only:
   - main
-  - sprint_1
+  - /^sprint-[0-9]+$
+  - /^sprint_[0-9]+$
+  - 23-autogenerate-documentation-from-code
 
 lint:
   image: cirrusci/flutter:2.10.3

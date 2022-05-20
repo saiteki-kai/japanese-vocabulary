@@ -14,7 +14,14 @@ You can find the entire repository [here](https://gitlab.com/saiteki-kai/japanes
 
 ## Demo
 
+<img src="./images/demo.gif" alt="drawing" width="300"/>
+
+<!---  
+Alternative pure markdown version.
+This doesn't resize the image!
+
 ![Demo](./images/demo.gif)
+-->
 
 ## Architecture
 
@@ -66,8 +73,6 @@ lib
 
 ![Pipelines](./images/pipelines.png)
 
-Around **06:38min**
-
 ## Installation
 
 Install packages
@@ -116,6 +121,17 @@ dhttpd --path doc/api
 
 Now you can see the documentation at <http://localhost:8080>
 
+## Generate the code quality report
+
+```bash
+dart pub global activate dart_code_metrics
+export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+metrics lib --reporter=gitlab --exclude={/**.g.dart,/.template.dart,/**.gr.dart} > gl-code-quality-report.json
+```
+
+Now you can see the code quality report in the `gl-code-quality-report.json` file
+
 ## Run the application
 
 Debug mode:
@@ -129,7 +145,6 @@ Release mode:
 ```bash
 flutter run --release 
 ```
-
 
 ## Bug Reports
 
