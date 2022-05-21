@@ -25,7 +25,7 @@ void main() {
         expect(hint.text, equals(""));
         expect(hint.n, equals(0));
         expect(hint.max, equals(0));
-        expect(hint.values, equals([]));
+        expect(hint.values, equals([0]));
       });
 
       test("2 characters", () {
@@ -45,7 +45,7 @@ void main() {
         expect(hint2.text, equals("うん"));
         expect(hint2.n, equals(2));
         expect(hint2.max, equals(2));
-        expect(hint2.values, equals([]));
+        expect(hint2.values, equals([0]));
       });
 
       test("4 characters", () {
@@ -66,7 +66,7 @@ void main() {
 
         final hint4 = hint3.getNextReadingHint(reading);
         expect(hint4.text, equals("たとえば"));
-        expect(hint4.values, equals([]));
+        expect(hint4.values, equals([0]));
       });
 
       test("7 characters", () {
@@ -95,11 +95,11 @@ void main() {
 
         final hint6 = hint5.getNextReadingHint(reading);
         expect(hint6.text, equals("ユニットテス"));
-        expect(hint6.values, equals([]));
+        expect(hint6.values, equals([0]));
 
         final hint7 = hint6.getNextReadingHint(reading);
         expect(hint7.text, equals("ユニットテスト"));
-        expect(hint7.values, equals([]));
+        expect(hint7.values, equals([0]));
       });
     });
   });
