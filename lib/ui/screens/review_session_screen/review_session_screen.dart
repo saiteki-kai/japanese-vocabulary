@@ -76,7 +76,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
     return Scaffold(
       body: ScreenLayout(
         appBar: const ReviewSessionAppBar(),
-        child: BlocBuilder<ReviewBloc, ReviewState>(
+        child: BlocConsumer<ReviewBloc, ReviewState>(
           builder: (context, state) {
             if (state is ReviewLoaded) {
               final word = state.review.word.target;
@@ -125,9 +125,23 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
               return const LoadingIndicator(message: "Loading Reviews...");
             }
           },
+          listener: _reviewBlocListener,
+          buildWhen: _reviewBlocBuildWhen,
         ),
       ),
     );
+  }
+
+  /// Defines when to build the widget.
+  bool _reviewBlocBuildWhen(ReviewState before, ReviewState after) {
+    return !(before is ReviewError || before is ReviewFinished);
+  }
+
+  /// When there is an error returns to the home page.
+  void _reviewBlocListener(BuildContext context, ReviewState state) {
+    if (state is ReviewError) {
+      AutoRouter.of(context).pop();
+    }
   }
 
   /// Updates the review based on the quality value and provide the next one.
