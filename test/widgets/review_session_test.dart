@@ -7,7 +7,10 @@ import 'package:japanese_vocabulary/data/models/review.dart';
 import 'package:japanese_vocabulary/ui/screens/review_session_screen/review_session_screen.dart';
 import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/next_review_button.dart';
 import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_answer.dart';
+import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_hint.dart';
+import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_hint_button.dart';
 import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_item.dart';
+import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_quality_selector.dart';
 import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/show_button.dart';
 import 'package:japanese_vocabulary/ui/widgets/loading_indicator.dart';
 import 'package:mocktail/mocktail.dart';
@@ -256,5 +259,110 @@ void main() {
     verify(() {
       bloc.add(ReviewSessionUpdated(review: review, quality: 4));
     }).called(1);
+  });
+
+  testWidgets("no hint asked and answer hidden", (WidgetTester tester) async {
+    await setUpWidget(tester, readingReviewWithWord);
+
+    final groupButtonFinder = find.descendant(
+      of: find.byType(ReviewQualitySelector),
+      matching: find.byType(GroupButton),
+    );
+    expect(groupButtonFinder, findsOneWidget);
+
+    final GroupButton groupButton = tester.widget(groupButtonFinder);
+    expect(groupButton.controller!.disabledIndexes, equals([0, 1, 2, 3, 4, 5]));
+    expect(groupButton.controller!.selectedIndex, isNull);
+  });
+
+  testWidgets("no hint asked and answer shown", (WidgetTester tester) async {
+    await setUpWidget(tester, readingReviewWithWord);
+
+    // tap show button
+    final showButtonFinder = find.widgetWithText(ShowButton, "SHOW");
+    await tester.tap(showButtonFinder.first);
+    await tester.pump();
+
+    final groupButtonFinder = find.descendant(
+      of: find.byType(ReviewQualitySelector),
+      matching: find.byType(GroupButton),
+    );
+    expect(groupButtonFinder, findsOneWidget);
+
+    final GroupButton groupButton = tester.widget(groupButtonFinder);
+    expect(groupButton.controller!.disabledIndexes, equals([]));
+    expect(groupButton.controller!.selectedIndex, isNull);
+  });
+
+  testWidgets("check hints", (WidgetTester tester) async {
+    expectOnHintAsked(
+      Finder groupButtonFinder,
+      int n,
+      String hintText,
+      List<int> disabledValues,
+    ) {
+      final GroupButton groupButton = tester.widget(groupButtonFinder);
+      expect(find.widgetWithText(ReviewHintButton, "$n"), findsOneWidget);
+      expect(find.widgetWithText(ReviewHint, hintText), findsOneWidget);
+      expect(groupButton.controller!.disabledIndexes, equals(disabledValues));
+    }
+
+    await setUpWidget(tester, readingReviewWithWord);
+
+    final reading = readingReviewWithWord.word.target!.reading;
+
+    final hintButtonFinder = find.byType(ReviewHintButton);
+    expect(hintButtonFinder, findsOneWidget);
+
+    final qualitySelectorFinder = find.byType(ReviewQualitySelector);
+    expect(qualitySelectorFinder, findsOneWidget);
+
+    final groupButtonFinder = find.descendant(
+      of: qualitySelectorFinder,
+      matching: find.byType(GroupButton),
+    );
+    expect(groupButtonFinder, findsOneWidget);
+
+    // tap show button
+    final showButtonFinder = find.widgetWithText(ShowButton, "SHOW");
+    await tester.tap(showButtonFinder.first);
+    await tester.pump();
+
+    String hintText = "＿＿＿＿＿";
+    expectOnHintAsked(groupButtonFinder, 5, hintText, []);
+
+    // ask hint
+    await tester.tap(hintButtonFinder.first);
+    await tester.pump();
+
+    hintText = "${reading.substring(0, 1)}＿＿＿＿";
+    expectOnHintAsked(groupButtonFinder, 4, hintText, [5]);
+
+    // ask hint
+    await tester.tap(hintButtonFinder.first);
+    await tester.pump();
+
+    hintText = "${reading.substring(0, 2)}＿＿＿";
+    expectOnHintAsked(groupButtonFinder, 3, hintText, [5]);
+
+    // ask hint
+    await tester.tap(hintButtonFinder.first);
+    await tester.pump();
+
+    hintText = "${reading.substring(0, 3)}＿＿";
+    expectOnHintAsked(groupButtonFinder, 2, hintText, [3, 4, 5]);
+
+    // ask hint
+    await tester.tap(hintButtonFinder.first);
+    await tester.pump();
+
+    hintText = "${reading.substring(0, 4)}＿";
+    expectOnHintAsked(groupButtonFinder, 1, hintText, [3, 4, 5]);
+
+    // ask hint
+    await tester.tap(hintButtonFinder.first);
+    await tester.pump();
+
+    expectOnHintAsked(groupButtonFinder, 0, reading, [1, 2, 3, 4, 5]);
   });
 }
