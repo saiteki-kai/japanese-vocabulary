@@ -69,11 +69,63 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
+    'emits [WordLoaded] when WordAdded is added when store is not empty.',
+    seed: () => const WordsLoaded(words: []),
+    build: () => bloc,
+    setUp: setUpWithWords,
+    act: (bloc) => bloc.add(WordAdded(word: word4)),
+    expect: () => <WordState>[
+      WordsLoaded(words: [
+        word4..id = 4,
+      ]),
+    ],
+  );
+
+  blocTest<WordBloc, WordState>(
     'emits [WordInitial] when WordAdded is added when the word is invalid.',
     build: () => bloc,
     act: (bloc) => bloc.add(WordAdded(word: invalidWord)),
     expect: () => <WordState>[
       WordInitial(),
+    ],
+  );
+
+  blocTest<WordBloc, WordState>(
+    'emits [WordLoaded] when WordAdded is added multiple times.',
+    seed: () => const WordsLoaded(words: []),
+    build: () => bloc,
+    act: (bloc) => {
+      bloc.add(WordAdded(word: word1)),
+      bloc.add(WordAdded(word: word2)),
+    },
+    expect: () => <WordState>[
+      WordsLoaded(words: [
+        word1..id = 1,
+      ]),
+      WordsLoaded(words: [
+        word1..id = 1,
+        word2..id = 2,
+      ]),
+    ],
+  );
+
+  blocTest<WordBloc, WordState>(
+    'emits [WordLoaded] when WordAdded is added multiple times and store not empty.',
+    seed: () => const WordsLoaded(words: []),
+    build: () => bloc,
+    setUp: setUpWithWords,
+    act: (bloc) => {
+      bloc.add(WordAdded(word: word4)),
+      bloc.add(WordAdded(word: word5)),
+    },
+    expect: () => <WordState>[
+      WordsLoaded(words: [
+        word4..id = 4,
+      ]),
+      WordsLoaded(words: [
+        word4..id = 4,
+        word5..id = 5,
+      ]),
     ],
   );
 }

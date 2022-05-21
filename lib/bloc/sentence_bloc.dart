@@ -16,13 +16,21 @@ class SentenceBloc extends Bloc<SentenceEvent, SentenceState> {
   final WordRepository repository;
 
   void _onRetrieved(
-      SentencesRetrieved event, Emitter<SentenceState> emit) async {
-    emit(SentencesLoading());
-
-    if (event.word.sentences.isNotEmpty) {
-      emit(SentencesLoaded(sentences: event.word.sentences));
+    SentencesRetrieved event,
+    Emitter<SentenceState> emit,
+  ) async {
+    emit(
+      SentencesLoading(),
+    );
+    final sentences = event.word.sentences;
+    if (sentences.isNotEmpty) {
+      emit(
+        SentencesLoaded(sentences: sentences),
+      );
     } else {
-      emit(const SentenceError(message: "sentence not found!"));
+      emit(
+        const SentenceError(message: "Sentence not found!"),
+      );
     }
   }
 }

@@ -46,7 +46,9 @@ class SentenceItem extends StatelessWidget {
     );
   }
 
-  void _onWordPressed(context) {
+  void _onWordPressed(_) {
     //AutoRouter.of(context).push(WordDetailsScreen(wordId: word.id));
+
+    return;
   }
 }

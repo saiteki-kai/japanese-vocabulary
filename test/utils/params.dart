@@ -51,6 +51,26 @@ Word get word3 {
   );
 }
 
+Word get word4 {
+  return Word(
+    text: "普通",
+    reading: "ふつう",
+    jlpt: 4,
+    meaning: "normal; ordinary; regular",
+    pos: "n,adj-na",
+  );
+}
+
+Word get word5 {
+  return Word(
+    text: "gracias",
+    reading: "gra see uhs",
+    jlpt: 2,
+    meaning: "thanks",
+    pos: "n",
+  );
+}
+
 Review createReviewByDate(
   DateTime? date, {
   Word? word,
