@@ -27,7 +27,7 @@ class NextReviewButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.all(16.0),
       child: ValueListenableBuilder(
         valueListenable: selectedQuality,
         builder: (BuildContext _, int value, Widget? __) {
@@ -37,6 +37,9 @@ class NextReviewButton extends StatelessWidget {
             style: TextButton.styleFrom(
               primary: Colors.white,
               padding: const EdgeInsets.all(16.0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
             ).copyWith(
               backgroundColor: MaterialStateProperty.resolveWith((states) {
                 if (states.contains(MaterialState.disabled)) {
