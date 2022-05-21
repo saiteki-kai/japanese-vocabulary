@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';
 import 'package:flutter/material.dart';
+import '../../bloc/sentence_bloc.dart';
 import '../../bloc/word_bloc.dart';
 import '../../data/models/sentence.dart';
 import '../../data/models/word.dart';
@@ -68,6 +69,7 @@ class _WordInsertState extends State<WordInsert> {
   ];
 
   WordBloc? _bloc;
+  SentenceBloc? _sentenceBloc;
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _readingController = TextEditingController();
   final TextEditingController _meaningController = TextEditingController();
@@ -82,6 +84,7 @@ class _WordInsertState extends State<WordInsert> {
   @override
   void initState() {
     _bloc = BlocProvider.of<WordBloc>(context);
+    _sentenceBloc = BlocProvider.of<SentenceBloc>(context);
     super.initState();
   }
 
@@ -290,12 +293,17 @@ class _WordInsertState extends State<WordInsert> {
     final posTmp = _posSelected.map((e) => _posNames[e]).join(",");
 
     _wordToAdd.pos = posTmp;
-    _wordToAdd.sentences.addAll(_sentences);
-
+    //_wordToAdd.sentences.addAll(_sentences);
+    //final texts = _sentences.map((e) => e.text);
+    // _wordToAdd.sentences.length == _wordToAdd.sentences.toSet().length
+    print("sentences: " + _sentences.toString());
     if (_wordToAdd.text.isNotEmpty &&
         _wordToAdd.reading.isNotEmpty &&
         _wordToAdd.meaning.isNotEmpty) {
       _bloc?.add(WordAdded(word: _wordToAdd));
+      final word = (_bloc?.state.props as List<Word>).last;
+      print("word: " + word.toString());
+      _sentenceBloc?.add(SentencesAdded(word: word, sentences: _sentences));
       AutoRouter.of(context).pop();
     }
   }
@@ -305,7 +313,10 @@ class _WordInsertState extends State<WordInsert> {
     final text = _sentenceTextController.text;
     final translation = _sentenceTranslationController.text;
     FocusScope.of(context).requestFocus(FocusNode());
-    if (text.isNotEmpty && translation.isNotEmpty) {
+
+    if (text.isNotEmpty &&
+        translation.isNotEmpty &&
+        _sentences.every((element) => element.text != text)) {
       setState(() {
         _sentences.add(Sentence(text: text, translation: translation));
         _sentenceTextController.clear();

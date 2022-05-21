@@ -22,3 +22,11 @@ class SentenceAdded extends SentenceEvent {
   @override
   List<Object> get props => [sentence];
 }
+
+class SentencesAdded extends SentenceEvent {
+  final Word word;
+  final List<Sentence> sentences;
+  const SentencesAdded({required this.word, required this.sentences});
+  @override
+  List<Object> get props => sentences;
+}

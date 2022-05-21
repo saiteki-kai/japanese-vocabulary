@@ -22,20 +22,25 @@ class WordBloc extends Bloc<WordEvent, WordState> {
     /// If one of the text fields is empty, the app will return to the initial state of the insertion
     ///
     /// otherwise the app will go to the word added state, closing the insertion page
-    if (event.word.text.isEmpty ||
-        event.word.meaning.isEmpty ||
-        event.word.reading.isEmpty) {
+    final word = event.word;
+    final texts = word.sentences.map((e) => e.text);
+    print("bloc sentences: " + word.sentences.toString());
+    if (word.text.isEmpty ||
+        word.meaning.isEmpty ||
+        word.reading.isEmpty ||
+        texts.length != texts.toSet().length) {
       emit(WordInitial());
     } else {
       final state = this.state;
       if (state is WordsLoaded) {
-        await repository.addWord(event.word);
-        emit(WordsLoaded(words: [...state.words, event.word]));
+        await repository.addWord(word);
+        emit(WordsLoaded(words: [...state.words, word]));
       }
       if (state is WordLoaded) {
-        await repository.addWord(event.word);
-        emit(WordLoaded(word: event.word));
+        await repository.addWord(word);
+        emit(WordLoaded(word: word));
       }
+      print("wordstate: " + state.toString());
     }
   }
 

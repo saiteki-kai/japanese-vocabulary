@@ -13,6 +13,8 @@ class SentencesLoading extends SentenceState {}
 
 class SentenceAdding extends SentenceState {}
 
+class SentencesAdding extends SentenceState {}
+
 class SentencesLoaded extends SentenceState {
   final List<Sentence> sentences;
   const SentencesLoaded({required this.sentences});
