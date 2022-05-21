@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:objectbox/objectbox.dart';
 
 import './review.dart';
@@ -44,7 +45,7 @@ class Word {
   final readingReview = ToOne<Review>();
 
   /// Sentences related to this
-  final sentences = ToMany<Sentence>();
+  List<Sentence> sentences = ToMany<Sentence>();
 
   double get meanAccuracy {
     final acc1 = meaningReview.target?.getReviewAccuracy() ?? 0.0;
@@ -83,8 +84,9 @@ class Word {
     int? jlpt,
     String? meaning,
     String? pos,
+    List<Sentence>? sentences,
   }) {
-    return Word(
+    final word = Word(
       id: id,
       text: text ?? this.text,
       reading: reading ?? this.reading,
@@ -92,6 +94,8 @@ class Word {
       meaning: meaning ?? this.meaning,
       pos: pos ?? this.pos,
     );
+    word.sentences.addAll(sentences!);
+    return word;
   }
 
   Map<String, dynamic> toMap() {
@@ -102,6 +106,7 @@ class Word {
       'jlpt': jlpt,
       'meaning': meaning,
       'pos': pos,
+      'sentences': sentences,
     };
   }
 
@@ -118,7 +123,7 @@ class Word {
 
   @override
   String toString() {
-    return 'Word(id: $id, text: $text, reading: $reading, jlpt: $jlpt, meaning: $meaning, pos: $pos)';
+    return 'Word(id: $id, text: $text, reading: $reading, jlpt: $jlpt, meaning: $meaning, pos: $pos, sentences: $sentences)';
   }
 
   @override
@@ -131,7 +136,8 @@ class Word {
         other.reading == reading &&
         other.jlpt == jlpt &&
         other.meaning == meaning &&
-        other.pos == pos;
+        other.pos == pos &&
+        listEquals(other.sentences, sentences);
   }
 
   @override
@@ -141,6 +147,7 @@ class Word {
         reading.hashCode ^
         jlpt.hashCode ^
         meaning.hashCode ^
-        pos.hashCode;
+        pos.hashCode ^
+        sentences.hashCode;
   }
 }

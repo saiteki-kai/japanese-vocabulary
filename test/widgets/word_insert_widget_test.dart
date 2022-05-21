@@ -146,7 +146,7 @@ void main() {
 
     // case: empty fields
     final scrollView = find.byType(SingleChildScrollView);
-    final sentenceButton = find.byKey(const Key("sentence-button"));
+    final sentenceButton = find.byKey(const Key("sentence-button-i"));
     await tester.dragUntilVisible(
         sentenceButton, scrollView, const Offset(-250, 0));
 

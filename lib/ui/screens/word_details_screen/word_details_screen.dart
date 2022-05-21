@@ -69,6 +69,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
                 ),
               ),
               floatingActionButton: floatingActionButton(
+                key: const Key("sentence-floating"),
                 show: true,
                 onPressed: () => _onAddDetailsPressed(context, word),
               ),
@@ -116,6 +117,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
             controller: _sentenceTranslationController,
           ),
           IconButton(
+            key: const Key("sentence-button-d"),
             onPressed: () => _onAddSentencePressed(context, word),
             icon: const Icon(Icons.add, color: Colors.black),
           ),

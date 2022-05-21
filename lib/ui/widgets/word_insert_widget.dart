@@ -21,7 +21,13 @@ class WordInsert extends StatefulWidget {
 }
 
 class _WordInsertState extends State<WordInsert> {
-  final _wordToAdd = Word(jlpt: 5, text: "", reading: "", meaning: "", pos: "");
+  final _wordToAdd = Word(
+    jlpt: 5,
+    text: "",
+    reading: "",
+    meaning: "",
+    pos: "",
+  );
 
   /// The currently selected jlpt button index
   int _jlptIndex = 0;
@@ -229,7 +235,7 @@ class _WordInsertState extends State<WordInsert> {
                                 ),
                                 IconButton(
                                   key: const Key(
-                                    "sentence-button",
+                                    "sentence-button-i",
                                   ),
                                   onPressed: _onAddSentencePressed,
                                   icon: const Icon(
