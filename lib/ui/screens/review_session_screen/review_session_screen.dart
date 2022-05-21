@@ -85,7 +85,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
                 return const Text("Error");
               }
 
-              // Initialize the value based on the reading of the word.
+              // Initialize the value based on the reading of the word
               _hint.value = Hint.fromReading(word.reading);
 
               return Column(
@@ -102,17 +102,22 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
                   ),
                   const Spacer(flex: 1),
                   // Answer to show/hide
-                  ReviewAnswer(review: state.review, hidden: _hideAnswer),
-                  const Spacer(flex: 2),
+                  Expanded(
+                    child: ReviewAnswer(
+                      review: state.review,
+                      hidden: _hideAnswer,
+                    ),
+                  ),
+                  const Spacer(flex: 1),
                   // Hint to show
                   ReviewHint(hint: _hint),
                   const Spacer(flex: 1),
                   // Quality buttons
                   ReviewQualitySelector(
                     disabled: _hideAnswer,
+                    hint: _hint,
                     onQualitySelected: (q) => _selectedQuality.value = q,
                   ),
-                  const Spacer(flex: 1),
                   // Next/Summary button
                   NextReviewButton(
                     isLast: state.isLast,
@@ -160,16 +165,23 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   void _onToggleAnswer() {
     _hideAnswer.value = !_hideAnswer.value;
 
-    if (!_hideAnswer.value) {
+    if (_hideAnswer.value) {
       _selectedQuality.value = -1;
     }
   }
 
   /// Updates the current Hint with the next one based on the [reviewType] of a
-  /// [Word].
+  /// given [Word].
+  ///
+  /// When there are no hints sets [_hideAnswer.value] to false.
   void _onAskHint(Word word, String reviewType) {
     if (reviewType == "reading") {
       _hint.value = _hint.value.getNextReadingHint(word.reading);
+    }
+
+    // if there are no more hints show the answer and enable the next button
+    if (_hint.value.n == _hint.value.max) {
+      _hideAnswer.value = false;
     }
   }
 }
