@@ -8,12 +8,14 @@ import 'review_type_tag.dart';
 import 'show_button.dart';
 
 /// A widget that displays a card with the word related to a [review] and
-/// provide a button to show or hide the [ShowButton] and the [ReviewAnswer].
+/// provide a button to show or hide the [ShowButton] and the [ReviewAnswer], and
+/// a button to show the [ReviewHint] and disable some quality values.
 class ReviewItem extends StatelessWidget {
   /// Creates a widget that displays the word for a [review] to review and
   /// a button to show or hide the review answer based on the [hidden] value.
   /// A [onToggleAnswer] callback is provided to control when the button is
-  /// tapped.
+  /// tapped. A [onAskHint] callback is provided to control when the a hint button
+  /// is tapped.
   const ReviewItem({
     Key? key,
     required this.review,
