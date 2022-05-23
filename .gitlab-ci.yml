@@ -49,6 +49,7 @@ pages:
 #  - /^sprint_[0-9]+$
 
 autogenerate_doc:
+  image: cirrusci/flutter:2.10.3
   stage: docs
   needs: [flutter_dependencies]
   before_script: []
