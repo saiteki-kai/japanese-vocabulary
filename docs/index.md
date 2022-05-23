@@ -146,6 +146,10 @@ Release mode:
 flutter run --release 
 ```
 
+## API
+
+You can find the API [here](../doc/api/index.html).
+
 ## Bug Reports
 
 ```text

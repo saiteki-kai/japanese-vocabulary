@@ -50,9 +50,10 @@ pages:
 
 autogenerate_doc:
   stage: docs
+  needs: [flutter_dependencies]
   before_script: []
   script:
-  - dart pub global activate dartdoc
+  - pub global activate dartdoc
   - export PATH="$PATH":"$HOME/.pub-cache/bin"
   - dartdoc
 
