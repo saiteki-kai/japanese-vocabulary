@@ -32,6 +32,7 @@ flutter_dependencies:
 
 pages:
   stage: docs
+  needs: [autogenerate_doc]
   image: python:3.9
   before_script: []
   script:
@@ -40,12 +41,20 @@ pages:
   artifacts:
     paths:
     - public
-  only:
-  - main
-  - 23-autogenerate-documentation-from-code
+#  only:
+#  - main
+#  - 23-autogenerate-documentation-from-code
 #  - /^sprint
 #  - /^sprint-[0-9]+$
 #  - /^sprint_[0-9]+$
+
+autogenerate_doc:
+  stage: docs
+  before_script: []
+  script:
+  - dart pub global activate dartdoc
+  - export PATH="$PATH":"$HOME/.pub-cache/bin"
+  - dartdoc
 
 lint:
   image: cirrusci/flutter:2.10.3
