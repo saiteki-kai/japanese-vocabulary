@@ -52,11 +52,14 @@ autogenerate_doc:
   image: cirrusci/flutter:2.10.3
   stage: docs
   needs: [flutter_dependencies]
-  before_script: []
   script:
   - pub global activate dartdoc
   - export PATH="$PATH":"$HOME/.pub-cache/bin"
   - dartdoc
+  artifacts:
+    name: docs
+    paths:
+      - $CI_PROJECT_DIR/docs
 
 lint:
   image: cirrusci/flutter:2.10.3
