@@ -53,7 +53,7 @@ autogenerate_doc:
   stage: docs
   needs: [flutter_dependencies]
   script:
-  - dart —version
+  - dart --version
   - pub global activate dartdoc
   - export PATH="$PATH":"$HOME/.pub-cache/bin"
   - pub global run dartdoc .
