@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';
 import 'package:flutter/material.dart';
-import '../../bloc/sentence_bloc.dart';
 import '../../bloc/word_bloc.dart';
 import '../../data/models/sentence.dart';
 import '../../data/models/word.dart';
@@ -69,7 +68,6 @@ class _WordInsertState extends State<WordInsert> {
   ];
 
   WordBloc? _bloc;
-  SentenceBloc? _sentenceBloc;
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _readingController = TextEditingController();
   final TextEditingController _meaningController = TextEditingController();
@@ -84,7 +82,6 @@ class _WordInsertState extends State<WordInsert> {
   @override
   void initState() {
     _bloc = BlocProvider.of<WordBloc>(context);
-    _sentenceBloc = BlocProvider.of<SentenceBloc>(context);
     super.initState();
   }
 
@@ -288,28 +285,23 @@ class _WordInsertState extends State<WordInsert> {
     _wordToAdd.reading = _readingController.text;
     _wordToAdd.text = _textController.text;
 
-    // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
+    /// A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'.
     _posSelected.remove(-1);
     final posTmp = _posSelected.map((e) => _posNames[e]).join(",");
-
     _wordToAdd.pos = posTmp;
-    //_wordToAdd.sentences.addAll(_sentences);
-    //final texts = _sentences.map((e) => e.text);
-    // _wordToAdd.sentences.length == _wordToAdd.sentences.toSet().length
-    print("sentences: " + _sentences.toString());
+
     if (_wordToAdd.text.isNotEmpty &&
         _wordToAdd.reading.isNotEmpty &&
         _wordToAdd.meaning.isNotEmpty) {
+      _wordToAdd.sentences.addAll(_sentences);
       _bloc?.add(WordAdded(word: _wordToAdd));
-      final word = (_bloc?.state.props as List<Word>).last;
-      print("word: " + word.toString());
-      _sentenceBloc?.add(SentencesAdded(word: word, sentences: _sentences));
+
       AutoRouter.of(context).pop();
     }
   }
 
   void _onAddSentencePressed() {
-    /// Adds a new example sentence
+    /// Adds a new example sentence.
     final text = _sentenceTextController.text;
     final translation = _sentenceTranslationController.text;
     FocusScope.of(context).requestFocus(FocusNode());
@@ -326,6 +318,7 @@ class _WordInsertState extends State<WordInsert> {
   }
 
   void _onPosSelected(int index, bool selected) {
+    /// Updates the currently selected POS.
     setState(() {
       if (selected) {
         _posSelected.add(index);
@@ -336,7 +329,7 @@ class _WordInsertState extends State<WordInsert> {
   }
 
   void _onJlptSelected(int index, bool __) {
-    /// Updates the currently selected JLPT level value
+    /// Updates the currently selected JLPT level value.
     setState(() => _jlptIndex = index);
   }
 }

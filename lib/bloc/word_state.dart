@@ -18,7 +18,7 @@ class WordsLoaded extends WordState {
   const WordsLoaded({required this.words});
 
   @override
-  List<Object> get props => words;
+  List<Object> get props => [words];
 }
 
 /// This [WordLoaded] returns a [Word].

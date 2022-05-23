@@ -40,7 +40,7 @@ class WordRepository {
       meaning.word.target = word;
       reading.word.target = word;
     }
-    print("repository, sto per aggiungere: " + word.toString());
+
     return box.put(word);
   }
 

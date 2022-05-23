@@ -19,16 +19,11 @@ class WordBloc extends Bloc<WordEvent, WordState> {
   final WordRepository repository;
 
   void _onWordAdded(WordAdded event, Emitter<WordState> emit) async {
-    /// If one of the text fields is empty, the app will return to the initial state of the insertion
+    /// If one of the text fields is empty, the app will return to the initial state of the insertion.
     ///
-    /// otherwise the app will go to the word added state, closing the insertion page
+    /// otherwise the app will go to the word added state, closing the insertion page.
     final word = event.word;
-    final texts = word.sentences.map((e) => e.text);
-    print("bloc sentences: " + word.sentences.toString());
-    if (word.text.isEmpty ||
-        word.meaning.isEmpty ||
-        word.reading.isEmpty ||
-        texts.length != texts.toSet().length) {
+    if (word.text.isEmpty || word.meaning.isEmpty || word.reading.isEmpty) {
       emit(WordInitial());
     } else {
       final state = this.state;
@@ -40,17 +35,18 @@ class WordBloc extends Bloc<WordEvent, WordState> {
         await repository.addWord(word);
         emit(WordLoaded(word: word));
       }
-      print("wordstate: " + state.toString());
     }
   }
 
   void _onRetrieved(WordsRetrieved _, Emitter<WordState> emit) async {
+    /// Returns all the words.
     emit(WordLoading());
     final words = await repository.getWords();
     emit(WordsLoaded(words: words));
   }
 
   void _onGetWord(WordRetrieved event, Emitter<WordState> emit) async {
+    /// Returns the word with the specified id.
     emit(WordLoading());
 
     final word = await repository.getWord(event.wordId);

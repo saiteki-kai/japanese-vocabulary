@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
-Widget floatingActionButton(
-    {bool show = false, VoidCallback? onPressed, Key? key}) {
+Widget floatingActionButton({
+  bool show = false,
+  VoidCallback? onPressed,
+  Key? key,
+}) {
   if (show) {
     return Padding(
       padding: const EdgeInsets.all(8.0),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:japanese_vocabulary/bloc/word_bloc.dart';
-import 'package:japanese_vocabulary/data/models/sentence.dart';
 import 'package:japanese_vocabulary/ui/screens/word_details_screen/word_details_screen.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -19,17 +18,7 @@ void main() {
   tearDown(() {
     bloc.close();
   });
-/*
 
-    final state = WordInitial();
-    when(() => bloc.state).thenReturn(state);
-
-    bloc.add(WordAdded(word: word));
-    bloc.add(WordsRetrieved());
-
-    if (state is WordsLoaded) {(state as WordsLoaded).words.first}
-
-*/
   Future<void> setUpWidget(tester, int id) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -56,7 +45,7 @@ void main() {
     expect(floatingFinder, findsNWidgets(1));
 
     await tester.tap(floatingFinder);
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     final textFinder = find.byKey(const Key("sentence-text-d"));
     final textController = (tester.widget(textFinder) as TextField).controller;
@@ -64,23 +53,23 @@ void main() {
     final addFinder = find.byKey(const Key("sentence-button-d"));
     expect(textFinder, findsNWidgets(1));
 
-    // case: empty fields
+    // Case: empty fields.
     await tester.tap(addFinder);
-    await tester.pump();
+    await tester.pumpAndSettle();
     expect(textFinder, findsNWidgets(1));
 
-    // case: only sentence text
+    // Case: only sentence text.
     await tester.enterText(textFinder, "test");
     await tester.tap(addFinder);
-    await tester.pump();
+    await tester.pumpAndSettle();
     expect(textFinder, findsNWidgets(1));
 
     textController?.clear();
 
-    // case: only translation
+    // Case: only translation.
     await tester.enterText(translationFinder, "test");
     await tester.tap(addFinder);
-    await tester.pump();
+    await tester.pumpAndSettle();
     expect(textFinder, findsNWidgets(1));
   });
 
@@ -96,54 +85,61 @@ void main() {
     expect(floatingFinder, findsNWidgets(1));
 
     await tester.tap(floatingFinder);
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     final textFinder = find.byKey(const Key("sentence-text-d"));
     final translationFinder = find.byKey(const Key("sentence-translation-d"));
     final addFinder = find.byKey(const Key("sentence-button-d"));
     expect(textFinder, findsNWidgets(1));
+    expect(addFinder, findsNWidgets(1));
 
-    await tester.enterText(textFinder, "text");
-    await tester.enterText(translationFinder, "translation");
+    const text = "text";
+    const translation = "translation";
 
-    final sentence = Sentence(text: "text", translation: "translation");
-    word.sentences.add(sentence);
+    (tester.widget(textFinder) as TextField).controller?.text = text;
+    (tester.widget(translationFinder) as TextField).controller?.text =
+        translation;
 
     await tester.tap(addFinder);
-    await tester.pump();
+    await tester.pumpAndSettle();
+
     expect(textFinder, findsNothing);
     expect(bloc.state, WordLoaded(word: word));
+    expect(word.sentences.length, 1);
   });
-/*
+
   testWidgets("add a duplicated sentence", (WidgetTester tester) async {
     final word = wordSentences;
     final state = WordLoaded(word: word);
 
     when(() => bloc.state).thenReturn(state);
 
-    await setUpWidget(tester, word.id);
+    await setUpWidget(tester, 2);
 
     final floatingFinder = find.byKey(const Key("sentence-floating"));
     expect(floatingFinder, findsNWidgets(1));
 
     await tester.tap(floatingFinder);
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     final textFinder = find.byKey(const Key("sentence-text-d"));
     final translationFinder = find.byKey(const Key("sentence-translation-d"));
     final addFinder = find.byKey(const Key("sentence-button-d"));
     expect(textFinder, findsNWidgets(1));
+    expect(addFinder, findsNWidgets(1));
 
-    await tester.enterText(textFinder, "text1");
-    await tester.enterText(translationFinder, "translation1");
+    const text = "text1";
+    const translation = "translation1";
 
-    final sentence = Sentence(text: "text1", translation: "translation1");
-    word.sentences.add(sentence);
+    (tester.widget(textFinder) as TextField).controller?.text = text;
+    (tester.widget(translationFinder) as TextField).controller?.text =
+        translation;
 
     await tester.tap(addFinder);
-    await tester.pump();
-    expect(textFinder, findsNothing);
+    await tester.pumpAndSettle();
+
+    expect(addFinder, findsOneWidget);
     expect(bloc.state, WordLoaded(word: word));
+    expect(word.sentences.length, 2);
   });
-  */
 }

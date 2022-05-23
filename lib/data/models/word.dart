@@ -44,8 +44,8 @@ class Word {
   /// Review related to reading of this word.
   final readingReview = ToOne<Review>();
 
-  /// Sentences related to this
-  List<Sentence> sentences = ToMany<Sentence>();
+  /// Sentences related to this word.
+  final sentences = ToMany<Sentence>();
 
   double get meanAccuracy {
     final acc1 = meaningReview.target?.getReviewAccuracy() ?? 0.0;
@@ -84,7 +84,6 @@ class Word {
     int? jlpt,
     String? meaning,
     String? pos,
-    List<Sentence>? sentences,
   }) {
     final word = Word(
       id: id,
@@ -94,7 +93,8 @@ class Word {
       meaning: meaning ?? this.meaning,
       pos: pos ?? this.pos,
     );
-    word.sentences.addAll(sentences!);
+    word.sentences.addAll(sentences);
+
     return word;
   }
 

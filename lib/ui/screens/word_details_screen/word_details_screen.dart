@@ -38,7 +38,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 2);
-    
+
     _bloc = BlocProvider.of<WordBloc>(context);
     _bloc?.add(WordRetrieved(wordId: widget.wordId));
 
@@ -53,7 +53,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
         builder: (context, state) {
           if (state is WordLoaded) {
             final word = state.word;
-            print("sentences: " + word.sentences.toString());
+
             return Scaffold(
               body: ScreenLayout(
                 appBar: WordDetailsAppBar(
@@ -133,9 +133,8 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
     final translation = _sentenceTranslationController.text;
     FocusScope.of(context).requestFocus(FocusNode());
     final sentences = word.sentences;
-    final aaa = sentences.every((element) => element.text != text);
-    print("sentences: " + sentences.toString());
-    if (text.isNotEmpty && translation.isNotEmpty && aaa) {
+    final noEqualSentences = sentences.every((element) => element.text != text);
+    if (text.isNotEmpty && translation.isNotEmpty && noEqualSentences) {
       setState(() {
         sentences.add(Sentence(text: text, translation: translation));
         _bloc?.add(WordAdded(word: word));
