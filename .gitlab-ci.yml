@@ -29,6 +29,7 @@ flutter_dependencies:
   before_script: []
   script:
     - flutter pub get
+    - dart --version
 
 pages:
   stage: docs
@@ -53,14 +54,13 @@ autogenerate_doc:
   stage: docs
   needs: [flutter_dependencies]
   script:
-  - dart --version
   - pub global activate dartdoc
   - export PATH="$PATH":"$HOME/.pub-cache/bin"
   - pub global run dartdoc .
   artifacts:
-    name: docs
+    name: doc
     paths:
-      - $CI_PROJECT_DIR/docs
+      - $CI_PROJECT_DIR/doc
 
 lint:
   image: cirrusci/flutter:2.10.3
