@@ -55,7 +55,7 @@ autogenerate_doc:
   script:
   - pub global activate dartdoc
   - export PATH="$PATH":"$HOME/.pub-cache/bin"
-  - dartdoc
+  - dart doc
   artifacts:
     name: docs
     paths:
