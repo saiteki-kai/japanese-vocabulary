@@ -61,6 +61,7 @@ autogenerate_doc:
     name: doc
     paths:
       - $CI_PROJECT_DIR/doc
+    when: always
 #  only:
 
 lint:
