@@ -6,7 +6,7 @@ import '../../../bloc/review_bloc.dart';
 import '../../../data/models/review.dart';
 import '../../../data/models/word.dart';
 import '../../../data/repositories/review_repository.dart';
-import '../../../utils/hints.dart';
+import '../../../utils/hint.dart';
 import '../../widgets/loading_indicator.dart';
 import '../../widgets/screen_layout.dart';
 import 'widgets/next_review_button.dart';
@@ -55,7 +55,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   /// A [Hint] value containing the current hint to show.
   ///
   /// The initial value is set to [Hint.empty].
-  final _hint = ValueNotifier<Hint>(Hint.empty());
+  final _hint = ValueNotifier<Hint>(MeaningHint.empty());
 
   @override
   void initState() {
@@ -85,8 +85,12 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
                 return const Text("Error");
               }
 
-              // Initialize the value based on the reading of the word
-              _hint.value = Hint.fromReading(word.reading);
+              // Initialize the value based on the reading/meaning of the word
+              if (state.review.type == "reading") {
+                _hint.value = ReadingHint.fromWord(word);
+              } else if (state.review.type == "meaning") {
+                _hint.value = MeaningHint.fromWord(word);
+              }
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -98,7 +102,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
                     hidden: _hideAnswer,
                     onToggleAnswer: _onToggleAnswer,
                     hint: _hint,
-                    onAskHint: () => _onAskHint(word, state.review.type),
+                    onAskHint: () => _onAskHint(word),
                   ),
                   const Spacer(flex: 1),
                   // Answer to show/hide
@@ -170,14 +174,12 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
     }
   }
 
-  /// Updates the current Hint with the next one based on the [reviewType] of a
+  /// Updates the current Hint with the next one based on the review type of a
   /// given [Word].
   ///
   /// When there are no hints sets [_hideAnswer.value] to false.
-  void _onAskHint(Word word, String reviewType) {
-    if (reviewType == "reading") {
-      _hint.value = _hint.value.getNextReadingHint(word.reading);
-    }
+  void _onAskHint(Word word) {
+      _hint.value = _hint.value.getNextHint(word);
 
     // if there are no more hints show the answer and enable the next button
     if (_hint.value.n == _hint.value.max) {

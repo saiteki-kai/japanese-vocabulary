@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'review_meaning_hint.dart';
 
-import '../../../../utils/hints.dart';
+import '../../../../utils/hint.dart';
 
 class ReviewHint extends StatelessWidget {
   const ReviewHint({
@@ -19,8 +20,6 @@ class ReviewHint extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: hint,
       builder: (context, Hint hint, child) {
-        final hintText = hint.text.padRight(hint.max, "＿");
-
         return Visibility(
           visible: hint.n > 0,
           maintainAnimation: true,
@@ -36,7 +35,14 @@ class ReviewHint extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 4.0),
-                Text(hintText, style: textTheme.titleMedium),
+                if (hint is MeaningHint && hint.currSentences.isNotEmpty)
+                  ReviewMeaningHint(hint: hint)
+                else if (hint is ReadingHint) 
+                  Text(
+                    hint.text.padRight(hint.max, "＿"),
+                    style: textTheme.subtitle2,
+                    textAlign: TextAlign.center,
+                  ),
               ],
             ),
           ),

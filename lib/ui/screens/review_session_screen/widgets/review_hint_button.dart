@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../utils/hints.dart';
+import '../../../../utils/hint.dart';
 
 class ReviewHintButton extends StatelessWidget {
   const ReviewHintButton({

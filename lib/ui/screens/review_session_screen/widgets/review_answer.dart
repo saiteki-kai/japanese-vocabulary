@@ -46,7 +46,7 @@ class ReviewAnswer extends StatelessWidget {
           child: Text(
             review.type == "meaning" ? meaning : reading,
             textAlign: TextAlign.center,
-            style: textTheme.headlineMedium,
+            style: textTheme.headline6,
           ),
         );
       },
