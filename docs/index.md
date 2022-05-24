@@ -148,7 +148,7 @@ flutter run --release
 
 ## API
 
-You can find the API <!-- [here](../doc/api/index.html). -->
+You can find the API [here]($CI_PROJECT_DIR/doc/api/index.html).
 
 ## Bug Reports
 
@@ -164,8 +164,6 @@ Gitlab issues is used for tracking bugs and proposing new features. Please consi
 * Provide steps to reproduce the issue
 * Include complete log tracebacks and error messages
 * An optional description to give more context
-
-<!-- ##  API -->
 
 <!-- ##  Usage -->
 

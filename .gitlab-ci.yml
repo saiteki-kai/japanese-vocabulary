@@ -38,7 +38,7 @@ pages:
   before_script: []
   script:
   - pip install -r ./docs/requirements.txt
-  - mkdocs build --strict --verbose
+  - mkdocs build --verbose
   artifacts:
     paths:
     - public
