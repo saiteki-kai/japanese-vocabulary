@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:equatable/equatable.dart';
 
-import 'sort.dart';
+import 'sort_option.dart';
 
 class Settings extends Equatable {
   const Settings({required this.sortOption});
