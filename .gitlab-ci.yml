@@ -42,12 +42,8 @@ pages:
   artifacts:
     paths:
     - public
-#  only:
-#  - main
-#  - 23-autogenerate-documentation-from-code
-#  - /^sprint
-#  - /^sprint-[0-9]+$
-#  - /^sprint_[0-9]+$
+  only:
+  - /^sprint_.*/
 
 autogenerate_doc:
   image: cirrusci/flutter:2.10.3
@@ -62,7 +58,8 @@ autogenerate_doc:
     paths:
       - $CI_PROJECT_DIR/doc
     when: always
-#  only:
+  only:
+  - /^sprint_.*/
 
 lint:
   image: cirrusci/flutter:2.10.3
@@ -80,7 +77,7 @@ code-quality:
     - metrics lib --reporter=gitlab --exclude={/**.g.dart,/**.template.dart,/**.gr.dart} > gl-code-quality-report.json
   artifacts:
     reports:
-      codequality: gl-code-quality-report.json
+      paths: ["gl-code-quality-report.json"]
 
 unit-test:
   image: cirrusci/flutter:2.10.3

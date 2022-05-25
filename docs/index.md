@@ -148,7 +148,7 @@ flutter run --release
 
 ## API
 
-You can find the API [here](https://gitlab.com/saiteki-kai/japanese-vocabulary/-/jobs/artifacts/23-autogenerate-documentation-from-code/file/doc/api/index.html?job=autogenerate_doc).
+You can find the API [here](https://gitlab.com/saiteki-kai/japanese-vocabulary/-/jobs/artifacts/sprint-2/file/doc/api/index.html?job=autogenerate_doc).
 
 ## Bug Reports
 
