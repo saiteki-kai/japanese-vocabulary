@@ -71,6 +71,103 @@ Word get word5 {
   );
 }
 
+Word createWordWithReview({
+  String text = "",
+  int jlpt = 0,
+  int streak1 = 0,
+  int streak2 = 0,
+  int correctAnswers1 = 0,
+  int correctAnswers2 = 0,
+  int incorrectAnswers1 = 0,
+  int incorrectAnswers2 = 0,
+  DateTime? nextDate1,
+  DateTime? nextDate2,
+}) {
+  final review1 = Review(
+    correctAnswers: correctAnswers1,
+    incorrectAnswers: incorrectAnswers1,
+    ef: 2.5,
+    interval: 0,
+    repetition: streak1,
+    type: "meaning",
+    nextDate: nextDate1,
+  );
+  final review2 = Review(
+    correctAnswers: correctAnswers2,
+    incorrectAnswers: incorrectAnswers2,
+    ef: 2.5,
+    interval: 0,
+    repetition: streak2,
+    type: "meaning",
+    nextDate: nextDate2,
+  );
+
+  final word = Word(
+    jlpt: jlpt,
+    meaning: "",
+    pos: "",
+    reading: "",
+    text: text,
+  );
+  word.readingReview.target = review1;
+  word.meaningReview.target = review2;
+
+  return word;
+}
+
+// mean accuracy: 0,58
+// max streak 4
+final wordsWithReview1 = createWordWithReview(
+  text: "B",
+  nextDate1: DateTime(2022),
+  nextDate2: null,
+  streak1: 0,
+  streak2: 4,
+  correctAnswers1: 2,
+  incorrectAnswers1: 1,
+  correctAnswers2: 3,
+  incorrectAnswers2: 3,
+);
+
+// mean accuracy: 0,83
+// max streak 3
+final wordsWithReview2 = createWordWithReview(
+  text: "C",
+  nextDate1: null,
+  nextDate2: null,
+  streak1: 3,
+  streak2: 2,
+  correctAnswers1: 1,
+  incorrectAnswers1: 0,
+  correctAnswers2: 2,
+  incorrectAnswers2: 1,
+);
+
+// mean accuracy: 0,66
+// max streak 5
+final wordsWithReview3 = createWordWithReview(
+  text: "A",
+  nextDate1: DateTime(2025),
+  nextDate2: DateTime(2024),
+  streak1: 5,
+  streak2: 2,
+  correctAnswers1: 4,
+  incorrectAnswers1: 2,
+  correctAnswers2: 2,
+  incorrectAnswers2: 1,
+);
+
+final wordsWithOneReview = word1.copyWith()
+  ..readingReview.target = Review(
+    correctAnswers: 2,
+    incorrectAnswers: 7,
+    ef: 2.5,
+    interval: 2,
+    nextDate: null,
+    repetition: 2,
+    type: "",
+  );
+
 Review createReviewByDate(
   DateTime? date, {
   Word? word,
