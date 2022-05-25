@@ -76,8 +76,7 @@ code-quality:
     - pub global activate dart_code_metrics
     - metrics lib --reporter=gitlab --exclude={/**.g.dart,/**.template.dart,/**.gr.dart} > gl-code-quality-report.json
   artifacts:
-    reports:
-      paths: ["gl-code-quality-report.json"]
+    paths: ["gl-code-quality-report.json"]
 
 unit-test:
   image: cirrusci/flutter:2.10.3
