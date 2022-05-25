@@ -43,7 +43,7 @@ pages:
     paths:
     - public
   only:
-  - /^sprint_.*/
+  - /^sprint-.*/
 
 autogenerate_doc:
   image: cirrusci/flutter:2.10.3
@@ -59,7 +59,7 @@ autogenerate_doc:
       - $CI_PROJECT_DIR/doc
     when: always
   only:
-  - /^sprint_.*/
+  - /^sprint-.*/
 
 lint:
   image: cirrusci/flutter:2.10.3
