@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:objectbox/objectbox.dart';
 
 import 'sort_option.dart';
-import './review.dart';
+import 'review.dart';
 import 'sentence.dart';
 
 @Entity()
@@ -195,13 +195,4 @@ class Word {
         return _sortByText(a, b);
     }
   }
-}
-
-abstract class SortStrategy {
-  sortBy();
-}
-
-class SortByStreakStrategy extends SortStrategy {
-  @override
-  sortBy() {}
 }
