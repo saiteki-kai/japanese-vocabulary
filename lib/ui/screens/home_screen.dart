@@ -66,7 +66,7 @@ class HomeScreen extends StatelessWidget {
 
   void _onTap(context, int index, tabsRouter) {
     if (index == 1) {
-      BlocProvider.of<WordBloc>(context).add(WordsRetrieved());
+      BlocProvider.of<WordBloc>(context).add(const WordsRetrieved());
     }
     tabsRouter.setActiveIndex(index);
   }
