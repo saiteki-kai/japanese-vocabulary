@@ -1,4 +1,5 @@
 import 'package:japanese_vocabulary/data/models/review.dart';
+import 'package:japanese_vocabulary/data/models/sort_option.dart';
 import 'package:japanese_vocabulary/data/models/word.dart';
 
 Word get emptyWord {
@@ -210,3 +211,26 @@ Review get meaningReviewWithWord {
     word: word1,
   );
 }
+
+final expectedSorting = {
+  SortField.date: [
+    wordsWithReview1,
+    wordsWithReview3,
+    wordsWithReview2,
+  ],
+  SortField.streak: [
+    wordsWithReview2,
+    wordsWithReview1,
+    wordsWithReview3,
+  ],
+  SortField.accuracy: [
+    wordsWithReview1,
+    wordsWithReview3,
+    wordsWithReview2,
+  ],
+  SortField.text: [
+    wordsWithReview3,
+    wordsWithReview1,
+    wordsWithReview2,
+  ],
+};

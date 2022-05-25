@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:japanese_vocabulary/data/models/sort_option.dart';
 import 'package:japanese_vocabulary/data/models/word.dart';
 import 'package:japanese_vocabulary/data/repositories/word_repository.dart';
 import 'package:japanese_vocabulary/objectbox.g.dart';
@@ -34,6 +35,29 @@ void main() async {
       when(box.getAll).thenReturn([]);
       final res = await repo.getWords();
       expect(res, equals([]));
+    });
+
+    group("sorting", () {
+      setUp(() {
+        when(() => box.getAll()..sort()).thenReturn(
+          <Word>[wordsWithReview1, wordsWithReview2, wordsWithReview3],
+        );
+      });
+
+      test("ascending", () async {
+        final sorted = await repo.getWords(
+          sort: const SortOption(field: SortField.streak, descending: false),
+        );
+
+        expect(sorted, equals(expectedSorting[SortField.streak]));
+      });
+      test("descending", () async {
+        final sorted = await repo.getWords(
+          sort: const SortOption(field: SortField.accuracy, descending: true),
+        );
+
+        expect(sorted, equals(expectedSorting[SortField.accuracy]!.reversed));
+      });
     });
   });
 

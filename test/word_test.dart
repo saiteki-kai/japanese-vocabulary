@@ -43,29 +43,6 @@ void main() {
       words = [wordsWithReview1, wordsWithReview2, wordsWithReview3];
     });
 
-    final expected = {
-      SortField.date: [
-        wordsWithReview1,
-        wordsWithReview3,
-        wordsWithReview2,
-      ],
-      SortField.streak: [
-        wordsWithReview2,
-        wordsWithReview1,
-        wordsWithReview3,
-      ],
-      SortField.accuracy: [
-        wordsWithReview1,
-        wordsWithReview3,
-        wordsWithReview2,
-      ],
-      SortField.text: [
-        wordsWithReview3,
-        wordsWithReview1,
-        wordsWithReview2,
-      ],
-    };
-
     for (SortField field in SortField.values) {
       group("sort by ${field.name}", () {
         test("ascending", () {
@@ -73,7 +50,7 @@ void main() {
             ..sort((a, b) =>
                 Word.sortBy(a, b, attribute: field, descending: false));
 
-          expect(sorted, equals(expected[field]));
+          expect(sorted, equals(expectedSorting[field]));
         });
 
         test("descending", () {
@@ -81,7 +58,7 @@ void main() {
             ..sort((a, b) =>
                 Word.sortBy(a, b, attribute: field, descending: true));
 
-          expect(sorted, equals(expected[field]!.reversed));
+          expect(sorted, equals(expectedSorting[field]!.reversed));
         });
       });
     }
