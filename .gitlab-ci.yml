@@ -29,20 +29,37 @@ flutter_dependencies:
   before_script: []
   script:
     - flutter pub get
+    - dart --version
 
 pages:
   stage: docs
+  needs: [autogenerate_doc]
   image: python:3.9
   before_script: []
   script:
   - pip install -r ./docs/requirements.txt
-  - mkdocs build --strict --verbose
+  - mkdocs build --verbose
   artifacts:
     paths:
     - public
   only:
-  - main
-  - sprint_1
+  - /^sprint_.*/
+
+autogenerate_doc:
+  image: cirrusci/flutter:2.10.3
+  stage: docs
+  needs: [flutter_dependencies]
+  script:
+  - pub global activate dartdoc
+  - export PATH="$PATH":"$HOME/.pub-cache/bin"
+  - pub global run dartdoc .
+  artifacts:
+    name: doc
+    paths:
+      - $CI_PROJECT_DIR/doc
+    when: always
+  only:
+  - /^sprint_.*/
 
 lint:
   image: cirrusci/flutter:2.10.3
