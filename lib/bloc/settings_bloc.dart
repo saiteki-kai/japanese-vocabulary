@@ -16,10 +16,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
   final SettingsRepository repository;
 
-  _onSettingsRetrieved(
-    SettingsRetrieved event,
-    Emitter<SettingsState> emit,
-  ) async {
+  _onSettingsRetrieved(SettingsRetrieved _, Emitter<SettingsState> emit) async {
     Settings? settings = await repository.getSettings();
 
     if (settings == null) {
@@ -30,10 +27,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(SettingsLoaded(settings: settings));
   }
 
-  _onSortChanged(
-    SettingsSortChanged event,
-    Emitter<SettingsState> emit,
-  ) async {
+  _onSortChanged(SettingsSortChanged event, Emitter<SettingsState> emit) async {
     Settings? settings = await repository.getSettings();
 
     if (settings != null) {

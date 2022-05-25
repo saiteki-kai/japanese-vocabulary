@@ -32,7 +32,7 @@ class WordScreen extends StatelessWidget {
               icon: const Icon(Icons.sort),
               onPressed: () => Backdrop.of(context).fling(),
             ),
-          )
+          ),
         ],
       ),
       backLayer: const SortingSection(),

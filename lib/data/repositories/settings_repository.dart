@@ -9,9 +9,11 @@ class SettingsRepository {
 
   Future<Settings?> getSettings() async {
     final json = (await prefs).getString("settings");
+
     if (json != null) {
       return Settings.fromJson(json);
     }
+
     return null;
   }
 

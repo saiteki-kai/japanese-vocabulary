@@ -34,9 +34,7 @@ class SortListItem extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
         borderRadius: BorderRadius.circular(8.0),
-        onTap: () {
-          onPressed(field, enabled ? !descending : descending);
-        },
+        onTap: _onTap,
         child: DecoratedBox(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
@@ -65,5 +63,9 @@ class SortListItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _onTap() {
+    onPressed(field, enabled ? !descending : descending);
   }
 }

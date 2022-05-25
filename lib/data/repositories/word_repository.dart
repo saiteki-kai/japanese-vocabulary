@@ -51,8 +51,12 @@ class WordRepository {
 
     if (sort != null) {
       return box.getAll()
-        ..sort((a, b) => Word.sortBy(a, b,
-            attribute: sort.field, descending: sort.descending));
+        ..sort((a, b) => Word.sortBy(
+              a,
+              b,
+              attribute: sort.field,
+              descending: sort.descending,
+            ));
     }
 
     return box.getAll();
