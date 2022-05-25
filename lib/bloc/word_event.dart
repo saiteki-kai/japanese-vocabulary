@@ -24,4 +24,8 @@ class WordAdded extends WordEvent {
 }
 
 /// This [WordsRetrieved] manages the events concerning the [Word].
-class WordsRetrieved extends WordEvent {}
+class WordsRetrieved extends WordEvent {
+  const WordsRetrieved({this.sort});
+
+  final SortOption? sort;
+}
