@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:japanese_vocabulary/bloc/sentence_bloc.dart';
+import 'package:japanese_vocabulary/bloc/word_bloc.dart';
 import 'package:japanese_vocabulary/data/models/word.dart';
 import 'package:japanese_vocabulary/ui/screens/word_details_screen/widgets/sentences_list.dart';
+import 'package:mocktail/mocktail.dart';
 
 import '../utils/mocks.dart';
 import '../utils/params.dart';
 
 void main() {
-  late SentenceBloc bloc;
+  late WordBloc bloc;
 
   setUp(() {
-    bloc = MockSentenceBloc();
+    bloc = MockWordBloc();
   });
 
   tearDown(() {
@@ -31,6 +32,8 @@ void main() {
   }
 
   testWidgets("empty sentence list", (WidgetTester tester) async {
+    when(() => bloc.state).thenReturn(WordLoaded(word: wordNoSentence));
+
     await setUpWidget(tester, wordNoSentence);
 
     final noSentence =
@@ -40,6 +43,8 @@ void main() {
   });
 
   testWidgets("sentence list", (WidgetTester tester) async {
+    when(() => bloc.state).thenReturn(WordLoaded(word: wordSentence));
+
     await setUpWidget(tester, wordSentence);
 
     final textSentence =

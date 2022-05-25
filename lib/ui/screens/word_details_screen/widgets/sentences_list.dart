@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../bloc/word_bloc.dart';
 import 'sentence_item.dart';
-import '../../../../bloc/sentence_bloc.dart';
 import '../../../../data/models/sentence.dart';
 import '../../../../data/models/word.dart';
 
@@ -17,17 +17,17 @@ class SentencesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<SentenceBloc>(context).add(SentencesRetrieved(word: word));
+    BlocProvider.of<WordBloc>(context).add(WordRetrieved(wordId: word.id));
 
     return Card(
       margin: const EdgeInsets.all(16.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
-      child: BlocBuilder<SentenceBloc, SentenceState>(
+      child: BlocBuilder<WordBloc, WordState>(
         builder: (context, state) {
-          if (state is SentencesLoaded) {
-            if (state.sentences.isEmpty) {
+          if (state is WordLoaded) {
+            if (state.word.sentences.isEmpty) {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
@@ -42,9 +42,9 @@ class SentencesList extends StatelessWidget {
               );
             }
             return ListView.builder(
-              itemCount: state.sentences.length,
+              itemCount: state.word.sentences.length,
               itemBuilder: (context, index) {
-                final Sentence sentence = state.sentences[index];
+                final Sentence sentence = state.word.sentences[index];
 
                 return SentenceItem(sentence: sentence);
               },

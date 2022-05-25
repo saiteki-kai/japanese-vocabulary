@@ -62,7 +62,11 @@ void main() async {
     'emits [WordLoaded] when WordAdded is added when store is empty.',
     seed: () => const WordsLoaded(words: []),
     build: () => bloc,
-    setUp: setUpWithWords,
+    setUp: () {
+      setUpWithWords();
+      when(() => repo.addWord(any()))
+          .thenAnswer((inv) => inv.positionalArguments[0].id);
+    },
     act: (bloc) => bloc.add(WordAdded(word: word1)),
     expect: () => <WordState>[
       WordsLoaded(words: [word1]),
