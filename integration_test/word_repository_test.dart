@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:japanese_vocabulary/data/app_database.dart';
 import 'package:japanese_vocabulary/data/models/review.dart';
+import 'package:japanese_vocabulary/data/models/sentence.dart';
 import 'package:japanese_vocabulary/data/models/word.dart';
 import 'package:japanese_vocabulary/data/repositories/word_repository.dart';
 import 'package:japanese_vocabulary/objectbox.g.dart';
@@ -173,6 +174,19 @@ void main() async {
 
       expect(res2, 2, reason: "Id should've been 2");
       expect(wordBox.getAll().length, 3, reason: "# elements should've been 3");
+    });
+    test('word-sentences relations', () async {
+      wordBox.removeAll();
+      final sentenceBox = store.box<Sentence>();
+      sentenceBox.removeAll();
+
+      final res = await repo.addWord(wordSentences);
+      final word = wordBox.get(res);
+
+      expect(word?.sentences.length, 2);
+
+      expect(wordBox.getAll().length, 1);
+      expect(sentenceBox.getAll().length, 2);
     });
   });
 }

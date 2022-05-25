@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/word_bloc.dart';
+import '../../../data/models/sentence.dart';
 import '../../../data/models/word.dart';
+import '../../widgets/floating_action_button.dart';
 import '../../widgets/loading_indicator.dart';
 import '../../widgets/screen_layout.dart';
 import './widgets/word_stats_tab.dart';
@@ -28,11 +30,15 @@ class WordDetailsScreen extends StatefulWidget {
 class _WordDetailsScreenState extends State<WordDetailsScreen>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
+  final TextEditingController _sentenceTextController = TextEditingController();
+  final TextEditingController _sentenceTranslationController =
+      TextEditingController();
   WordBloc? _bloc;
 
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 2);
+
     _bloc = BlocProvider.of<WordBloc>(context);
     _bloc?.add(WordRetrieved(wordId: widget.wordId));
 
@@ -64,6 +70,11 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
                   ],
                 ),
               ),
+              floatingActionButton: floatingActionButton(
+                key: const Key("sentence-floating"),
+                show: true,
+                onPressed: () => _onAddDetailsPressed(context, word),
+              ),
             );
           } else if (state is WordError) {
             return Text(state.message);
@@ -79,5 +90,59 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
     _bloc?.add(WordsRetrieved());
 
     return Future.value(true);
+  }
+
+  void _onAddDetailsPressed(BuildContext context, Word word) {
+    showDialog(
+      context: context,
+      builder: (_) => SimpleDialog(
+        title: const Text("Enter an example sentence"),
+        children: [
+          SizedBox(
+            width: 300.0,
+            child: TextField(
+              key: const Key("sentence-text-d"),
+              decoration: const InputDecoration(
+                hintText: "Sentence",
+              ),
+              controller: _sentenceTextController,
+            ),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          TextField(
+            key: const Key("sentence-translation-d"),
+            decoration: const InputDecoration(
+              hintText: "Translation",
+            ),
+            controller: _sentenceTranslationController,
+          ),
+          IconButton(
+            key: const Key("sentence-button-d"),
+            onPressed: () => _onAddSentencePressed(context, word),
+            icon: const Icon(Icons.add, color: Colors.black),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _onAddSentencePressed(BuildContext context, Word word) {
+    /// Adds a new example sentence
+    final text = _sentenceTextController.text;
+    final translation = _sentenceTranslationController.text;
+    FocusScope.of(context).requestFocus(FocusNode());
+    final sentences = word.sentences;
+    final noEqualSentences = sentences.every((element) => element.text != text);
+    if (text.isNotEmpty && translation.isNotEmpty && noEqualSentences) {
+      setState(() {
+        sentences.add(Sentence(text: text, translation: translation));
+        _bloc?.add(WordAdded(word: word));
+        _sentenceTextController.clear();
+        _sentenceTranslationController.clear();
+        Navigator.pop(context);
+      });
+    }
   }
 }

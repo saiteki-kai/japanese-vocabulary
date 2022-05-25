@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import '../data/models/sentence.dart';
 import '../data/models/word.dart';
-import '../data/repositories/word_repository.dart';
+import '../data/repositories/sentence_repository.dart';
 
 part 'sentence_event.dart';
 part 'sentence_state.dart';
@@ -12,25 +12,16 @@ class SentenceBloc extends Bloc<SentenceEvent, SentenceState> {
     on<SentencesRetrieved>(_onRetrieved);
   }
 
-  /// The instance of the repository
-  final WordRepository repository;
+  /// The instance of the repository.
+  final SentenceRepository repository;
 
   void _onRetrieved(
     SentencesRetrieved event,
     Emitter<SentenceState> emit,
   ) async {
-    emit(
-      SentencesLoading(),
-    );
-    final sentences = event.word.sentences;
-    if (sentences.isNotEmpty) {
-      emit(
-        SentencesLoaded(sentences: sentences),
-      );
-    } else {
-      emit(
-        const SentenceError(message: "Sentence not found!"),
-      );
-    }
+    /// Returns the list of sentences related to a word.
+    emit(SentencesLoading());
+    final sentences = event.word?.sentences.toList() ?? [];
+    emit(SentencesLoaded(sentences: sentences));
   }
 }

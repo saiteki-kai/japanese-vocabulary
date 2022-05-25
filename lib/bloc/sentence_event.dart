@@ -8,9 +8,9 @@ abstract class SentenceEvent extends Equatable {
 }
 
 class SentencesRetrieved extends SentenceEvent {
-  final Word word;
+  final Word? word;
   const SentencesRetrieved({required this.word});
 
   @override
-  List<Object> get props => [word];
+  List<Object> get props => [word?.sentences ?? []];
 }
