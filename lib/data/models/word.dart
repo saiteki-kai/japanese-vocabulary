@@ -1,5 +1,9 @@
+import 'dart:core';
+import 'dart:math';
+
 import 'package:objectbox/objectbox.dart';
 
+import 'sort_option.dart';
 import './review.dart';
 import 'sentence.dart';
 
@@ -143,4 +147,61 @@ class Word {
         meaning.hashCode ^
         pos.hashCode;
   }
+
+  static int _sortByNextReview(Word a, Word b) {
+    const maxMilliseconds = 8640000000000000;
+
+    final dateA = a.nextReview?.millisecondsSinceEpoch ?? maxMilliseconds;
+    final dateB = b.nextReview?.millisecondsSinceEpoch ?? maxMilliseconds;
+
+    return dateA.compareTo(dateB);
+  }
+
+  static int _sortByStreak(Word a, Word b) {
+    final streakAR = a.readingReview.target?.repetition ?? 0;
+    final streakAM = a.meaningReview.target?.repetition ?? 0;
+
+    final streakBR = b.readingReview.target?.repetition ?? 0;
+    final streakBM = b.meaningReview.target?.repetition ?? 0;
+
+    return max(streakAR, streakAM).compareTo(max(streakBR, streakBM));
+  }
+
+  static int _sortByText(Word a, Word b) {
+    return a.text.compareTo(b.text);
+  }
+
+  static int _sortByAccuracy(Word a, Word b) {
+    return a.meanAccuracy.compareTo(b.meanAccuracy);
+  }
+
+  static int sortBy(Word a, Word b, {SortField? attribute, bool? descending}) {
+    // switch arguments
+    if (descending ?? false) {
+      final c = a;
+      a = b;
+      b = c;
+    }
+
+    switch (attribute) {
+      case SortField.streak:
+        return _sortByStreak(a, b);
+      case SortField.date:
+        return _sortByNextReview(a, b);
+      case SortField.accuracy:
+        return _sortByAccuracy(a, b);
+      case SortField.text:
+      default:
+        return _sortByText(a, b);
+    }
+  }
+}
+
+abstract class SortStrategy {
+  sortBy();
+}
+
+class SortByStreakStrategy extends SortStrategy {
+  @override
+  sortBy() {}
 }
