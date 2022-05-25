@@ -6,7 +6,7 @@ import '../../bloc/word_bloc.dart';
 import '../../data/models/sentence.dart';
 import '../../data/models/word.dart';
 import 'screen_layout.dart';
-import 'sentence.dart';
+import 'sentence_item.dart';
 
 /// A widget that allows the user to add a new [Word] they want to learn.
 class WordInsert extends StatefulWidget {

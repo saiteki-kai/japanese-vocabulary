@@ -4,22 +4,8 @@ import '../../data/models/sentence.dart';
 class SentenceRepository {
   const SentenceRepository({required Future<Box<Sentence>> box}) : _box = box;
 
-  // A database instance.
+  /// A database instance.
   final Future<Box<Sentence>> _box;
-
-  /// The method that allows the insertion of a sentence in the repository.
-  Future<int> addSentence(Sentence sentence) async {
-    final box = await _box;
-
-    return box.put(sentence);
-  }
-
-  /// The method that allows the insertion of multiple sentences in the repository.
-  Future<List<int>> addSentences(List<Sentence> sentences) async {
-    final box = await _box;
-
-    return box.putMany(sentences);
-  }
 
   /// Returns the list of all sentences with the specified ids.
   Future<List<Sentence?>> getSentences(List<int> ids) async {

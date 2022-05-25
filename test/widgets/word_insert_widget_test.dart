@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:group_button/group_button.dart';
 import 'package:japanese_vocabulary/bloc/word_bloc.dart';
 import 'package:japanese_vocabulary/data/models/word.dart';
-import 'package:japanese_vocabulary/ui/widgets/sentence.dart';
+import 'package:japanese_vocabulary/ui/widgets/sentence_item.dart';
 import 'package:japanese_vocabulary/ui/widgets/word_insert_widget.dart';
 import 'package:mocktail/mocktail.dart';
 

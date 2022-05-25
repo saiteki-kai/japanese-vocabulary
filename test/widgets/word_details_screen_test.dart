@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:japanese_vocabulary/bloc/word_bloc.dart';
+import 'package:japanese_vocabulary/data/models/sentence.dart';
 import 'package:japanese_vocabulary/ui/screens/word_details_screen/word_details_screen.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -71,6 +72,10 @@ void main() {
     await tester.tap(addFinder);
     await tester.pumpAndSettle();
     expect(textFinder, findsNWidgets(1));
+
+    verifyNever(() {
+      bloc.add(WordAdded(word: word));
+    });
   });
 
   testWidgets("add a valid sentence", (WidgetTester tester) async {
@@ -103,8 +108,18 @@ void main() {
     await tester.tap(addFinder);
     await tester.pumpAndSettle();
 
+    verify(() {
+      bloc.add(
+        WordAdded(
+          word: word4
+            ..sentences.add(
+              Sentence(text: text, translation: translation),
+            ),
+        ),
+      );
+    }).called(1);
+
     expect(textFinder, findsNothing);
-    expect(bloc.state, WordLoaded(word: word));
     expect(word.sentences.length, 1);
   });
 
@@ -138,8 +153,10 @@ void main() {
     await tester.tap(addFinder);
     await tester.pumpAndSettle();
 
+    verifyNever(() {
+      bloc.add(WordAdded(word: word));
+    });
+
     expect(addFinder, findsOneWidget);
-    expect(bloc.state, WordLoaded(word: word));
-    expect(word.sentences.length, 2);
   });
 }
