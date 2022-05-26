@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:japanese_vocabulary/bloc/word_bloc.dart';
+import 'package:japanese_vocabulary/data/models/sort_option.dart';
 import 'package:japanese_vocabulary/data/repositories/word_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -19,10 +20,14 @@ void main() async {
     when(repo.getWords).thenAnswer((_) async => [word1, word2, word3]);
   }
 
+  setUpAll(() {
+    registerFallbackValue(FakeWord());
+    registerFallbackValue(FakeSortOption());
+  });
+
   setUp(() async {
     repo = MockWordRepository();
     bloc = WordBloc(repository: repo);
-    registerFallbackValue(FakeWord());
 
     when(() => repo.addWord(any()))
         .thenAnswer((inv) async => inv.positionalArguments[0].id);
@@ -129,4 +134,50 @@ void main() async {
       verify(() => repo.addWord(any())).called(2);
     },
   );
+
+  group("sorting", () {
+    blocTest<WordBloc, WordState>(
+      "ascending",
+      build: () => bloc,
+      setUp: () {
+        when(() => repo.getWords(sort: any(named: "sort"))).thenAnswer(
+          (_) async => expectedSorting[SortField.streak]!,
+        );
+      },
+      act: (bloc) {
+        bloc.add(
+          const WordsRetrieved(
+            sort: SortOption(field: SortField.streak, descending: false),
+          ),
+        );
+      },
+      expect: () => <WordState>[
+        WordLoading(),
+        WordsLoaded(words: expectedSorting[SortField.streak]!),
+      ],
+    );
+
+    blocTest<WordBloc, WordState>(
+      "descending",
+      build: () => bloc,
+      setUp: () {
+        when(() => repo.getWords(sort: any(named: "sort"))).thenAnswer(
+          (_) async => expectedSorting[SortField.streak]!.reversed.toList(),
+        );
+      },
+      act: (bloc) {
+        bloc.add(
+          const WordsRetrieved(
+            sort: SortOption(field: SortField.streak, descending: true),
+          ),
+        );
+      },
+      expect: () => <WordState>[
+        WordLoading(),
+        WordsLoaded(
+          words: expectedSorting[SortField.streak]!.reversed.toList(),
+        ),
+      ],
+    );
+  });
 }
