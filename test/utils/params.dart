@@ -129,7 +129,7 @@ Review get meaningReviewWithWord {
 }
 
 Word get wordWith3Sentences {
-  final word =  Word(
+  final word = Word(
     text: "言葉",
     reading: "ことば",
     jlpt: 5,
@@ -147,5 +147,45 @@ Word get wordWithoutSentences {
     jlpt: 4,
     meaning: "review (of learned material); revision",
     pos: "Noun, Suru verb",
+  );
+}
+
+Word get wordReading1Char {
+  return Word(
+    text: "",
+    reading: "あ",
+    jlpt: 0,
+    meaning: "",
+    pos: "",
+  );
+}
+
+Word get wordReading2Char {
+  return Word(
+    text: "",
+    reading: "うん",
+    jlpt: 0,
+    meaning: "",
+    pos: "",
+  );
+}
+
+Word get wordReading4Char {
+  return Word(
+    text: "",
+    reading: "たとえば",
+    jlpt: 0,
+    meaning: "",
+    pos: "",
+  );
+}
+
+Word get wordReading7Char {
+  return Word(
+    text: "",
+    reading: "ユニットテスト",
+    jlpt: 0,
+    meaning: "",
+    pos: "",
   );
 }
