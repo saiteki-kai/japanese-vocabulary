@@ -6,12 +6,14 @@ import '../../../data/models/word.dart';
 import 'widgets/sorting_section.dart';
 import 'widgets/word_item.dart';
 
-/// A private widget that displays a list of [Word] and initialize database.
+/// A widget that displays a list of [Word].
 ///
-/// This widget initializes values in the database and also
-/// allows you to view all the words in the dictionary through a scrolling list
-/// that shows the text of the word,
-/// the next revision date and an average of the accuracy of the last two revisions.
+/// This widget allows you to view all the words in the database through a
+/// [ListView] that shows the text of each word, the next review date and
+/// an average of the accuracy of the two types of reviews.
+///
+/// The words can be sorted using the [SortingSection] specifying a field on
+/// which to sort and the sort order (descending of ascending).
 class WordScreen extends StatelessWidget {
   const WordScreen({
     Key? key,

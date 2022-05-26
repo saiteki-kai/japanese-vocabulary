@@ -4,9 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../bloc/settings_bloc.dart';
 import '../../../../bloc/word_bloc.dart';
 import '../../../../data/models/sort_option.dart';
+import '../../../../utils/sort.dart';
 import 'sort_list_item.dart';
 
+/// A Widget that displays different [SortListItem] and allows you to select
+/// a sort option by pressing on a [SortListItem].
+///
+/// After a sort option is selected, it will be cached.
 class SortingSection extends StatefulWidget {
+  /// Creates a [SortingSection].
   const SortingSection({Key? key}) : super(key: key);
 
   @override
@@ -14,7 +20,10 @@ class SortingSection extends StatefulWidget {
 }
 
 class _SortingSectionState extends State<SortingSection> {
+  /// A [WordBloc] instance.
   WordBloc? _wordBloc;
+
+  /// A [SettingsBloc] instance.
   SettingsBloc? _settingsBloc;
 
   @override
@@ -58,6 +67,7 @@ class _SortingSectionState extends State<SortingSection> {
     );
   }
 
+  /// Updates the sort option and the words list.
   _onSortChanged(SortField field, bool descending) {
     final sortOption = SortOption(field: field, descending: descending);
 

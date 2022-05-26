@@ -45,7 +45,9 @@ class WordRepository {
     return box.put(word);
   }
 
-  /// This method returns all the words in the repository
+  /// This method returns all the words in the repository.
+  ///
+  /// The words can be sorted by specifying the [sort].
   Future<List<Word>> getWords({SortOption? sort}) async {
     final box = await _box;
 
