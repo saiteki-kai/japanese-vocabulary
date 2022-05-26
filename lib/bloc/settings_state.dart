@@ -9,7 +9,9 @@ abstract class SettingsState extends Equatable {
 
 class SettingsInitial extends SettingsState {}
 
-class SettingsLoading extends SettingsState {}
+class SettingsLoading extends SettingsState {
+  const SettingsLoading();
+}
 
 class SettingsLoaded extends SettingsState {
   const SettingsLoaded({required this.settings});

@@ -17,6 +17,7 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   final SettingsRepository repository;
 
   _onSettingsRetrieved(SettingsRetrieved _, Emitter<SettingsState> emit) async {
+    emit(const SettingsLoading());
     Settings? settings = await repository.getSettings();
 
     if (settings == null) {
