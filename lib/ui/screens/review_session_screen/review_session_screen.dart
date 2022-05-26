@@ -23,6 +23,11 @@ import 'widgets/review_session_appbar.dart';
 /// is shown, [ReviewQualitySelector] is enabled and allows you to choose a
 /// quality value. Then [NextReviewButton] allows you to move on to the next
 /// review or, if there are no more, to go to the summary.
+
+/// Also a certain numbers of hints for a word are displayed and accessed by the [ReviewItem].
+/// that updates the current [hint] to be displayed in the [ReviewHint] and changes 
+/// the enabled values of the [ReviewQualitySelector]. 
+/// The [hint] can be of two types [MeaningHint] or [ReadingHint].
 class ReviewSessionScreen extends StatefulWidget implements AutoRouteWrapper {
   const ReviewSessionScreen({Key? key}) : super(key: key);
 
@@ -179,7 +184,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   ///
   /// When there are no hints sets [_hideAnswer.value] to false.
   void _onAskHint(Word word) {
-      _hint.value = _hint.value.getNextHint(word);
+    _hint.value = _hint.value.getNextHint(word);
 
     // if there are no more hints show the answer and enable the next button
     if (_hint.value.n == _hint.value.max) {

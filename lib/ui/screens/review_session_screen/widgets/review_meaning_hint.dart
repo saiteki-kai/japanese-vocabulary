@@ -2,6 +2,9 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import '../../../../utils/hint.dart';
 
+/// A Widget that displays the list of sentences associated with the [hint] of type [MeaningHint].
+///
+/// The list is shown with a [PageView] and a [DotsIndicator] is used to move to previous hints.
 class ReviewMeaningHint extends StatefulWidget {
   ReviewMeaningHint({
     Key? key,
@@ -9,6 +12,7 @@ class ReviewMeaningHint extends StatefulWidget {
   })  : assert(hint.currSentences.isNotEmpty),
         super(key: key);
 
+  /// A [Hint] value.
   final MeaningHint hint;
 
   @override
@@ -16,10 +20,13 @@ class ReviewMeaningHint extends StatefulWidget {
 }
 
 class _ReviewMeaningHintState extends State<ReviewMeaningHint> {
+  /// The current page value.
   final ValueNotifier<int> page = ValueNotifier(0);
 
+  /// The page controller of the hints.
   PageController? _controller;
 
+  /// The number of sentences of the [widget.hint].
   int get _length => widget.hint.currSentences.length;
 
   @override
@@ -63,9 +70,7 @@ class _ReviewMeaningHintState extends State<ReviewMeaningHint> {
                   ),
                 );
               },
-              onPageChanged: (i) {
-                page.value = i;
-              },
+              onPageChanged: _onPageChanged,
             ),
           ),
         ),
@@ -89,5 +94,10 @@ class _ReviewMeaningHintState extends State<ReviewMeaningHint> {
           ),
       ],
     );
+  }
+
+  /// Changes the current page.
+  _onPageChanged(i) {
+    page.value = i;
   }
 }
