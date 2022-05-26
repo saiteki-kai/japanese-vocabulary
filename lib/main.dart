@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'utils/initial_data.dart';
 
 import 'config/routes.gr.dart';
 import 'bloc/review_bloc.dart';
@@ -13,8 +12,6 @@ import 'data/repositories/review_repository.dart';
 import 'data/repositories/word_repository.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  AppDatabase.instance.store.then(initializeDB);
   runApp(JapaneseVocabularyApp());
 }
 
