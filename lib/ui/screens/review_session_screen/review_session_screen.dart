@@ -91,9 +91,10 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
               }
 
               // Initialize the value based on the reading/meaning of the word
-              if (state.review.type == "reading") {
+              final reviewType = state.review.type;
+              if ( reviewType == "reading") {
                 _hint.value = ReadingHint.fromWord(word);
-              } else if (state.review.type == "meaning") {
+              } else if (reviewType == "meaning") {
                 _hint.value = MeaningHint.fromWord(word);
               }
 
@@ -147,7 +148,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   }
 
   /// Defines when to build the widget.
-  bool _reviewBlocBuildWhen(ReviewState before, ReviewState after) {
+  bool _reviewBlocBuildWhen(ReviewState before, ReviewState _) {
     return !(before is ReviewError || before is ReviewFinished);
   }
 

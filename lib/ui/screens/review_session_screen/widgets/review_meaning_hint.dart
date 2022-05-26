@@ -32,8 +32,9 @@ class _ReviewMeaningHintState extends State<ReviewMeaningHint> {
   @override
   void initState() {
     super.initState();
-    _controller = PageController(initialPage: widget.hint.n - 1);
-    page.value = widget.hint.n - 1;
+    final nextPageIndex = widget.hint.n - 1;
+    _controller = PageController(initialPage: nextPageIndex);
+    page.value = nextPageIndex;
   }
 
   @override

@@ -1,0 +1,1 @@
+[{"type":"issue","check_name":"prefer-async-await","description":"Prefer using async/await syntax instead of .then invocations","categories":["Style"],"location":{"path":"lib/main.dart","positions":{"begin":{"line":17,"column":3},"end":{"line":17,"column":48}}},"severity":"minor","fingerprint":"a8609ce12109c7b502509876752e3e07"}]
