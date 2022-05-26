@@ -2,7 +2,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:japanese_vocabulary/bloc/settings_bloc.dart';
 import 'package:japanese_vocabulary/data/models/settings.dart';
-import 'package:japanese_vocabulary/data/models/sort_option.dart';
 import 'package:japanese_vocabulary/data/repositories/settings_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
