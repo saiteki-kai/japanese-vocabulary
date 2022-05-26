@@ -1,4 +1,5 @@
 import 'package:japanese_vocabulary/data/models/review.dart';
+import 'package:japanese_vocabulary/data/models/settings.dart';
 import 'package:japanese_vocabulary/data/models/sort_option.dart';
 import 'package:japanese_vocabulary/data/models/word.dart';
 
@@ -234,3 +235,13 @@ final expectedSorting = {
     wordsWithReview2,
   ],
 };
+
+Settings get settings1 {
+  return const Settings(
+    sortOption: SortOption(descending: true, field: SortField.accuracy),
+  );
+}
+
+SortOption get sortOption1 {
+  return const SortOption(descending: false, field: SortField.streak);
+}
