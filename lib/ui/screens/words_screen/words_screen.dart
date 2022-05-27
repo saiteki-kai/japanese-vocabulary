@@ -4,6 +4,7 @@ import '../../../bloc/word_bloc.dart';
 import '../../../data/models/word.dart';
 import '../../widgets/screen_layout.dart';
 import 'widgets/word_item.dart';
+import 'widgets/word_search.dart';
 
 /// A private widget that displays a list of [Word] and initialize database.
 ///
@@ -21,7 +22,22 @@ class WordScreen extends StatelessWidget {
     BlocProvider.of<WordBloc>(context).add(WordsRetrieved());
 
     return ScreenLayout(
-      appBar: AppBar(title: const Text("Words"), elevation: 0),
+      appBar: AppBar(
+        title: const Text("Words"),
+        elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              // Show the search bar
+              showSearch(
+                  context: context,
+                  // delegate to the search bar
+                  delegate: CustomSearchDelegate());
+            },
+            icon: const Icon(Icons.search),
+          )
+        ],
+      ),
       padding: EdgeInsets.zero,
       child: BlocBuilder<WordBloc, WordState>(
         builder: (context, state) {
@@ -30,7 +46,7 @@ class WordScreen extends StatelessWidget {
               itemCount: state.words.length,
               itemBuilder: (context, index) {
                 final Word word = state.words[index];
-
+                print(word);
                 return WordItem(word: word);
               },
               padding: EdgeInsets.zero,
