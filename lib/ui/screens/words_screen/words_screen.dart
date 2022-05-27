@@ -12,10 +12,19 @@ import 'widgets/word_search.dart';
 /// allows you to view all the words in the dictionary through a scrolling list
 /// that shows the text of the word,
 /// the next revision date and an average of the accuracy of the last two revisions.
-class WordScreen extends StatelessWidget {
+class WordScreen extends StatefulWidget {
   const WordScreen({
     Key? key,
   }) : super(key: key);
+
+  @override
+  _WordScreenState createState() => _WordScreenState();
+}
+
+class _WordScreenState extends State<WordScreen> {
+  Icon customIcon = const Icon(Icons.search);
+  Widget title = const Text('Words');
+  Widget searchBar = _setSearchBar();
 
   @override
   Widget build(BuildContext context) {
@@ -23,20 +32,15 @@ class WordScreen extends StatelessWidget {
 
     return ScreenLayout(
       appBar: AppBar(
-        title: const Text("Words"),
+        title: Column(
+          children: [
+            title,
+            searchBar,
+          ],
+        ),
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Show the search bar
-              showSearch(
-                  context: context,
-                  // delegate to the search bar
-                  delegate: CustomSearchDelegate());
-            },
-            icon: const Icon(Icons.search),
-          )
-        ],
+        centerTitle: true,
+        toolbarHeight: 105,
       ),
       padding: EdgeInsets.zero,
       child: BlocBuilder<WordBloc, WordState>(
@@ -46,7 +50,7 @@ class WordScreen extends StatelessWidget {
               itemCount: state.words.length,
               itemBuilder: (context, index) {
                 final Word word = state.words[index];
-                print(word);
+                //print(word);
                 return WordItem(word: word);
               },
               padding: EdgeInsets.zero,
@@ -59,4 +63,34 @@ class WordScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+ListTile _setSearchBar() {
+  return ListTile(
+    leading: const Icon(
+      Icons.search,
+      color: Colors.white,
+      size: 28,
+    ),
+    title: TextField(
+      decoration: const InputDecoration(
+        hintText: 'Search...',
+        hintStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+          fontStyle: FontStyle.italic,
+        ),
+        border: InputBorder.none,
+      ),
+      style: const TextStyle(
+        color: Colors.white,
+      ),
+      controller: TextEditingController(),
+    ),
+    onTap: () => _onTapFunction(),
+  );
+}
+
+void _onTapFunction() {
+  print("Searching onTap....");
 }

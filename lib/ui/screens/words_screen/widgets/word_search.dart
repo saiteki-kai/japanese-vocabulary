@@ -1,22 +1,6 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../config/routes.gr.dart';
 import '../../../../data/models/word.dart';
-import '../../../../utils/colors.dart';
-import '../../../../utils/date.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../bloc/word_bloc.dart';
-import '../../../../data/models/word.dart';
-import '../../../widgets/screen_layout.dart';
-import 'word_item.dart';
-
-import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-
 import '../../../../data/repositories/word_repository.dart';
-import '../../../../data/models/word.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   // Demo list to show querying
