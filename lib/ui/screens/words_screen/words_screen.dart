@@ -24,7 +24,7 @@ class WordScreen extends StatefulWidget {
 class _WordScreenState extends State<WordScreen> {
   Icon customIcon = const Icon(Icons.search);
   Widget title = const Text('Words');
-  Widget searchBar = _setSearchBar();
+  Widget searchBar = const SearchBar();
 
   @override
   Widget build(BuildContext context) {
@@ -63,34 +63,4 @@ class _WordScreenState extends State<WordScreen> {
       ),
     );
   }
-}
-
-ListTile _setSearchBar() {
-  return ListTile(
-    leading: const Icon(
-      Icons.search,
-      color: Colors.white,
-      size: 28,
-    ),
-    title: TextField(
-      decoration: const InputDecoration(
-        hintText: 'Search...',
-        hintStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 18,
-          fontStyle: FontStyle.italic,
-        ),
-        border: InputBorder.none,
-      ),
-      style: const TextStyle(
-        color: Colors.white,
-      ),
-      controller: TextEditingController(),
-    ),
-    onTap: () => _onTapFunction(),
-  );
-}
-
-void _onTapFunction() {
-  print("Searching onTap....");
 }

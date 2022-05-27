@@ -2,87 +2,41 @@ import 'package:flutter/material.dart';
 import '../../../../data/models/word.dart';
 import '../../../../data/repositories/word_repository.dart';
 
-class CustomSearchDelegate extends SearchDelegate {
-  // Demo list to show querying
-  List<String> searchTerms = [
-    "Apple",
-    "Banana",
-    "Mango",
-    "Pear",
-    "Watermelons",
-    "Blueberries",
-    "Pineapples",
-    "Strawberries",
-  ];
+/// A widget that allows the user to search a [Word] they want to learn.
+class SearchBar extends ListTile {
+  const SearchBar({Key? key, this.text}) : super(key: key);
 
-  Future<List<Word>?> listWords() {
-    WordRepository? repository;
-    final words = repository!.getWords();
+  final String? text;
 
-    return words;
-  }
-
-  // Clear the search text
   @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(
-        onPressed: () {
-          query = '';
-        },
-        icon: const Icon(Icons.clear),
+  Widget build(BuildContext context) {
+    final TextEditingController _textController = TextEditingController();
+
+    return ListTile(
+      leading: const Icon(
+        Icons.search,
+        color: Colors.white,
+        size: 28,
       ),
-    ];
-  }
-
-  // Pop out of search menu
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-      onPressed: () {
-        close(context, null);
-      },
-      icon: const Icon(Icons.arrow_back),
+      title: TextField(
+        decoration: const InputDecoration(
+          hintText: 'Search...',
+          hintStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        style: const TextStyle(
+          color: Colors.white,
+        ),
+        controller: _textController,
+      ),
+      onTap: _onTapFunction,
     );
   }
 
-  // Show query result
-  @override
-  Widget buildResults(BuildContext context) {
-    final List<String> matchQuery = [];
-    for (var term in searchTerms) {
-      if (term.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(term);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        final result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
-        );
-      },
-    );
-  }
-
-  // Show the querying process at the runtime
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    final List<String> matchQuery = [];
-    for (var term in searchTerms) {
-      if (term.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(term);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        final result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
-        );
-      },
-    );
+  void _onTapFunction() {
+    print("Searching onTap....");
   }
 }
