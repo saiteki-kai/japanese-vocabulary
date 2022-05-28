@@ -1,6 +1,7 @@
 import '../../objectbox.g.dart';
 import '../../data/models/word.dart';
 import '../../data/models/review.dart';
+import '../models/sort_option.dart';
 
 class WordRepository {
   const WordRepository({required Future<Box<Word>> box}) : _box = box;
@@ -44,9 +45,21 @@ class WordRepository {
     return box.put(word);
   }
 
-  /// This method returns all the words in the repository
-  Future<List<Word>> getWords() async {
+  /// This method returns all the words in the repository.
+  ///
+  /// The words can be sorted by specifying the [sort].
+  Future<List<Word>> getWords({SortOption? sort}) async {
     final box = await _box;
+
+    if (sort != null) {
+      return box.getAll()
+        ..sort((a, b) => Word.sortBy(
+              a,
+              b,
+              attribute: sort.field,
+              descending: sort.descending,
+            ));
+    }
 
     return box.getAll();
   }

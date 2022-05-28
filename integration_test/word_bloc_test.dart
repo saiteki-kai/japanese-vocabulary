@@ -35,7 +35,7 @@ void main() async {
     'emits [WordLoading, WordLoaded] when WordRetrieved is added.',
     build: () => bloc,
     setUp: setUpWithWords,
-    act: (bloc) => bloc.add(WordsRetrieved()),
+    act: (bloc) => bloc.add(const WordsRetrieved()),
     expect: () => <WordState>[
       WordLoading(),
       WordsLoaded(
@@ -49,9 +49,9 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoading, WordLoaded] when WordRetrived is added when store is empty.',
+    'emits [WordLoading, WordLoaded] when WordRetrieved is added when store is empty.',
     build: () => bloc,
-    act: (bloc) => bloc.add(WordsRetrieved()),
+    act: (bloc) => bloc.add(const WordsRetrieved()),
     expect: () => <WordState>[
       WordLoading(),
       const WordsLoaded(words: []),

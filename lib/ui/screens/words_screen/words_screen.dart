@@ -1,16 +1,19 @@
+import 'package:backdrop/backdrop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/word_bloc.dart';
 import '../../../data/models/word.dart';
-import '../../widgets/screen_layout.dart';
+import 'widgets/sorting_section.dart';
 import 'widgets/word_item.dart';
 
-/// A private widget that displays a list of [Word] and initialize database.
+/// A widget that displays a list of [Word].
 ///
-/// This widget initializes values in the database and also
-/// allows you to view all the words in the dictionary through a scrolling list
-/// that shows the text of the word,
-/// the next revision date and an average of the accuracy of the last two revisions.
+/// This widget allows you to view all the words in the database through a
+/// [ListView] that shows the text of each word, the next review date and
+/// an average of the accuracy of the two types of reviews.
+///
+/// The words can be sorted using the [SortingSection] specifying a field on
+/// which to sort and the sort order (descending of ascending).
 class WordScreen extends StatelessWidget {
   const WordScreen({
     Key? key,
@@ -18,12 +21,25 @@ class WordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<WordBloc>(context).add(WordsRetrieved());
+    BlocProvider.of<WordBloc>(context).add(const WordsRetrieved());
 
-    return ScreenLayout(
-      appBar: AppBar(title: const Text("Words"), elevation: 0),
-      padding: EdgeInsets.zero,
-      child: BlocBuilder<WordBloc, WordState>(
+    return BackdropScaffold(
+      appBar: BackdropAppBar(
+        title: const Text("Words"),
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        actions: [
+          LayoutBuilder(
+            builder: (context, constraints) => IconButton(
+              icon: const Icon(Icons.sort),
+              onPressed: () => Backdrop.of(context).fling(),
+            ),
+          ),
+        ],
+      ),
+      backLayer: const SortingSection(),
+      stickyFrontLayer: true,
+      frontLayer: BlocBuilder<WordBloc, WordState>(
         builder: (context, state) {
           if (state is WordsLoaded) {
             return ListView.builder(
@@ -34,7 +50,6 @@ class WordScreen extends StatelessWidget {
                 return WordItem(word: word);
               },
               padding: EdgeInsets.zero,
-              shrinkWrap: true,
             );
           } else {
             return const SizedBox();
