@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:japanese_vocabulary/data/models/review.dart';
 import 'package:japanese_vocabulary/data/models/sentence.dart';
 import 'package:japanese_vocabulary/data/models/word.dart';

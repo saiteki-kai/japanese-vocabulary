@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 
 import '../../../../data/models/sentence.dart';
 
+/// A widget that displays the [sentence] associated to a [Word].
+///
+/// The sentence are displayed by using the [SentenceItem] widget.
+/// Text and traslation of sentence are show.
 class SentenceItem extends StatelessWidget {
+  /// Creates a sentence widget.
+  ///
+  /// [sentence] parameter are required and must not be null.
   const SentenceItem({
     Key? key,
     required this.sentence,
   }) : super(key: key);
 
+  /// [sentence] associated to a [word].
   final Sentence sentence;
 
   @override
@@ -46,7 +54,7 @@ class SentenceItem extends StatelessWidget {
     );
   }
 
-  void _onWordPressed(context) {
-    //AutoRouter.of(context).push(WordDetailsScreen(wordId: word.id));
+  void _onWordPressed(_) {
+    return;
   }
 }

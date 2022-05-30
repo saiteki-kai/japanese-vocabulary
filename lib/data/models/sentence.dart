@@ -11,11 +11,11 @@ class Sentence {
   /// Auto increment id
   int id;
 
-  /// Text of this word.
+  /// Text of this sentence.
   @Index()
   String text;
 
-  /// Reading of this word.
+  /// Traslantion of this sentence.
   @Index()
   String translation;
 

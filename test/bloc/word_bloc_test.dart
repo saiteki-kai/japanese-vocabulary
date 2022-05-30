@@ -59,24 +59,6 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoaded] when WordAdded is added when store is empty.',
-    seed: () => const WordsLoaded(words: []),
-    build: () => bloc,
-    setUp: () {
-      setUpWithWords();
-      when(() => repo.addWord(any()))
-          .thenAnswer((inv) => inv.positionalArguments[0].id);
-    },
-    act: (bloc) => bloc.add(WordAdded(word: word1)),
-    expect: () => <WordState>[
-      WordsLoaded(words: [word1]),
-    ],
-    verify: (_) {
-      verify(() => repo.addWord(any())).called(1);
-    },
-  );
-
-  blocTest<WordBloc, WordState>(
     'emits [WordInitial] when WordAdded is added when the word is invalid.',
     build: () => bloc,
     setUp: setUpEmpty,
