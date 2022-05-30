@@ -71,10 +71,12 @@ class _SentencesListState extends State<SentencesList> {
 
                 return SentenceItem(
                   sentence: sentence,
-                  deleteCallback: () => setState(
-                    () {
-                      _onDeletePressed(widget.word, sentence);
-                    },
+                  deleteCallback: () => _showAlertDialog(
+                    context,
+                    () => _deleteCallback(widget.word, sentence),
+                    continueText: "Delete",
+                    title: "Would you like to delete this sentence?",
+                    message: sentence.text,
                   ),
                 );
               },
@@ -89,9 +91,50 @@ class _SentencesListState extends State<SentencesList> {
     );
   }
 
-  void _onDeletePressed(Word word, Sentence sentence) {
-    word.sentences.remove(sentence);
-    _bloc?.add(WordAdded(word: word));
-    _bloc?.add(WordRetrieved(wordId: word.id));
+  void _deleteCallback(Word word, Sentence sentence) {
+    setState(() {
+      word.sentences.remove(sentence);
+      _bloc?.add(WordAdded(word: word));
+      _bloc?.add(WordRetrieved(wordId: word.id));
+      Navigator.pop(context);
+    });
   }
+}
+
+_showAlertDialog(
+  BuildContext context,
+  VoidCallback continueCallback, {
+  String continueText = "Continue",
+  String title = "Are you sure?",
+  String message = "",
+}) {
+  // set up the buttons
+  final cancelButton = TextButton(
+    key: const Key("alert-cancel"),
+    child: const Text("Cancel"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+  final continueButton = TextButton(
+    key: const Key("alert-confirm"),
+    child: Text(continueText),
+    onPressed: continueCallback,
+  );
+  // set up the AlertDialog
+  final alert = AlertDialog(
+    title: Text(title),
+    content: Text(message),
+    actions: [
+      cancelButton,
+      continueButton,
+    ],
+  );
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

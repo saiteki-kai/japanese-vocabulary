@@ -30,33 +30,34 @@ class SentenceItem extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                verticalDirection: VerticalDirection.down,
-                children: [
-                  Flexible(
-                    child: Text(
-                      sentence.text,
-                      key: const Key("textSentenceTest"),
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  verticalDirection: VerticalDirection.down,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        sentence.text,
+                        key: const Key("textSentenceTest"),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  Flexible(
-                    child: Text(
-                      sentence.translation,
-                      style: const TextStyle(
-                        fontSize: 14,
+                    Flexible(
+                      child: Text(
+                        sentence.translation,
+                        style: const TextStyle(
+                          fontSize: 14,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              const Spacer(),
               IconButton(
                 key: const Key("sentence-delete"),
                 onPressed: deleteCallback,
