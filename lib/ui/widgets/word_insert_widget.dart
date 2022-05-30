@@ -256,6 +256,9 @@ class _WordInsertState extends State<WordInsert> {
                                   translation: Text(
                                     _sentences[index].translation,
                                   ),
+                                  deleteCallback: () => setState(() {
+                                    _sentences.removeAt(index);
+                                  }),
                                 );
                               },
                             ),
