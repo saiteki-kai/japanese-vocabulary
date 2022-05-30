@@ -6,7 +6,6 @@ import '../../../data/models/word.dart';
 import '../../widgets/floating_action_button.dart';
 import '../../widgets/loading_indicator.dart';
 import '../../widgets/screen_layout.dart';
-import '../../widgets/sentence_dialog.dart';
 import './widgets/word_stats_tab.dart';
 import './widgets/word_details_appbar.dart';
 import './widgets/word_details_tab.dart';
@@ -158,6 +157,4 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
       });
     }
   }
-
-  // TODO: callback for deletion
 }

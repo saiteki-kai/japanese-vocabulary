@@ -247,18 +247,8 @@ class _WordInsertState extends State<WordInsert> {
                               itemCount: _sentences.length,
                               itemBuilder: (context, index) {
                                 return SentenceItem(
-                                  text: Text(
-                                    _sentences[index].text,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  translation: Text(
-                                    _sentences[index].translation,
-                                  ),
-                                  deleteCallback: () => setState(() {
-                                    _sentences.removeAt(index);
-                                  }),
+                                  sentence: _sentences[index],
+                                  deleteCallback: () => _onDeletePressed(index),
                                 );
                               },
                             ),
@@ -274,6 +264,12 @@ class _WordInsertState extends State<WordInsert> {
         ),
       ),
     );
+  }
+
+  void _onDeletePressed(int index) {
+    setState(() {
+      _sentences.removeAt(index);
+    });
   }
 
   void _onPressed() {

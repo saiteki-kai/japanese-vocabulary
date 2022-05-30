@@ -151,7 +151,7 @@ void main() {
         sentenceButton, scrollView, const Offset(-250, 0));
 
     await tester.tap(sentenceButton);
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     Finder sentences = find.byType(SentenceItem);
     expect(sentences, findsNothing);
@@ -159,7 +159,7 @@ void main() {
     // case: only sentence text
     await tester.enterText(find.byKey(const Key("sentence-text-i")), "test");
     await tester.tap(sentenceButton);
-    await tester.pump();
+    await tester.pumpAndSettle();
     sentences = find.byType(SentenceItem);
     expect(sentences, findsNothing);
 
@@ -169,9 +169,37 @@ void main() {
     await tester.enterText(
         find.byKey(const Key("sentence-translation-i")), "test");
     await tester.tap(sentenceButton);
-    await tester.pump();
+    await tester.pumpAndSettle();
     sentences = find.byType(SentenceItem);
     expect(sentences, findsNothing);
+  });
+
+  testWidgets("add a valid sentence", (WidgetTester tester) async {
+    final state = WordInitial();
+    when(() => bloc.state).thenReturn(state);
+
+    await setUpWidget(tester, null);
+
+    final textController =
+        (tester.widget(find.byKey(const Key("sentence-text-i"))) as TextField)
+            .controller;
+    final translationController =
+        (tester.widget(find.byKey(const Key("sentence-translation-i")))
+                as TextField)
+            .controller;
+    textController?.text = "test";
+    translationController?.text = "test";
+
+    final scrollView = find.byType(SingleChildScrollView);
+    final sentenceButton = find.byKey(const Key("sentence-button-i"));
+    await tester.dragUntilVisible(
+        sentenceButton, scrollView, const Offset(-250, 0));
+
+    await tester.tap(sentenceButton);
+    await tester.pumpAndSettle();
+
+    final sentences = find.byType(SentenceItem);
+    expect(sentences, findsOneWidget);
   });
 
   testWidgets("add word with sentences", (WidgetTester tester) async {
@@ -220,12 +248,32 @@ void main() {
     final secondSentence =
         tester.widgetList<SentenceItem>(sentencesFinder).last;
 
-    expect((firstSentence.text as Text).data, "text1");
+    expect(firstSentence.sentence.text, equals("text1"));
 
-    expect((firstSentence.translation as Text).data, "translation1");
+    expect(firstSentence.sentence.translation, equals("translation1"));
 
-    expect((secondSentence.text as Text).data, "text2");
+    expect(secondSentence.sentence.text, equals("text2"));
 
-    expect((secondSentence.translation as Text).data, "translation2");
+    expect(secondSentence.sentence.translation, equals("translation2"));
+  });
+
+  testWidgets("delete a sentence", (WidgetTester tester) async {
+    final state = WordInitial();
+    when(() => bloc.state).thenReturn(state);
+
+    await setUpWidget(tester, wordSentences);
+
+    final deleteBtnFinder = find.byKey(const Key("sentence-delete"));
+    expect(deleteBtnFinder, findsNWidgets(2));
+
+    final scrollView = find.byType(SingleChildScrollView);
+    await tester.dragUntilVisible(
+        deleteBtnFinder.last, scrollView, const Offset(-250, 0));
+
+    await tester.tap(deleteBtnFinder.first);
+    await tester.pumpAndSettle();
+
+    expect(deleteBtnFinder, findsOneWidget);
   });
 }
+ 
