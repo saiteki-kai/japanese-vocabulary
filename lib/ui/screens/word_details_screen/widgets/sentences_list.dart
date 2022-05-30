@@ -73,7 +73,7 @@ class _SentencesListState extends State<SentencesList> {
                   sentence: sentence,
                   deleteCallback: () => setState(
                     () {
-                      _onDeletePressed(_bloc, widget.word, sentence);
+                      _onDeletePressed(widget.word, sentence);
                     },
                   ),
                 );
@@ -88,10 +88,10 @@ class _SentencesListState extends State<SentencesList> {
       ),
     );
   }
-}
 
-void _onDeletePressed(WordBloc? bloc, Word word, Sentence sentence) {
-  word.sentences.remove(sentence);
-  bloc?.add(WordAdded(word: word));
-  bloc?.add(WordRetrieved(wordId: word.id));
+  void _onDeletePressed(Word word, Sentence sentence) {
+    word.sentences.remove(sentence);
+    _bloc?.add(WordAdded(word: word));
+    _bloc?.add(WordRetrieved(wordId: word.id));
+  }
 }

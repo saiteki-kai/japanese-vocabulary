@@ -25,7 +25,6 @@ class SentenceItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: InkWell(
-        onTap: () => _onWordPressed(context),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
@@ -71,9 +70,5 @@ class SentenceItem extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void _onWordPressed(_) {
-    return;
   }
 }
