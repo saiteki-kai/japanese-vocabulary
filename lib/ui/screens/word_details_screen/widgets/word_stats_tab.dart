@@ -23,20 +23,24 @@ class WordStatisticsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (_meaningReview != null) StatsWidget(review: _meaningReview!),
-              if (_readingReview != null) StatsWidget(review: _readingReview!),
-            ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (_meaningReview != null)
+                  StatsWidget(review: _meaningReview!),
+                if (_readingReview != null)
+                  StatsWidget(review: _readingReview!),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

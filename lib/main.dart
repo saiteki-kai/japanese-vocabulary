@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'bloc/settings_bloc.dart';
 import 'config/routes.gr.dart';
 import 'bloc/review_bloc.dart';
 import 'bloc/word_bloc.dart';
@@ -8,6 +10,7 @@ import 'data/app_database.dart';
 import 'data/models/review.dart';
 import 'data/models/word.dart';
 import 'data/repositories/review_repository.dart';
+import 'data/repositories/settings_repository.dart';
 import 'data/repositories/word_repository.dart';
 
 void main() {
@@ -33,6 +36,11 @@ class JapaneseVocabularyApp extends StatelessWidget {
             box: AppDatabase.getBox<Review>(),
           ),
         ),
+        RepositoryProvider<SettingsRepository>(
+          create: (context) => SettingsRepository(
+            prefs: SharedPreferences.getInstance(),
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -44,6 +52,11 @@ class JapaneseVocabularyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => ReviewBloc(
               repository: RepositoryProvider.of<ReviewRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => SettingsBloc(
+              repository: RepositoryProvider.of<SettingsRepository>(context),
             ),
           ),
         ],

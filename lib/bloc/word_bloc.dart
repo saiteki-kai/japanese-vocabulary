@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 import '../data/repositories/word_repository.dart';
 import '../data/models/word.dart';
+import '../data/models/sort_option.dart';
 
 part 'word_event.dart';
 part 'word_state.dart';
@@ -38,10 +39,9 @@ class WordBloc extends Bloc<WordEvent, WordState> {
     }
   }
 
-  void _onRetrieved(WordsRetrieved _, Emitter<WordState> emit) async {
-    /// Returns all the words.
+  void _onRetrieved(WordsRetrieved event, Emitter<WordState> emit) async {
     emit(WordLoading());
-    final words = await repository.getWords();
+    final words = await repository.getWords(sort: event.sort);
     emit(WordsLoaded(words: words));
   }
 

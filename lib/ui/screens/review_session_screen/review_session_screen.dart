@@ -138,7 +138,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   }
 
   /// Defines when to build the widget.
-  bool _reviewBlocBuildWhen(ReviewState before, _) {
+  bool _reviewBlocBuildWhen(ReviewState before, ReviewState _) {
     return !(before is ReviewError || before is ReviewFinished);
   }
 

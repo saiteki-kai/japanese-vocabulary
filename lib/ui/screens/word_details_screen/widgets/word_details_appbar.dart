@@ -1,9 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
-
-import '../../../../utils/colors.dart';
 import '../../../../config/routes.gr.dart';
+import '../../../../utils/colors.dart';
 import '../../../../data/models/word.dart';
 
 class WordDetailsAppBar extends StatelessWidget {
