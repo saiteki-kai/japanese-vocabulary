@@ -32,9 +32,9 @@ void main() {
   }
 
   testWidgets("empty sentence list", (WidgetTester tester) async {
-    when(() => bloc.state).thenReturn(WordLoaded(word: wordNoSentence));
+    when(() => bloc.state).thenReturn(WordLoaded(word: word3));
 
-    await setUpWidget(tester, wordNoSentence);
+    await setUpWidget(tester, word3);
 
     final noSentence =
         (tester.widget(find.byKey(const Key("noSentenceTest"))) as Text).data;
@@ -43,13 +43,13 @@ void main() {
   });
 
   testWidgets("sentence list", (WidgetTester tester) async {
-    when(() => bloc.state).thenReturn(WordLoaded(word: wordSentence));
+    when(() => bloc.state).thenReturn(WordLoaded(word: wordSentences));
 
-    await setUpWidget(tester, wordSentence);
+    await setUpWidget(tester, wordSentences);
 
-    final textSentence =
-        (tester.widget(find.byKey(const Key("textSentenceTest"))) as Text).data;
-
-    expect(textSentence, equals("sentence text"));
+    final textSentence = find.byKey(const Key("textSentenceTest"));
+    final sentencesFound = tester.widgetList(textSentence);
+    expect((sentencesFound.first as Text).data, "text1");
+    expect((sentencesFound.last as Text).data, "text2");
   });
 }

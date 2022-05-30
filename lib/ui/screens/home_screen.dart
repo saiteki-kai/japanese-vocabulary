@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../bloc/word_bloc.dart';
 import '../../config/routes.gr.dart';
 import '../../data/models/word.dart';
+import '../widgets/floating_action_button.dart';
 
 /// Widget for the basic definition of the [WordScreen].
 ///
@@ -38,10 +39,10 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          floatingActionButton: _floatingActionButton(
+          floatingActionButton: floatingActionButton(
             show: tabsRouter.activeIndex == 1,
             onPressed: () {
-              AutoRouter.of(context).push(const WordInsertScreen());
+              AutoRouter.of(context).push(WordInsertScreen());
             },
           ),
         );
@@ -49,24 +50,9 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _floatingActionButton({bool show = false, VoidCallback? onPressed}) {
-    if (show) {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FloatingActionButton(
-          child: const Icon(Icons.add),
-          backgroundColor: Colors.amber,
-          onPressed: onPressed,
-        ),
-      );
-    }
-
-    return const SizedBox();
-  }
-
   void _onTap(context, int index, tabsRouter) {
     if (index == 1) {
-      BlocProvider.of<WordBloc>(context).add(WordsRetrieved());
+      BlocProvider.of<WordBloc>(context).add(const WordsRetrieved());
     }
     tabsRouter.setActiveIndex(index);
   }

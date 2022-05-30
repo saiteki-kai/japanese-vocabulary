@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 
 import '../data/repositories/word_repository.dart';
 import '../data/models/word.dart';
+import '../data/models/sort_option.dart';
 
 part 'word_event.dart';
 part 'word_state.dart';
@@ -19,30 +20,33 @@ class WordBloc extends Bloc<WordEvent, WordState> {
   final WordRepository repository;
 
   void _onWordAdded(WordAdded event, Emitter<WordState> emit) async {
-    /// If one of the text fields is empty, the app will return to the initial state of the insertion
+    /// If one of the text fields is empty, the app will return to the initial state of the insertion.
     ///
-    /// otherwise the app will go to the word added state, closing the insertion page
-    if (event.word.text.isEmpty ||
-        event.word.meaning.isEmpty ||
-        event.word.reading.isEmpty) {
+    /// otherwise the app will go to the word added state, closing the insertion page.
+    final word = event.word;
+    if (word.text.isEmpty || word.meaning.isEmpty || word.reading.isEmpty) {
       emit(WordInitial());
     } else {
       final state = this.state;
-
       if (state is WordsLoaded) {
-        await repository.addWord(event.word);
-        emit(WordsLoaded(words: [...state.words, event.word]));
+        await repository.addWord(word);
+        emit(WordsLoaded(words: [...state.words, word]));
+      }
+      if (state is WordLoaded) {
+        await repository.addWord(word);
+        emit(WordLoaded(word: word));
       }
     }
   }
 
-  void _onRetrieved(WordsRetrieved _, Emitter<WordState> emit) async {
+  void _onRetrieved(WordsRetrieved event, Emitter<WordState> emit) async {
     emit(WordLoading());
-    final words = await repository.getWords();
+    final words = await repository.getWords(sort: event.sort);
     emit(WordsLoaded(words: words));
   }
 
   void _onGetWord(WordRetrieved event, Emitter<WordState> emit) async {
+    /// Returns the word with the specified id.
     emit(WordLoading());
 
     final word = await repository.getWord(event.wordId);

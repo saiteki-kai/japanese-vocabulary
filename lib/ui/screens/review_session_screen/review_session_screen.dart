@@ -4,11 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/review_bloc.dart';
 import '../../../data/models/review.dart';
+import '../../../data/models/word.dart';
 import '../../../data/repositories/review_repository.dart';
+import '../../../utils/hints.dart';
 import '../../widgets/loading_indicator.dart';
 import '../../widgets/screen_layout.dart';
 import 'widgets/next_review_button.dart';
 import 'widgets/review_answer.dart';
+import 'widgets/review_hint.dart';
 import 'widgets/review_item.dart';
 import 'widgets/review_quality_selector.dart';
 import 'widgets/review_session_appbar.dart';
@@ -49,6 +52,11 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   /// disabled.
   final _selectedQuality = ValueNotifier<int>(-1);
 
+  /// A [Hint] value containing the current hint to show.
+  ///
+  /// The initial value is set to [Hint.empty].
+  final _hint = ValueNotifier<Hint>(Hint.empty());
+
   @override
   void initState() {
     _bloc = BlocProvider.of<ReviewBloc>(context);
@@ -68,9 +76,18 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
     return Scaffold(
       body: ScreenLayout(
         appBar: const ReviewSessionAppBar(),
-        child: BlocBuilder<ReviewBloc, ReviewState>(
+        child: BlocConsumer<ReviewBloc, ReviewState>(
           builder: (context, state) {
             if (state is ReviewLoaded) {
+              final word = state.review.word.target;
+
+              if (word == null) {
+                return const Text("Error");
+              }
+
+              // Initialize the value based on the reading of the word
+              _hint.value = Hint.fromReading(word.reading);
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -80,17 +97,27 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
                     review: state.review,
                     hidden: _hideAnswer,
                     onToggleAnswer: _onToggleAnswer,
+                    hint: _hint,
+                    onAskHint: () => _onAskHint(word, state.review.type),
                   ),
                   const Spacer(flex: 1),
                   // Answer to show/hide
-                  ReviewAnswer(review: state.review, hidden: _hideAnswer),
-                  const Spacer(flex: 2),
+                  Expanded(
+                    child: ReviewAnswer(
+                      review: state.review,
+                      hidden: _hideAnswer,
+                    ),
+                  ),
+                  const Spacer(flex: 1),
+                  // Hint to show
+                  ReviewHint(hint: _hint),
+                  const Spacer(flex: 1),
                   // Quality buttons
                   ReviewQualitySelector(
                     disabled: _hideAnswer,
+                    hint: _hint,
                     onQualitySelected: (q) => _selectedQuality.value = q,
                   ),
-                  const Spacer(flex: 1),
                   // Next/Summary button
                   NextReviewButton(
                     isLast: state.isLast,
@@ -103,9 +130,23 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
               return const LoadingIndicator(message: "Loading Reviews...");
             }
           },
+          listener: _reviewBlocListener,
+          buildWhen: _reviewBlocBuildWhen,
         ),
       ),
     );
+  }
+
+  /// Defines when to build the widget.
+  bool _reviewBlocBuildWhen(ReviewState before, ReviewState _) {
+    return !(before is ReviewError || before is ReviewFinished);
+  }
+
+  /// When there is an error returns to the home page.
+  void _reviewBlocListener(BuildContext context, ReviewState state) {
+    if (state is ReviewError) {
+      AutoRouter.of(context).pop();
+    }
   }
 
   /// Updates the review based on the quality value and provide the next one.
@@ -124,8 +165,23 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   void _onToggleAnswer() {
     _hideAnswer.value = !_hideAnswer.value;
 
-    if (!_hideAnswer.value) {
+    if (_hideAnswer.value) {
       _selectedQuality.value = -1;
+    }
+  }
+
+  /// Updates the current Hint with the next one based on the [reviewType] of a
+  /// given [Word].
+  ///
+  /// When there are no hints sets [_hideAnswer.value] to false.
+  void _onAskHint(Word word, String reviewType) {
+    if (reviewType == "reading") {
+      _hint.value = _hint.value.getNextReadingHint(word.reading);
+    }
+
+    // if there are no more hints show the answer and enable the next button
+    if (_hint.value.n == _hint.value.max) {
+      _hideAnswer.value = false;
     }
   }
 }

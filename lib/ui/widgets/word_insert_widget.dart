@@ -3,13 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:group_button/group_button.dart';
 import 'package:flutter/material.dart';
 import '../../bloc/word_bloc.dart';
+import '../../data/models/sentence.dart';
 import '../../data/models/word.dart';
 import 'screen_layout.dart';
+import 'sentence_item.dart';
 
 /// A widget that allows the user to add a new [Word] they want to learn.
 class WordInsert extends StatefulWidget {
   /// Creates a word insert widget.
-  const WordInsert({Key? key}) : super(key: key);
+  const WordInsert({Key? key, this.wordToAdd}) : super(key: key);
+
+  /// Word passed to the widget in case the fields need to be pre-filled (i.e. edit functionality)
+  final Word? wordToAdd;
 
   @override
   State<WordInsert> createState() => _WordInsertState();
@@ -17,13 +22,21 @@ class WordInsert extends StatefulWidget {
 
 class _WordInsertState extends State<WordInsert> {
   final _wordToAdd = Word(jlpt: 5, text: "", reading: "", meaning: "", pos: "");
+  bool readyToBuild = false;
+  Text titleInsert = const Text("Insert a word");
 
   /// The currently selected jlpt button index
-  int _jlptIndex = 0;
+  int _jlptIndex = -1;
+
+  /// The list of seleected pos
+  final List<int> _posSelected = [];
 
   /// The list of selectable jlpt levels
   final List<String> _jlptNames = ["N5", "N4", "N3", "N2", "N1"];
   final _jlptValues = [5, 4, 3, 2, 1];
+
+  /// The list of example sentences that will be associated to the word
+  final List<Sentence> _sentences = [];
 
   /// The list of the selectable parts of speech names
   final List<String> _posNames = [
@@ -54,6 +67,9 @@ class _WordInsertState extends State<WordInsert> {
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _readingController = TextEditingController();
   final TextEditingController _meaningController = TextEditingController();
+  final TextEditingController _sentenceTextController = TextEditingController();
+  final TextEditingController _sentenceTranslationController =
+      TextEditingController();
   final GroupButtonController _posController = GroupButtonController();
   final GroupButtonController _jlptController = GroupButtonController();
 
@@ -61,19 +77,40 @@ class _WordInsertState extends State<WordInsert> {
   void initState() {
     _bloc = BlocProvider.of<WordBloc>(context);
     super.initState();
+    final wordToAdd = widget.wordToAdd;
+    if (wordToAdd != null) {
+      titleInsert = const Text("Edit a word");
+
+      /// If a word has been passed, fill in the fields
+      _wordToAdd.id = wordToAdd.id;
+      _textController.text = wordToAdd.text;
+      _readingController.text = wordToAdd.reading;
+      _meaningController.text = wordToAdd.meaning;
+      _jlptIndex = _jlptValues.indexOf(wordToAdd.jlpt);
+      final posNamesToSelect = wordToAdd.pos.split(',');
+      _posSelected.addAll(posNamesToSelect.map(_posNames.indexOf).toList());
+      _posSelected.remove(-1);
+      _posController.selectIndexes(_posSelected);
+
+      _bloc?.add(WordRetrieved(wordId: _wordToAdd.id));
+      _sentences.addAll(wordToAdd.sentences);
+    }
+
+    _jlptController.selectIndex(_jlptIndex);
   }
 
   @override
   Widget build(BuildContext context) {
-    _jlptController.selectIndex(_jlptIndex);
-
     return Scaffold(
       body: ScreenLayout(
         appBar: AppBar(
           elevation: 0,
-          title: const Text('Insert a word'),
+          title: titleInsert,
           actions: [
             IconButton(
+              key: const Key(
+                "word-button",
+              ),
               onPressed: _onPressed,
               icon: const Icon(Icons.check, color: Colors.white),
             ),
@@ -92,18 +129,27 @@ class _WordInsertState extends State<WordInsert> {
                       _FormItem(
                         title: "Text",
                         field: TextField(
+                          key: const Key(
+                            "text",
+                          ),
                           controller: _textController,
                         ),
                       ),
                       _FormItem(
                         title: "Reading",
                         field: TextField(
+                          key: const Key(
+                            "reading",
+                          ),
                           controller: _readingController,
                         ),
                       ),
                       _FormItem(
                         title: "Meaning",
                         field: TextField(
+                          key: const Key(
+                            "meaning",
+                          ),
                           controller: _meaningController,
                         ),
                       ),
@@ -111,6 +157,9 @@ class _WordInsertState extends State<WordInsert> {
                         title: "Part of speech",
                         field: Center(
                           child: GroupButton(
+                            key: const Key(
+                              "pos",
+                            ),
                             options: GroupButtonOptions(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -125,15 +174,92 @@ class _WordInsertState extends State<WordInsert> {
                         title: "JLPT",
                         field: Center(
                           child: GroupButton(
+                            key: const Key(
+                              "jlpt",
+                            ),
                             options: GroupButtonOptions(
                               borderRadius: BorderRadius.circular(8),
                               buttonWidth: 50,
                             ),
                             isRadio: true,
+                            enableDeselect: true,
                             controller: _jlptController,
                             onSelected: _onJlptSelected,
                             buttons: _jlptNames,
                           ),
+                        ),
+                      ),
+                      _FormItem(
+                        title: "Examples",
+                        field: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    verticalDirection: VerticalDirection.down,
+                                    children: [
+                                      TextField(
+                                        key: const Key(
+                                          "sentence-text-i",
+                                        ),
+                                        decoration: const InputDecoration(
+                                          hintText: "Sentence",
+                                        ),
+                                        controller: _sentenceTextController,
+                                      ),
+                                      const SizedBox(
+                                        height: 4,
+                                      ),
+                                      TextField(
+                                        key: const Key(
+                                          "sentence-translation-i",
+                                        ),
+                                        decoration: const InputDecoration(
+                                          hintText: "Translation",
+                                        ),
+                                        controller:
+                                            _sentenceTranslationController,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                IconButton(
+                                  key: const Key(
+                                    "sentence-button-i",
+                                  ),
+                                  onPressed: _onAddSentencePressed,
+                                  icon: const Icon(
+                                    Icons.add,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              key: const Key(
+                                "sentence-listview",
+                              ),
+                              itemCount: _sentences.length,
+                              itemBuilder: (context, index) {
+                                return SentenceItem(
+                                  text: Text(
+                                    _sentences[index].text,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  translation: Text(
+                                    _sentences[index].translation,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -148,27 +274,65 @@ class _WordInsertState extends State<WordInsert> {
   }
 
   void _onPressed() {
-    _wordToAdd.jlpt = _jlptValues[_jlptIndex];
-    _wordToAdd.meaning = _meaningController.text;
-    _wordToAdd.reading = _readingController.text;
     _wordToAdd.text = _textController.text;
-    final posSelected = _posController.selectedIndexes;
+    _wordToAdd.reading = _readingController.text;
+    _wordToAdd.meaning = _meaningController.text;
 
+    if (_wordToAdd.text.isNotEmpty &&
+        _wordToAdd.reading.isNotEmpty &&
+        _wordToAdd.meaning.isNotEmpty) {
+      // Just to check if all the mandatory fields are not empty
+      readyToBuild = true;
+    }
+
+    _wordToAdd.jlpt = _jlptValues[_jlptIndex];
     // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
-    final posTmp = posSelected.map((e) => _posNames[e]).join(",");
+    _posSelected.remove(-1);
+    final posTmp = _posSelected.map((e) => _posNames[e]).join(",");
     _wordToAdd.pos = posTmp;
 
-    _bloc?.add(WordAdded(word: _wordToAdd));
-    AutoRouter.of(context).pop();
+    // If the mandatory fields are not compiled it doesn't insert or edit.
+    // Also doens't change route.
+    if (readyToBuild) {
+      _wordToAdd.sentences.addAll(_sentences);
+      _bloc?.add(WordAdded(word: _wordToAdd));
+
+      AutoRouter.of(context).pop();
+    }
   }
 
-  void _onPosSelected(int _, bool __) {
-    return;
+  void _onAddSentencePressed() {
+    /// Adds a new example sentence.
+    final text = _sentenceTextController.text;
+    final translation = _sentenceTranslationController.text;
+    FocusScope.of(context).requestFocus(FocusNode());
+
+    if (text.isNotEmpty &&
+        translation.isNotEmpty &&
+        _sentences.every((element) => element.text != text)) {
+      setState(() {
+        _sentences.add(Sentence(text: text, translation: translation));
+        _sentenceTextController.clear();
+        _sentenceTranslationController.clear();
+      });
+    }
+  }
+
+  void _onPosSelected(int index, bool selected) {
+    /// Updates the currently selected POS.
+    setState(() {
+      if (selected) {
+        _posSelected.add(index);
+      } else {
+        _posSelected.remove(index);
+      }
+    });
   }
 
   void _onJlptSelected(int index, bool __) {
     /// Updates the currently selected JLPT level value
-    setState(() => _jlptIndex = index);
+    _jlptController.selectedIndex!;
+    _jlptIndex = index;
   }
 }
 
