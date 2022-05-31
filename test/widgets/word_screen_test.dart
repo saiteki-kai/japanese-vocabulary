@@ -21,12 +21,12 @@ void main() {
     bloc.close();
   });
 
-  Future<void> setUpWidget(tester, String? search) async {
+  Future<void> setUpWidget(tester) async {
     await tester.pumpWidget(
       MaterialApp(
         home: BlocProvider.value(
           value: bloc,
-          child: WordScreen(searchString: search),
+          child: const WordScreen(),
         ),
       ),
     );
@@ -35,7 +35,7 @@ void main() {
   testWidgets("empty word list", (WidgetTester tester) async {
     when(() => bloc.state).thenReturn(const WordsLoaded(words: []));
 
-    await setUpWidget(tester, "");
+    await setUpWidget(tester);
 
     final itemsFinder = find.byType(WordItem);
     expect(itemsFinder, findsNothing);
@@ -45,7 +45,7 @@ void main() {
     final state = WordsLoaded(words: [word1, word2, word3]);
     when(() => bloc.state).thenReturn(state);
 
-    await setUpWidget(tester, "");
+    await setUpWidget(tester);
 
     final itemsFinder = find.byType(WordItem);
     expect(itemsFinder, findsNWidgets(3));
@@ -55,11 +55,15 @@ void main() {
     final state = WordsLoaded(words: [word2]);
     when(() => bloc.state).thenReturn(state);
 
-    await setUpWidget(tester, "習");
+    await setUpWidget(tester);
+
+    final searchButton = find.byKey(const Key("search-text"));
+    await tester.enterText(searchButton, "習");
 
     final itemsFinder = find.byType(WordItem);
     expect(itemsFinder, findsNWidgets(1));
 
+    await tester.enterText(searchButton, "習");
     final highlightFinder = find.byType(SubstringHighlight);
     expect(highlightFinder, findsNWidgets(1));
     final firstWordText =
@@ -71,11 +75,14 @@ void main() {
     final state = WordsLoaded(words: [word5, word6]);
     when(() => bloc.state).thenReturn(state);
 
-    await setUpWidget(tester, "gracia");
+    await setUpWidget(tester);
+    final searchButton = find.byKey(const Key("search-text"));
+    await tester.enterText(searchButton, "gracia");
 
     final itemsFinder = find.byType(WordItem);
     expect(itemsFinder, findsNWidgets(2));
 
+    await tester.enterText(searchButton, "gracia");
     final highlightFinder = find.byType(SubstringHighlight);
     expect(highlightFinder, findsNWidgets(2));
     final firstWordText =

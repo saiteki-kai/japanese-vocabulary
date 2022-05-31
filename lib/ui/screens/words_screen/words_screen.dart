@@ -14,10 +14,7 @@ import 'widgets/word_item.dart';
 class WordScreen extends StatefulWidget {
   const WordScreen({
     Key? key,
-    this.searchString,
   }) : super(key: key);
-
-  final String? searchString;
 
   @override
   _WordScreenState createState() => _WordScreenState();
@@ -26,16 +23,13 @@ class WordScreen extends StatefulWidget {
 class _WordScreenState extends State<WordScreen> {
   Icon customIcon = const Icon(Icons.search);
   Widget title = const Text('Words');
-  String _searchString = "";
+  String searchString = "";
 
   WordBloc? _bloc;
 
   @override
   void initState() {
     _bloc = BlocProvider.of<WordBloc>(context);
-    if (widget.searchString != null) {
-      _searchString = widget.searchString!;
-    }
     super.initState();
   }
 
@@ -47,6 +41,9 @@ class _WordScreenState extends State<WordScreen> {
           children: [
             title,
             TextField(
+              key: const Key(
+                "search-text",
+              ),
               onChanged: _onChanged,
               decoration: const InputDecoration(
                 labelText: 'Search...',
@@ -77,7 +74,7 @@ class _WordScreenState extends State<WordScreen> {
               itemBuilder: (context, index) {
                 final Word word = state.words[index];
 
-                return WordItem(word: word, search: _searchString);
+                return WordItem(word: word, search: searchString);
               },
               padding: EdgeInsets.zero,
               shrinkWrap: true,
@@ -93,8 +90,8 @@ class _WordScreenState extends State<WordScreen> {
   void _onChanged(String value) {
     /// Updates the state of the search
     setState(() {
-      _searchString = value.toLowerCase();
-      _bloc?.add(WordsRetrieved(search: _searchString));
+      searchString = value.toLowerCase();
+      _bloc?.add(WordsRetrieved(search: searchString));
     });
   }
 }
