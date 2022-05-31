@@ -73,7 +73,10 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
               floatingActionButton: floatingActionButton(
                 key: const Key("sentence-floating"),
                 show: true,
-                onPressed: () => _onAddDetailsPressed(context, word),
+                onPressed: () => _onShowSentenceDialogPressed(
+                  context,
+                  word,
+                ),
               ),
             );
           } else if (state is WordError) {
@@ -92,7 +95,10 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
     return Future.value(true);
   }
 
-  void _onAddDetailsPressed(BuildContext context, Word word) {
+  void _onShowSentenceDialogPressed(
+    BuildContext context,
+    Word word,
+  ) {
     showDialog(
       context: context,
       builder: (_) => SimpleDialog(
@@ -120,7 +126,10 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
           ),
           IconButton(
             key: const Key("sentence-button-d"),
-            onPressed: () => _onAddSentencePressed(context, word),
+            onPressed: () => _onAddSentencePressed(
+              context,
+              word,
+            ),
             icon: const Icon(Icons.add, color: Colors.black),
           ),
         ],
@@ -128,7 +137,10 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
     );
   }
 
-  void _onAddSentencePressed(BuildContext context, Word word) {
+  void _onAddSentencePressed(
+    BuildContext context,
+    Word word,
+  ) {
     /// Adds a new example sentence
     final text = _sentenceTextController.text;
     final translation = _sentenceTranslationController.text;

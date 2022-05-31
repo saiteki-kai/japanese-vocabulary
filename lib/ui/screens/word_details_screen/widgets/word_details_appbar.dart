@@ -20,7 +20,7 @@ class WordDetailsAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: kToolbarHeight * 2,
+      height: kToolbarHeight * 2, 
       child: AppBar(
         elevation: 0,
         title: Text(title),
