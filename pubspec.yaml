@@ -28,6 +28,7 @@ dependencies:
   
   flutter_bloc: ^8.0.1
   equatable: ^2.0.3
+  substring_highlight: ^1.0.33
 
 dev_dependencies:
   flutter_lints: ^1.0.0

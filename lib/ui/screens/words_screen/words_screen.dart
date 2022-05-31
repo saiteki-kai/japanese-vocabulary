@@ -71,7 +71,7 @@ class _WordScreenState extends State<WordScreen> {
               itemBuilder: (context, index) {
                 final Word word = state.words[index];
 
-                return WordItem(word: word);
+                return WordItem(word: word, search: searchString);
               },
               padding: EdgeInsets.zero,
               shrinkWrap: true,

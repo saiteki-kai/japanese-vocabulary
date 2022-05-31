@@ -23,7 +23,6 @@ class WordAdded extends WordEvent {
   List<Object> get props => [word];
 }
 
-/// This [WordsRetrieved] manages the events concerning the [Word].
 class WordsRetrieved extends WordEvent {
   final String search;
   const WordsRetrieved({required this.search});

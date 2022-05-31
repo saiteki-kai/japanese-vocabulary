@@ -39,7 +39,8 @@ class WordBloc extends Bloc<WordEvent, WordState> {
   }
 
   void _onRetrieved(WordsRetrieved event, Emitter<WordState> emit) async {
-    /// Returns all the words.
+    /// Returns all the words if 'search' is empty, otherwise it returns
+    /// just the words with 'search' as substring of their text.
     emit(WordLoading());
     final words = await repository.getWords();
 
