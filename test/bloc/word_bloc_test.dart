@@ -19,6 +19,11 @@ void main() async {
     when(repo.getWords).thenAnswer((_) async => [word1, word2, word3]);
   }
 
+  void setUpWithWords_2() {
+    when(repo.getWords)
+        .thenAnswer((_) async => [word1, word2, word5, word4, word6]);
+  }
+
   setUp(() async {
     repo = MockWordRepository();
     bloc = WordBloc(repository: repo);
@@ -34,7 +39,21 @@ void main() async {
   });
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoading, WordLoaded] when WordRetrieved is added.',
+    'emits [WordLoading, WordLoaded] when WordRetrieved is added with empty db.',
+    build: () => bloc,
+    setUp: setUpEmpty,
+    act: (bloc) => bloc.add(const WordsRetrieved(search: "")),
+    expect: () => <WordState>[
+      WordLoading(),
+      const WordsLoaded(words: []),
+    ],
+    verify: (_) {
+      verify(() => repo.getWords()).called(1);
+    },
+  );
+
+  blocTest<WordBloc, WordState>(
+    'emits [WordLoading, WordLoaded] when WordRetrieved is added and search is empty.',
     build: () => bloc,
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(const WordsRetrieved(search: "")),
@@ -48,7 +67,7 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoading, WordLoaded] when WordRetrieved is added.',
+    'emits [WordLoading, WordLoaded] when WordRetrieved is added and search for a word in the db.',
     build: () => bloc,
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(const WordsRetrieved(search: "習")),
@@ -62,7 +81,7 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoading, WordLoaded] when WordRetrieved is added.',
+    'emits [WordLoading, WordLoaded] when WordRetrieved is added and search for a word not in the db.',
     build: () => bloc,
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(const WordsRetrieved(search: "習g")),
@@ -76,13 +95,13 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoading, WordLoaded] when WordRetrieved is added when store is empty.',
+    'emits [WordLoading, WordLoaded] when WordRetrieved is added and search for multiple words in the db.',
     build: () => bloc,
-    setUp: setUpEmpty,
-    act: (bloc) => bloc.add(const WordsRetrieved(search: "")),
+    setUp: setUpWithWords_2,
+    act: (bloc) => bloc.add(const WordsRetrieved(search: "gracia")),
     expect: () => <WordState>[
       WordLoading(),
-      const WordsLoaded(words: []),
+      WordsLoaded(words: [word5, word6]),
     ],
     verify: (_) {
       verify(() => repo.getWords()).called(1);
