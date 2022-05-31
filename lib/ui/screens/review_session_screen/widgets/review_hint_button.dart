@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../utils/hints.dart';
+import '../../../../utils/hint.dart';
 
+/// A Button for asking the next [hint] and displaying the number of remaning hints.
+///
+/// A [onPressed] callback is provided that is called when each hint is requested.
 class ReviewHintButton extends StatelessWidget {
   const ReviewHintButton({
     Key? key,
@@ -10,7 +13,7 @@ class ReviewHintButton extends StatelessWidget {
     required this.onPressed,
   }) : super(key: key);
 
-  /// A [Hint] value containing the current hint to show.
+  /// A [Hint] value containing the hint to show.
   final ValueListenable<Hint> hint;
 
   /// Called when the [ReviewHintButton] is tapped.

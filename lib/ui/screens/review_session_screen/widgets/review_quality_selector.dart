@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:group_button/group_button.dart';
 
-import '../../../../utils/hints.dart';
+import '../../../../utils/hint.dart';
 
 /// A widget that allow you to select a quality level from 0 to 5.
 ///

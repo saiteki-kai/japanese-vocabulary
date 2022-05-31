@@ -211,6 +211,17 @@ Review get nowReview => createReviewByDate(DateTime.now());
 Review get review1 => createReviewByDate(DateTime(DateTime.now().year - 1));
 Review get review2 => createReviewByDate(DateTime(DateTime.now().year + 1));
 
+final sentence1 = Sentence(
+    text: '言葉と行動は一致すべきものだが、実行は難しい。',
+    translation:
+        'Your words are supposed to correspond to your actions, but that is not easy to put into practice.');
+final sentence2 = Sentence(
+    text: '彼女は図書館の利用許可を与えられた。',
+    translation: 'She was accorded permission to use the library.');
+final sentence3 = Sentence(
+    text: '麺はふつう小麦粉から作られる。',
+    translation: 'Noodles are usually made from wheat.');
+
 Review get readingReviewWithWord {
   return createReviewByDate(
     null,
@@ -220,10 +231,12 @@ Review get readingReviewWithWord {
 }
 
 Review get meaningReviewWithWord {
+  final Word word = word1;
+  word.sentences.addAll([sentence1, sentence2, sentence3]);
   return createReviewByDate(
     null,
     type: "meaning",
-    word: word1,
+    word: word,
   );
 }
 
@@ -258,4 +271,65 @@ Settings get settings1 {
 
 SortOption get sortOption1 {
   return const SortOption(descending: false, field: SortField.streak);
+}
+Word get wordWith3Sentences {
+  final word = Word(
+    text: "言葉",
+    reading: "ことば",
+    jlpt: 5,
+    meaning: "word; phrase; expression; term",
+    pos: "Noun",
+  );
+  word.sentences.addAll([sentence1, sentence2, sentence3]);
+  return word;
+}
+
+Word get wordWithoutSentences {
+  return Word(
+    text: "復習",
+    reading: "ふくしゅう",
+    jlpt: 4,
+    meaning: "review (of learned material); revision",
+    pos: "Noun, Suru verb",
+  );
+}
+
+Word get wordReading1Char {
+  return Word(
+    text: "",
+    reading: "あ",
+    jlpt: 0,
+    meaning: "",
+    pos: "",
+  );
+}
+
+Word get wordReading2Char {
+  return Word(
+    text: "",
+    reading: "うん",
+    jlpt: 0,
+    meaning: "",
+    pos: "",
+  );
+}
+
+Word get wordReading4Char {
+  return Word(
+    text: "",
+    reading: "たとえば",
+    jlpt: 0,
+    meaning: "",
+    pos: "",
+  );
+}
+
+Word get wordReading7Char {
+  return Word(
+    text: "",
+    reading: "ユニットテスト",
+    jlpt: 0,
+    meaning: "",
+    pos: "",
+  );
 }

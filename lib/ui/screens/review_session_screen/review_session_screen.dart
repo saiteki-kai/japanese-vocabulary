@@ -6,7 +6,7 @@ import '../../../bloc/review_bloc.dart';
 import '../../../data/models/review.dart';
 import '../../../data/models/word.dart';
 import '../../../data/repositories/review_repository.dart';
-import '../../../utils/hints.dart';
+import '../../../utils/hint.dart';
 import '../../widgets/loading_indicator.dart';
 import '../../widgets/screen_layout.dart';
 import 'widgets/next_review_button.dart';
@@ -23,6 +23,11 @@ import 'widgets/review_session_appbar.dart';
 /// is shown, [ReviewQualitySelector] is enabled and allows you to choose a
 /// quality value. Then [NextReviewButton] allows you to move on to the next
 /// review or, if there are no more, to go to the summary.
+
+/// Also a certain numbers of hints for a word are displayed and accessed by the [ReviewItem].
+/// that updates the current [hint] to be displayed in the [ReviewHint] and changes 
+/// the enabled values of the [ReviewQualitySelector]. 
+/// The [hint] can be of two types [MeaningHint] or [ReadingHint].
 class ReviewSessionScreen extends StatefulWidget implements AutoRouteWrapper {
   const ReviewSessionScreen({Key? key}) : super(key: key);
 
@@ -55,7 +60,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   /// A [Hint] value containing the current hint to show.
   ///
   /// The initial value is set to [Hint.empty].
-  final _hint = ValueNotifier<Hint>(Hint.empty());
+  final _hint = ValueNotifier<Hint>(MeaningHint.empty());
 
   @override
   void initState() {
@@ -85,8 +90,13 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
                 return const Text("Error");
               }
 
-              // Initialize the value based on the reading of the word
-              _hint.value = Hint.fromReading(word.reading);
+              // Initialize the value based on the reading/meaning of the word
+              final reviewType = state.review.type;
+              if ( reviewType == "reading") {
+                _hint.value = ReadingHint.fromWord(word);
+              } else if (reviewType == "meaning") {
+                _hint.value = MeaningHint.fromWord(word);
+              }
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -98,7 +108,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
                     hidden: _hideAnswer,
                     onToggleAnswer: _onToggleAnswer,
                     hint: _hint,
-                    onAskHint: () => _onAskHint(word, state.review.type),
+                    onAskHint: () => _onAskHint(word),
                   ),
                   const Spacer(flex: 1),
                   // Answer to show/hide
@@ -170,14 +180,12 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
     }
   }
 
-  /// Updates the current Hint with the next one based on the [reviewType] of a
+  /// Updates the current Hint with the next one based on the review type of a
   /// given [Word].
   ///
   /// When there are no hints sets [_hideAnswer.value] to false.
-  void _onAskHint(Word word, String reviewType) {
-    if (reviewType == "reading") {
-      _hint.value = _hint.value.getNextReadingHint(word.reading);
-    }
+  void _onAskHint(Word word) {
+    _hint.value = _hint.value.getNextHint(word);
 
     // if there are no more hints show the answer and enable the next button
     if (_hint.value.n == _hint.value.max) {

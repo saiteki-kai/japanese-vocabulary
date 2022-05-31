@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:japanese_vocabulary/data/models/review.dart';
 import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_item.dart';
 import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/review_type_tag.dart';
-import 'package:japanese_vocabulary/utils/hints.dart';
+import 'package:japanese_vocabulary/utils/hint.dart';
 
 import '../utils/params.dart';
 
@@ -18,7 +18,7 @@ void main() {
           hidden: ValueNotifier(false),
           review: review,
           onToggleAnswer: () {},
-          hint: ValueNotifier(Hint.empty()),
+          hint: ValueNotifier(ReadingHint.empty()),
           onAskHint: () {},
         ),
       ),

@@ -20,7 +20,8 @@ dependencies:
   auto_route: ^3.2.4
   group_button: ^4.8.0
   percent_indicator: ^4.0.0  
-  tab_indicator_styler: ^2.0.0  
+  tab_indicator_styler: ^2.0.0
+  dots_indicator: ^2.1.0
 
   path_provider: ^2.0.9
   objectbox: ^1.4.0

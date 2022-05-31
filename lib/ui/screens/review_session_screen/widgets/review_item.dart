@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../data/models/review.dart';
-import '../../../../utils/hints.dart';
+import '../../../../utils/hint.dart';
 import 'review_hint_button.dart';
 import 'review_type_tag.dart';
 import 'show_button.dart';
