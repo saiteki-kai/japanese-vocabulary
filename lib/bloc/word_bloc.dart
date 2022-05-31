@@ -38,11 +38,24 @@ class WordBloc extends Bloc<WordEvent, WordState> {
     }
   }
 
-  void _onRetrieved(WordsRetrieved _, Emitter<WordState> emit) async {
+  void _onRetrieved(WordsRetrieved event, Emitter<WordState> emit) async {
     /// Returns all the words.
     emit(WordLoading());
     final words = await repository.getWords();
-    emit(WordsLoaded(words: words));
+
+    if (event.search != "") {
+      // We are searching something
+      final List<Word> searchedWord = [];
+      for (final word in words) {
+        if (word.text.toLowerCase().contains(event.search)) {
+          searchedWord.add(word);
+        }
+      }
+      emit(WordsLoaded(words: searchedWord));
+    } else {
+      // We are not searching something so we return the whole list
+      emit(WordsLoaded(words: words));
+    }
   }
 
   void _onGetWord(WordRetrieved event, Emitter<WordState> emit) async {
