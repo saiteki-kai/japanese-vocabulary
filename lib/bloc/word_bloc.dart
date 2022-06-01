@@ -44,7 +44,7 @@ class WordBloc extends Bloc<WordEvent, WordState> {
     emit(WordLoading());
     final words = await repository.getWords();
 
-    if (event.search != "") {
+    if (event.search.isNotEmpty) {
       // We are searching something
       final searchedWord = words
           .where((word) => word.text.toLowerCase().contains(event.search))

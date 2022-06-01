@@ -40,7 +40,7 @@ void main() async {
   }
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoading, WordLoaded] when WordRetrieved is added.',
+    'emits [WordLoading, WordLoaded] when WordsRetrieved is added.',
     build: () => bloc,
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(const WordsRetrieved(search: "")),
@@ -57,7 +57,7 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoading, WordLoaded] when WordRetrived is added when store is empty.',
+    'emits [WordLoading, WordLoaded] when WordsRetrieved is added when store is empty.',
     build: () => bloc,
     act: (bloc) => bloc.add(const WordsRetrieved(search: "")),
     expect: () => <WordState>[
@@ -67,7 +67,7 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoading, WordLoaded] when WordRetrieved is added and search for a word in the db.',
+    'emits [WordLoading, WordLoaded] when WordsRetrieved is added and search for a word in the db.',
     build: () => bloc,
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(const WordsRetrieved(search: "習")),
@@ -82,7 +82,7 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoading, WordLoaded] when WordRetrieved is added and search for a word not in the db.',
+    'emits [WordLoading, WordLoaded] when WordsRetrieved is added and search for a word not in the db.',
     build: () => bloc,
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(const WordsRetrieved(search: "習g")),
@@ -93,7 +93,7 @@ void main() async {
   );
 
   blocTest<WordBloc, WordState>(
-    'emits [WordLoading, WordLoaded] when WordRetrieved is added and search for multiple words in the db.',
+    'emits [WordLoading, WordLoaded] when WordsRetrieved is added and search for multiple words in the db.',
     build: () => bloc,
     setUp: setUpWithWords_2,
     act: (bloc) => bloc.add(const WordsRetrieved(search: "gracia")),
