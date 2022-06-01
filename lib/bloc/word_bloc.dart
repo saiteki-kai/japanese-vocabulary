@@ -46,12 +46,10 @@ class WordBloc extends Bloc<WordEvent, WordState> {
 
     if (event.search != "") {
       // We are searching something
-      final List<Word> searchedWord = [];
-      for (final word in words) {
-        if (word.text.toLowerCase().contains(event.search)) {
-          searchedWord.add(word);
-        }
-      }
+      final searchedWord = words
+          .where((word) => word.text.toLowerCase().contains(event.search))
+          .toList();
+
       emit(WordsLoaded(words: searchedWord));
     } else {
       // We are not searching something so we return the whole list

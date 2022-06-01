@@ -45,13 +45,14 @@ class _WordScreenState extends State<WordScreen> {
                 "search-text",
               ),
               onChanged: _onChanged,
-              decoration: const InputDecoration(
-                labelText: 'Search...',
-                suffixIcon: Icon(
+              decoration: InputDecoration(
+                fillColor: Colors.black.withOpacity(0.2),
+                hintText: 'Search...',
+                suffixIcon: const Icon(
                   Icons.search,
                   color: Colors.white,
                 ),
-                labelStyle: TextStyle(
+                labelStyle: const TextStyle(
                   color: Colors.white,
                 ),
               ),
