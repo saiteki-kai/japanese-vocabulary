@@ -87,7 +87,7 @@ class _WordDetailsScreenState extends State<WordDetailsScreen>
   }
 
   Future<bool> _onBack() {
-    _bloc?.add(const WordsRetrieved(search: ""));
+    _bloc?.add(const WordsRetrieved());
 
     return Future.value(true);
   }

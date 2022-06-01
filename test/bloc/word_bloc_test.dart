@@ -42,7 +42,7 @@ void main() async {
     'emits [WordLoading, WordLoaded] when WordsRetrieved is added with empty db.',
     build: () => bloc,
     setUp: setUpEmpty,
-    act: (bloc) => bloc.add(const WordsRetrieved(search: "")),
+    act: (bloc) => bloc.add(const WordsRetrieved()),
     expect: () => <WordState>[
       WordLoading(),
       const WordsLoaded(words: []),
@@ -56,7 +56,7 @@ void main() async {
     'emits [WordLoading, WordLoaded] when WordsRetrieved is added and search is empty.',
     build: () => bloc,
     setUp: setUpWithWords,
-    act: (bloc) => bloc.add(const WordsRetrieved(search: "")),
+    act: (bloc) => bloc.add(const WordsRetrieved()),
     expect: () => <WordState>[
       WordLoading(),
       WordsLoaded(words: [word1, word2, word3]),
