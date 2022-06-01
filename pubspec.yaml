@@ -31,6 +31,7 @@ dependencies:
   equatable: ^2.0.3
   backdrop: ^0.7.2
   shared_preferences: ^2.0.15
+  substring_highlight: ^1.0.33
 
 dev_dependencies:
   flutter_lints: ^1.0.0

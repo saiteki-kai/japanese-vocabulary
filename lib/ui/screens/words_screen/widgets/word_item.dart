@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:substring_highlight/substring_highlight.dart';
 
 import '../../../../config/routes.gr.dart';
 import '../../../../data/models/word.dart';
@@ -16,13 +17,12 @@ class WordItem extends StatelessWidget {
   /// Creates a word item widget.
   ///
   /// The [word] parameter is required.
-  const WordItem({
-    Key? key,
-    required this.word,
-  }) : super(key: key);
+  const WordItem({Key? key, required this.word, required this.search})
+      : super(key: key);
 
   /// The [word] from which details will be displayed.
   final Word word;
+  final String search;
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +37,18 @@ class WordItem extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    word.text,
-                    style: const TextStyle(
+                  SubstringHighlight(
+                    text: word.text,
+                    term: search, // search term to highligh
+                    textStyle: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textStyleHighlight: const TextStyle(
+                      // highlight style
+                      color: Colors.amber,
+                      //decoration: TextDecoration.underline,
                     ),
                   ),
                   const SizedBox(height: 8.0),

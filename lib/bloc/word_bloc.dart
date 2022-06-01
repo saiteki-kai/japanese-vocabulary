@@ -40,9 +40,22 @@ class WordBloc extends Bloc<WordEvent, WordState> {
   }
 
   void _onRetrieved(WordsRetrieved event, Emitter<WordState> emit) async {
+    /// Returns all the words if 'search' is empty, otherwise it returns
+    /// just the words with 'search' as substring of their text.
     emit(WordLoading());
     final words = await repository.getWords(sort: event.sort);
-    emit(WordsLoaded(words: words));
+
+    if (event.search.isNotEmpty) {
+      // We are searching something
+      final searchedWord = words
+          .where((word) => word.text.toLowerCase().contains(event.search))
+          .toList();
+
+      emit(WordsLoaded(words: searchedWord));
+    } else {
+      // We are not searching something so we return the whole list
+      emit(WordsLoaded(words: words));
+    }
   }
 
   void _onGetWord(WordRetrieved event, Emitter<WordState> emit) async {

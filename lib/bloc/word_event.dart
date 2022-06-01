@@ -23,9 +23,11 @@ class WordAdded extends WordEvent {
   List<Object> get props => [word];
 }
 
-/// This [WordsRetrieved] manages the events concerning the [Word].
 class WordsRetrieved extends WordEvent {
-  const WordsRetrieved({this.sort});
-
+  final String search;
   final SortOption? sort;
+  const WordsRetrieved({this.search = "", this.sort});
+
+  @override
+  List<Object> get props => [search];
 }

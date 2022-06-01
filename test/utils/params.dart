@@ -74,6 +74,16 @@ Word get word5 {
   );
 }
 
+Word get word6 {
+  return Word(
+    text: "Mucho gracias",
+    reading: "moo chow  gra see uhs",
+    jlpt: 2,
+    meaning: "thanks very much",
+    pos: "n",
+  );
+}
+
 Word get wordSentences {
   final word = Word(
     text: "普通",
