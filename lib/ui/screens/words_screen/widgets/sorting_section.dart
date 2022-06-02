@@ -13,7 +13,9 @@ import 'sort_list_item.dart';
 /// After a sort option is selected, it will be cached.
 class SortingSection extends StatefulWidget {
   /// Creates a [SortingSection].
-  const SortingSection({Key? key}) : super(key: key);
+  const SortingSection({Key? key, required this.search}) : super(key: key);
+
+  final String search;
 
   @override
   State<SortingSection> createState() => _SortingSectionState();
@@ -72,6 +74,6 @@ class _SortingSectionState extends State<SortingSection> {
     final sortOption = SortOption(field: field, descending: descending);
 
     _settingsBloc?.add(SettingsSortChanged(sortOption: sortOption));
-    _wordBloc?.add(WordsRetrieved(sort: sortOption));
+    _wordBloc?.add(WordsRetrieved(sort: sortOption, search: widget.search));
   }
 }

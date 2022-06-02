@@ -30,7 +30,7 @@ void main() {
     wordBloc.close();
   });
 
-  setUpWidget(WidgetTester tester) async {
+  setUpWidget(WidgetTester tester, String searchString) async {
     when(() => wordBloc.state).thenReturn(
       WordsLoaded(
         words: [wordsWithReview1, wordsWithReview2, wordsWithReview3],
@@ -49,14 +49,18 @@ void main() {
             BlocProvider.value(value: wordBloc),
             BlocProvider.value(value: settingsBloc),
           ],
-          child: const Material(child: SortingSection()),
+          child: Material(
+              child: SortingSection(
+            search: searchString,
+          )),
         ),
       ),
     );
   }
 
-  testWidgets("check enabled property", (WidgetTester tester) async {
-    await setUpWidget(tester);
+  testWidgets("check enabled property, with no search",
+      (WidgetTester tester) async {
+    await setUpWidget(tester, "");
 
     final itemFinder = find.byType(SortListItem);
     expect(itemFinder, findsNWidgets(4));
@@ -81,8 +85,35 @@ void main() {
     }
   });
 
-  testWidgets("change sort field", (WidgetTester tester) async {
-    await setUpWidget(tester);
+  testWidgets("check enabled property, with search",
+      (WidgetTester tester) async {
+    await setUpWidget(tester, "an");
+
+    final itemFinder = find.byType(SortListItem);
+    expect(itemFinder, findsNWidgets(4));
+
+    // check items
+    final items = tester.widgetList<SortListItem>(itemFinder).toList();
+    final initialSortField = const SortOption.initial().field;
+
+    for (final item in items) {
+      final iconFinder = find.descendant(
+        of: find.byWidget(item),
+        matching: find.byType(Icon),
+      );
+
+      if (item.field == initialSortField) {
+        expect(item.enabled, true);
+        expect(iconFinder, findsOneWidget);
+      } else {
+        expect(item.enabled, false);
+        expect(iconFinder, findsNothing);
+      }
+    }
+  });
+
+  testWidgets("change sort field, with no search", (WidgetTester tester) async {
+    await setUpWidget(tester, "");
 
     final sortListItemFinder = find.byType(SortListItem);
 
@@ -104,8 +135,31 @@ void main() {
     }).called(1);
   });
 
-  testWidgets("change sort mode", (WidgetTester tester) async {
-    await setUpWidget(tester);
+  testWidgets("change sort field, with search", (WidgetTester tester) async {
+    await setUpWidget(tester, "an");
+
+    final sortListItemFinder = find.byType(SortListItem);
+
+    // press on the last item (one not enabled)
+    await tester.tap(sortListItemFinder.last);
+    await tester.pump();
+
+    final sortOption = SortOption(
+      field: sortFieldText.keys.last,
+      descending: false,
+    );
+
+    verify(() {
+      settingsBloc.add(SettingsSortChanged(sortOption: sortOption));
+    }).called(1);
+
+    verify(() {
+      wordBloc.add(WordsRetrieved(search: "an", sort: sortOption));
+    }).called(1);
+  });
+
+  testWidgets("change sort mode, with no search", (WidgetTester tester) async {
+    await setUpWidget(tester, "");
 
     final sortListItemFinder = find.byType(SortListItem);
 
@@ -125,6 +179,30 @@ void main() {
 
     verify(() {
       wordBloc.add(WordsRetrieved(sort: sortOption));
+    }).called(1);
+  });
+
+  testWidgets("change sort mode, with search", (WidgetTester tester) async {
+    await setUpWidget(tester, "an");
+
+    final sortListItemFinder = find.byType(SortListItem);
+
+    // press on the first item (the one already enabled)
+    await tester.tap(sortListItemFinder.first);
+    await tester.pump();
+
+    // check if the order is reversed
+    final sortOption = SortOption(
+      field: sortFieldText.keys.first,
+      descending: true,
+    );
+
+    verify(() {
+      settingsBloc.add(SettingsSortChanged(sortOption: sortOption));
+    }).called(1);
+
+    verify(() {
+      wordBloc.add(WordsRetrieved(search: "an", sort: sortOption));
     }).called(1);
   });
 }

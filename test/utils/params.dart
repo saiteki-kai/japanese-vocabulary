@@ -144,7 +144,7 @@ Word createWordWithReview({
 // mean accuracy: 0,58
 // max streak 4
 final wordsWithReview1 = createWordWithReview(
-  text: "B",
+  text: "Barbara",
   nextDate1: DateTime(2022),
   nextDate2: null,
   streak1: 0,
@@ -158,7 +158,7 @@ final wordsWithReview1 = createWordWithReview(
 // mean accuracy: 0,83
 // max streak 3
 final wordsWithReview2 = createWordWithReview(
-  text: "C",
+  text: "Cane",
   nextDate1: null,
   nextDate2: null,
   streak1: 3,
@@ -172,7 +172,7 @@ final wordsWithReview2 = createWordWithReview(
 // mean accuracy: 0,66
 // max streak 5
 final wordsWithReview3 = createWordWithReview(
-  text: "A",
+  text: "Anice",
   nextDate1: DateTime(2025),
   nextDate2: DateTime(2024),
   streak1: 5,
@@ -282,6 +282,7 @@ Settings get settings1 {
 SortOption get sortOption1 {
   return const SortOption(descending: false, field: SortField.streak);
 }
+
 Word get wordWith3Sentences {
   final word = Word(
     text: "言葉",

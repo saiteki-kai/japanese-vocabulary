@@ -77,7 +77,7 @@ class _WordScreenState extends State<WordScreen> {
           ),
         ),
       ),
-      backLayer: const SortingSection(),
+      backLayer: SortingSection(search: searchString),
       stickyFrontLayer: true,
       frontLayer: BlocBuilder<WordBloc, WordState>(
         builder: (context, state) {
