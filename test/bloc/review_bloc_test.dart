@@ -18,10 +18,10 @@ void main() async {
 
   void setUpWithReviews() {
     when(repo.getReviews).thenAnswer((_) async {
-      return [nullDateReview, review1, review2];
+      return [meaningReviewWithWord, review1, review2];
     });
     when(repo.getTodayReviews).thenAnswer((_) async {
-      return [nullDateReview, review1];
+      return [meaningReviewWithWord, review1];
     });
   }
 
@@ -47,7 +47,7 @@ void main() async {
     act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview, isLast: false),
+      ReviewLoaded(review: meaningReviewWithWord, isLast: false),
     ],
     verify: (_) {
       verify(() => repo.getTodayReviews()).called(1);
@@ -64,7 +64,7 @@ void main() async {
       ..add(ReviewSessionUpdated(review: review1, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview, isLast: false),
+      ReviewLoaded(review: meaningReviewWithWord, isLast: false),
       ReviewLoaded(review: review1, isLast: true),
     ],
     verify: (_) {
@@ -83,7 +83,7 @@ void main() async {
       ..add(ReviewSessionUpdated(review: review2, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview, isLast: false),
+      ReviewLoaded(review: meaningReviewWithWord, isLast: false),
       ReviewLoaded(review: review1, isLast: true),
       ReviewFinished(),
     ],
