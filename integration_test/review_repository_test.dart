@@ -15,11 +15,6 @@ void main() async {
     store = await AppDatabase.instance.store;
     box = store.box<Review>();
     repo = ReviewRepository(box: Future.value(box));
-
-    box.removeAll();
-    box.put(nullDateReview);
-    box.put(review1);
-    box.put(review2);
   });
 
   tearDown(() async {
@@ -28,7 +23,14 @@ void main() async {
     await AppDatabase.instance.deleteDatabase();
   });
 
+  setUpWithReviews() {
+    box.put(readingReviewWithWord);
+    box.put(review1);
+    box.put(review2);
+  }
+
   test("get all reviews", () async {
+    setUpWithReviews();
     List<Review> reviews = await repo.getReviews();
     expect(reviews.length, 3);
 
@@ -38,6 +40,8 @@ void main() async {
   });
 
   test("get today's reviews", () async {
+    setUpWithReviews();
+
     List<Review> reviews = await repo.getTodayReviews();
     expect(reviews.length, 2);
 
@@ -51,21 +55,53 @@ void main() async {
   });
 
   group("update a review", () {
+    test("check word relationship", () async {
+      final review = readingReviewWithWord;
+      final word = readingReviewWithWord.word.target?..id = 1;
+
+      // add review with word
+      final id1 = await repo.updateReview(review);
+
+      // assign id given by the database
+      review.id = id1;
+
+      List<Review> reviews = await repo.getReviews();
+      expect(reviews, equals([review]));
+      expect(reviews[0].word.target, equals(word));
+
+      // make update the ef field
+      review.ef = 2.0;
+
+      // update the review
+      final id2 = await repo.updateReview(review);
+      expect(id2, equals(id1));
+
+      // check the word
+      reviews = await repo.getReviews();
+      expect(reviews, equals([review]));
+      expect(reviews[0].word.target, equals(word));
+    });
+
     test("review already present in the database", () async {
+      setUpWithReviews();
+
       List<Review> reviews = box.getAll();
       Review r = reviews[0];
+      final associatedWord = r.word.target;
 
       final id1 = await repo.updateReview(r);
       expect(id1, equals(r.id));
       expect(reviews.length, 3);
 
-      final updatedReview = r.copyWith(ef: 2.3);
+      final updatedReview = r.copyWith(ef: 2.3)..word.target = associatedWord;
 
       final id2 = await repo.updateReview(updatedReview);
       expect(id2, equals(r.id));
 
       expect(r.ef, 2.5);
       expect(updatedReview.ef, 2.3);
+
+      expect(updatedReview.word.target, equals(associatedWord));
 
       reviews = box.getAll();
       expect(reviews.length, 3);
@@ -74,10 +110,13 @@ void main() async {
       reviews = box.getAll();
       r = reviews[0];
       expect(r.ef, 2.3);
+      expect(r.word.target, equals(associatedWord));
       expect(reviews.length, 3);
     });
 
     test("review not present in the database", () async {
+      setUpWithReviews();
+
       final newReview = createReviewByDate(null);
       final id3 = await repo.updateReview(newReview);
 
