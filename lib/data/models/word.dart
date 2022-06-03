@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'dart:core';
 import 'dart:math';
 import 'package:objectbox/objectbox.dart';
@@ -9,6 +8,7 @@ import 'review.dart';
 import 'sentence.dart';
 
 @Entity()
+// ignore: must_be_immutable
 class Word extends Equatable {
   Word({
     this.id = 0,
