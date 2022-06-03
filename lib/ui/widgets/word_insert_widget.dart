@@ -21,14 +21,14 @@ class WordInsert extends StatefulWidget {
 }
 
 class _WordInsertState extends State<WordInsert> {
-  final _wordToAdd = Word(jlpt: 5, text: "", reading: "", meaning: "", pos: "");
+  Word _wordToAdd = Word(jlpt: 5, text: "", reading: "", meaning: "", pos: "");
   bool readyToBuild = false;
   Text titleInsert = const Text("Insert a word");
 
   /// The currently selected jlpt button index
   int _jlptIndex = -1;
 
-  /// The list of seleected pos
+  /// The list of selected pos
   final List<int> _posSelected = [];
 
   /// The list of selectable jlpt levels
@@ -273,9 +273,11 @@ class _WordInsertState extends State<WordInsert> {
   }
 
   void _onPressed() {
-    _wordToAdd.text = _textController.text;
-    _wordToAdd.reading = _readingController.text;
-    _wordToAdd.meaning = _meaningController.text;
+    _wordToAdd = _wordToAdd.copyWith(
+      text: _textController.text,
+      reading: _readingController.text,
+      meaning: _meaningController.text,
+    );
 
     if (_wordToAdd.text.isNotEmpty &&
         _wordToAdd.reading.isNotEmpty &&
@@ -284,14 +286,17 @@ class _WordInsertState extends State<WordInsert> {
       readyToBuild = true;
     }
 
-    _wordToAdd.jlpt = _jlptValues[_jlptIndex];
     // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
     _posSelected.remove(-1);
     final posTmp = _posSelected.map((e) => _posNames[e]).join(",");
-    _wordToAdd.pos = posTmp;
+
+    _wordToAdd = _wordToAdd.copyWith(
+      jlpt: _jlptValues[_jlptIndex],
+      pos: posTmp,
+    );
 
     // If the mandatory fields are not compiled it doesn't insert or edit.
-    // Also doens't change route.
+    // Also doesn't change route.
     if (readyToBuild) {
       _wordToAdd.sentences.addAll(_sentences);
       _bloc?.add(WordAdded(word: _wordToAdd));

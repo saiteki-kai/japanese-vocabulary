@@ -4,173 +4,168 @@
   "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
   "entities": [
     {
-      "id": "1:3830602318012237067",
-      "lastPropertyId": "9:7782135532053608708",
-      "name": "Review",
+      "id": "1:9206247479439857373",
+      "lastPropertyId": "3:3944717135816050946",
+      "name": "Sentence",
       "properties": [
         {
-          "id": "1:6258077533714517537",
+          "id": "1:6254079928805673673",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:1294270843906626824",
-          "name": "ef",
-          "type": 8
-        },
-        {
-          "id": "3:896536706799675303",
-          "name": "interval",
-          "type": 6
-        },
-        {
-          "id": "4:2680377027375405668",
-          "name": "repetition",
-          "type": 2
-        },
-        {
-          "id": "5:6889856694279360459",
-          "name": "correctAnswers",
-          "type": 6
-        },
-        {
-          "id": "6:4265141917207866929",
-          "name": "incorrectAnswers",
-          "type": 6
-        },
-        {
-          "id": "7:5760956220129578562",
-          "name": "nextDate",
-          "type": 10
-        },
-        {
-          "id": "8:1153444076668128005",
-          "name": "type",
+          "id": "2:5959381001710275054",
+          "name": "text",
           "type": 9
         },
         {
-          "id": "9:7782135532053608708",
-          "name": "wordId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "1:4357274250751207369",
-          "relationTarget": "Word"
+          "id": "3:3944717135816050946",
+          "name": "translation",
+          "type": 9
         }
       ],
       "relations": []
     },
     {
-      "id": "2:401038334785999611",
-      "lastPropertyId": "9:8175364561035269813",
+      "id": "2:1966947074475594132",
+      "lastPropertyId": "8:7040682119867187000",
       "name": "Word",
       "properties": [
         {
-          "id": "1:5629376883517929042",
+          "id": "1:3312389242462208248",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:3397079272869506039",
+          "id": "2:9166229480289644332",
           "name": "text",
           "type": 9,
           "flags": 2048,
-          "indexId": "2:6484170409729585574"
+          "indexId": "3:5619824048106089222"
         },
         {
-          "id": "3:3906779331924907371",
+          "id": "3:7725006193569903052",
           "name": "reading",
           "type": 9,
           "flags": 2048,
-          "indexId": "3:6957971061665870199"
+          "indexId": "4:8214601762371282380"
         },
         {
-          "id": "4:2884383427580765370",
+          "id": "4:436730323243660595",
           "name": "jlpt",
           "type": 2
         },
         {
-          "id": "6:4797713563500394941",
-          "name": "pos",
-          "type": 9,
-          "flags": 2048,
-          "indexId": "8:8729763161222566721"
-        },
-        {
-          "id": "7:3512978780094895428",
-          "name": "meaningReviewId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "4:8427070866013411077",
-          "relationTarget": "Review"
-        },
-        {
-          "id": "8:5037895364817270746",
-          "name": "readingReviewId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "5:8527817239037047097",
-          "relationTarget": "Review"
-        },
-        {
-          "id": "9:8175364561035269813",
+          "id": "5:878070176841271282",
           "name": "meaning",
           "type": 9,
           "flags": 2048,
-          "indexId": "7:6191155656918217405"
+          "indexId": "5:9014269220320242567"
+        },
+        {
+          "id": "6:5610280891489146520",
+          "name": "pos",
+          "type": 9,
+          "flags": 2048,
+          "indexId": "6:3198345669593570661"
+        },
+        {
+          "id": "7:5036145758249628494",
+          "name": "meaningReviewId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "7:1176858192302387660",
+          "relationTarget": "Review"
+        },
+        {
+          "id": "8:7040682119867187000",
+          "name": "readingReviewId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "8:6166180071303627069",
+          "relationTarget": "Review"
         }
       ],
       "relations": [
         {
-          "id": "1:5212780146065234005",
+          "id": "1:4120482905649221341",
           "name": "sentences",
-          "targetId": "3:2230893357760227941"
+          "targetId": "1:9206247479439857373"
         }
       ]
     },
     {
-      "id": "3:2230893357760227941",
-      "lastPropertyId": "3:8984471098102041347",
-      "name": "Sentence",
+      "id": "3:4980336401306829282",
+      "lastPropertyId": "9:1806990199653024408",
+      "name": "Review",
       "properties": [
         {
-          "id": "1:7346206682188149299",
+          "id": "1:1626135589085623955",
           "name": "id",
           "type": 6,
           "flags": 1
         },
         {
-          "id": "2:874495945188899458",
-          "name": "text",
-          "type": 9,
-          "flags": 2048,
-          "indexId": "9:3228828558177168568"
+          "id": "2:6365584892320273545",
+          "name": "ef",
+          "type": 8
         },
         {
-          "id": "3:8984471098102041347",
-          "name": "translation",
-          "type": 9,
-          "flags": 2048,
-          "indexId": "10:7656404866111244454"
+          "id": "3:5428391148633241063",
+          "name": "interval",
+          "type": 6
+        },
+        {
+          "id": "4:4030955230144328763",
+          "name": "repetition",
+          "type": 2
+        },
+        {
+          "id": "5:5257293484975687443",
+          "name": "correctAnswers",
+          "type": 6
+        },
+        {
+          "id": "6:6617914674650179552",
+          "name": "incorrectAnswers",
+          "type": 6
+        },
+        {
+          "id": "7:6041430832453480761",
+          "name": "nextDate",
+          "type": 10
+        },
+        {
+          "id": "8:8654180953071034506",
+          "name": "type",
+          "type": 9
+        },
+        {
+          "id": "9:1806990199653024408",
+          "name": "wordId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "9:1772162283183374269",
+          "relationTarget": "Word"
         }
       ],
       "relations": []
     }
   ],
-  "lastEntityId": "3:2230893357760227941",
-  "lastIndexId": "10:7656404866111244454",
-  "lastRelationId": "1:5212780146065234005",
+  "lastEntityId": "3:4980336401306829282",
+  "lastIndexId": "9:1772162283183374269",
+  "lastRelationId": "1:4120482905649221341",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [
-    3458087574536909469
+    2657583556167658195,
+    4258254644886010891
   ],
-  "retiredPropertyUids": [
-    5284903311057106241
-  ],
+  "retiredPropertyUids": [],
   "retiredRelationUids": [],
   "version": 1
 }

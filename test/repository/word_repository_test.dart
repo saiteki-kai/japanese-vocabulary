@@ -100,15 +100,15 @@ void main() async {
       final id = await repo.addWord(word1);
       expect(id, word1.id, reason: "Id should've been ${word1.id}");
 
-      final word = word1;
+      final word = word1.copyWith(
+        text: "Gracias",
+        reading: "Gra see uhs",
+        jlpt: 1,
+        meaning: "Thanks",
+        pos: "n,vi",
+      );
 
-      word.text = "Gracias";
-      word.reading = "Gra see uhs";
-      word.jlpt = 1;
-      word.meaning = "Thanks";
-      word.pos = "n, vi";
-
-      final id2 = await repo.addWord(word1);
+      final id2 = await repo.addWord(word);
       expect(id2, id, reason: "Id should've been $id2");
     });
   });

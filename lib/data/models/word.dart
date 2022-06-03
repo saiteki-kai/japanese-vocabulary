@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:core';
 import 'dart:math';
@@ -8,7 +9,7 @@ import 'review.dart';
 import 'sentence.dart';
 
 @Entity()
-class Word {
+class Word extends Equatable {
   Word({
     this.id = 0,
     required this.text,
@@ -23,23 +24,23 @@ class Word {
 
   /// Text of this word.
   @Index()
-  String text;
+  final String text;
 
   /// Reading of this word.
   @Index()
-  String reading;
+  final String reading;
 
   /// A number corresponding to the JLPT level N5 to N1 of this word.
   @Property(type: PropertyType.byte)
-  int jlpt;
+  final int jlpt;
 
   /// Meaning of this word.
   @Index()
-  String meaning;
+  final String meaning;
 
   /// Part of speech of this word.
   @Index()
-  String pos;
+  final String pos;
 
   /// Review related to meaning of this word.
   final meaningReview = ToOne<Review>();
@@ -96,32 +97,12 @@ class Word {
       meaning: meaning ?? this.meaning,
       pos: pos ?? this.pos,
     );
+
+    word.readingReview.target = readingReview.target;
+    word.meaningReview.target = meaningReview.target;
     word.sentences.addAll(sentences);
 
     return word;
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'text': text,
-      'reading': reading,
-      'jlpt': jlpt,
-      'meaning': meaning,
-      'pos': pos,
-      'sentences': sentences,
-    };
-  }
-
-  factory Word.fromMap(Map<String, dynamic> map) {
-    return Word(
-      id: map['id']?.toInt() ?? 0,
-      text: map['text'] ?? '',
-      reading: map['reading'] ?? '',
-      jlpt: map['jlpt']?.toInt() ?? 0,
-      meaning: map['meaning'] ?? '',
-      pos: map['pos'] ?? '',
-    );
   }
 
   @override
@@ -130,29 +111,17 @@ class Word {
   }
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Word &&
-        other.id == id &&
-        other.text == text &&
-        other.reading == reading &&
-        other.jlpt == jlpt &&
-        other.meaning == meaning &&
-        other.pos == pos &&
-        listEquals(other.sentences, sentences);
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        text.hashCode ^
-        reading.hashCode ^
-        jlpt.hashCode ^
-        meaning.hashCode ^
-        pos.hashCode ^
-        sentences.hashCode;
-  }
+  List<Object?> get props => [
+        id,
+        text,
+        reading,
+        jlpt,
+        meaning,
+        pos,
+        sentences,
+        readingReview.target,
+        meaningReview.target,
+      ];
 
   static int _sortByNextReview(Word a, Word b) {
     const maxMilliseconds = 8640000000000000;

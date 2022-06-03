@@ -1,48 +1,49 @@
+import 'package:equatable/equatable.dart';
 import 'package:objectbox/objectbox.dart';
 
 import './word.dart';
 
 @Entity()
-class Review {
+// ignore: must_be_immutable
+class Review extends Equatable {
   Review({
     this.id = 0,
-    required this.ef,
-    required this.interval,
-    required this.repetition,
-    required this.correctAnswers,
-    required this.incorrectAnswers,
-    required this.nextDate,
+    this.ef = 2.5,
+    this.interval = 0,
+    this.repetition = 0,
+    this.correctAnswers = 0,
+    this.incorrectAnswers = 0,
+    this.nextDate,
     required this.type,
   });
 
-  /// Auto increment id
-  ///
+  /// Auto increment Id
   int id;
 
   /// Easiness factor for the spaced repetition algorithm.
   ///
   /// Default value 2.5.
-  double ef = 2.5;
+  final double ef;
 
   /// Number of days for the next review.
-  int interval = 0;
+  final int interval;
 
   /// Number of consecutive correct answers.
   @Property(type: PropertyType.byte)
-  int repetition = 0;
+  final int repetition;
 
   /// Number of correct answers.
-  int correctAnswers = 0;
+  final int correctAnswers;
 
   /// Number of incorrect answers.
-  int incorrectAnswers = 0;
+  final int incorrectAnswers;
 
   /// Date of the next review.
   @Property(type: PropertyType.date)
-  DateTime? nextDate;
+  final DateTime? nextDate;
 
   /// Type of this review (meaning or reading).
-  String type;
+  final String type;
 
   /// Word related of this review.
   final word = ToOne<Word>();
@@ -68,7 +69,7 @@ class Review {
     DateTime? nextDate,
     String? type,
   }) {
-    return Review(
+    final review = Review(
       id: id,
       ef: ef ?? this.ef,
       interval: interval ?? this.interval,
@@ -78,34 +79,10 @@ class Review {
       nextDate: nextDate ?? this.nextDate,
       type: type ?? this.type,
     );
-  }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'ef': ef,
-      'interval': interval,
-      'repetition': repetition,
-      'correctAnswers': correctAnswers,
-      'incorrectAnswers': incorrectAnswers,
-      'nextDate': nextDate?.millisecondsSinceEpoch,
-      'type': type,
-    };
-  }
+    review.word.target = word.target;
 
-  factory Review.fromMap(Map<String, dynamic> map) {
-    return Review(
-      id: map['id']?.toInt() ?? 0,
-      ef: map['ef']?.toDouble() ?? 0.0,
-      interval: map['interval']?.toInt() ?? 0,
-      repetition: map['repetition']?.toInt() ?? 0,
-      correctAnswers: map['correctAnswers']?.toInt() ?? 0,
-      incorrectAnswers: map['incorrectAnswers']?.toInt() ?? 0,
-      nextDate: map['nextDate'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['nextDate'])
-          : null,
-      type: map['type'] ?? '',
-    );
+    return review;
   }
 
   @override
@@ -114,29 +91,17 @@ class Review {
   }
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Review &&
-        other.id == id &&
-        other.ef == ef &&
-        other.interval == interval &&
-        other.repetition == repetition &&
-        other.correctAnswers == correctAnswers &&
-        other.incorrectAnswers == incorrectAnswers &&
-        other.nextDate == nextDate &&
-        other.type == type;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        ef.hashCode ^
-        interval.hashCode ^
-        repetition.hashCode ^
-        correctAnswers.hashCode ^
-        incorrectAnswers.hashCode ^
-        nextDate.hashCode ^
-        type.hashCode;
+  List<Object?> get props {
+    return [
+      id,
+      ef,
+      interval,
+      repetition,
+      correctAnswers,
+      incorrectAnswers,
+      nextDate,
+      type,
+      word.target,
+    ];
   }
 }

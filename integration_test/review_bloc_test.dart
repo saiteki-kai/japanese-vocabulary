@@ -26,7 +26,7 @@ void main() async {
   });
 
   setUpWithReviews() {
-    repo.updateReview(nullDateReview);
+    repo.updateReview(meaningReviewWithWord);
     repo.updateReview(review1);
     repo.updateReview(review2);
   }
@@ -38,7 +38,7 @@ void main() async {
     act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview..id = 1, isLast: false),
+      ReviewLoaded(review: meaningReviewWithWord..id = 1, isLast: false),
     ],
   );
 
@@ -51,7 +51,7 @@ void main() async {
       ..add(ReviewSessionUpdated(review: review1, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview..id = 1, isLast: false),
+      ReviewLoaded(review: meaningReviewWithWord..id = 1, isLast: false),
       ReviewLoaded(review: review1..id = 2, isLast: true),
     ],
   );
@@ -66,7 +66,7 @@ void main() async {
       ..add(ReviewSessionUpdated(review: review2, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview..id = 1, isLast: false),
+      ReviewLoaded(review: meaningReviewWithWord..id = 1, isLast: false),
       ReviewLoaded(review: review1..id = 2, isLast: true),
       ReviewFinished(),
     ],

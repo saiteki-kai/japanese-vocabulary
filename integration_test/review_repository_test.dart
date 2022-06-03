@@ -56,7 +56,7 @@ void main() async {
 
   group("update a review", () {
     test("check word relationship", () async {
-      final review = readingReviewWithWord;
+      Review review = readingReviewWithWord;
       final word = readingReviewWithWord.word.target?..id = 1;
 
       // add review with word
@@ -70,7 +70,7 @@ void main() async {
       expect(reviews[0].word.target, equals(word));
 
       // make update the ef field
-      review.ef = 2.0;
+      review = review.copyWith(ef: 2.0);
 
       // update the review
       final id2 = await repo.updateReview(review);

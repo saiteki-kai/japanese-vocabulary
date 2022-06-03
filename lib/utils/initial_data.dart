@@ -5,7 +5,6 @@ import '../data/models/word.dart';
 initializeDB(store) {
   createWord(text, meaning, reading) {
     final mRev = Review(
-      id: 0,
       ef: 2.5,
       correctAnswers: 0,
       incorrectAnswers: 0,
@@ -15,7 +14,6 @@ initializeDB(store) {
       type: "meaning",
     );
     final rRev = Review(
-      id: 0,
       ef: 2.5,
       correctAnswers: 0,
       incorrectAnswers: 0,
@@ -25,9 +23,19 @@ initializeDB(store) {
       type: "reading",
     );
 
-    final sentence1 = Sentence(text: '言葉と行動は一致すべきものだが、実行は難しい。', translation: 'Your words are supposed to correspond to your actions, but that is not easy to put into practice.');
-    final sentence2 = Sentence(text: '彼女は図書館の利用許可を与えられた。', translation: 'She was accorded permission to use the library.');
-    final sentence3 = Sentence(text: '麺はふつう小麦粉から作られる。', translation: 'Noodles are usually made from wheat.');
+    final sentence1 = Sentence(
+      text: '言葉と行動は一致すべきものだが、実行は難しい。',
+      translation:
+          'Your words are supposed to correspond to your actions, but that is not easy to put into practice.',
+    );
+    final sentence2 = Sentence(
+      text: '彼女は図書館の利用許可を与えられた。',
+      translation: 'She was accorded permission to use the library.',
+    );
+    final sentence3 = Sentence(
+      text: '麺はふつう小麦粉から作られる。',
+      translation: 'Noodles are usually made from wheat.',
+    );
 
     final word = Word(
       id: 0,
