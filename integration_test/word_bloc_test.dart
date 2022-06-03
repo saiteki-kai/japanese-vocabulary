@@ -31,7 +31,7 @@ void main() async {
     repo.addWord(word3);
   }
 
-  setUpWithWords_2() {
+  setUpWithWords2() {
     repo.addWord(word1);
     repo.addWord(word2);
     repo.addWord(word5);
@@ -44,16 +44,25 @@ void main() async {
     build: () => bloc,
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(const WordsRetrieved()),
-    expect: () => <WordState>[
-      WordLoading(),
-      WordsLoaded(
-        words: [
-          word1..id = 1,
-          word2..id = 2,
-          word3..id = 3,
-        ],
-      ),
-    ],
+    expect: () {
+      final w1 = word1;
+      w1.id = 1;
+      w1.meaningReview.targetId = 1;
+      w1.readingReview.targetId = 2;
+      final w2 = word2;
+      w2.id = 2;
+      w2.meaningReview.targetId = 3;
+      w2.readingReview.targetId = 4;
+      final w3 = word3;
+      w3.id = 3;
+      w3.meaningReview.targetId = 5;
+      w3.readingReview.targetId = 6;
+
+      return <WordState>[
+        WordLoading(),
+        WordsLoaded(words: [w1, w2, w3]),
+      ];
+    },
   );
 
   blocTest<WordBloc, WordState>(
@@ -71,14 +80,17 @@ void main() async {
     build: () => bloc,
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(const WordsRetrieved(search: "習")),
-    expect: () => <WordState>[
-      WordLoading(),
-      WordsLoaded(
-        words: [
-          word2..id = 2,
-        ],
-      ),
-    ],
+    expect: () {
+      final word = word2;
+      word.id = 2;
+      word.meaningReview.targetId = 3;
+      word.readingReview.targetId = 4;
+
+      return <WordState>[
+        WordLoading(),
+        WordsLoaded(words: [word]),
+      ];
+    },
   );
 
   blocTest<WordBloc, WordState>(
@@ -95,17 +107,24 @@ void main() async {
   blocTest<WordBloc, WordState>(
     'emits [WordLoading, WordLoaded] when WordsRetrieved is added and search for multiple words in the db.',
     build: () => bloc,
-    setUp: setUpWithWords_2,
+    setUp: setUpWithWords2,
     act: (bloc) => bloc.add(const WordsRetrieved(search: "gracia")),
-    expect: () => <WordState>[
-      WordLoading(),
-      WordsLoaded(
-        words: [
-          word5..id = 3,
-          word6..id = 5,
-        ],
-      ),
-    ],
+    expect: () {
+      final w1 = word5;
+      w1.id = 3;
+      w1.meaningReview.targetId = 5;
+      w1.readingReview.targetId = 6;
+
+      final w2 = word6;
+      w2.id = 5;
+      w2.meaningReview.targetId = 9;
+      w2.readingReview.targetId = 10;
+
+      return <WordState>[
+        WordLoading(),
+        WordsLoaded(words: [w1, w2]),
+      ];
+    },
   );
 
   blocTest<WordBloc, WordState>(
@@ -113,9 +132,16 @@ void main() async {
     seed: () => const WordsLoaded(words: []),
     build: () => bloc,
     act: (bloc) => bloc.add(WordAdded(word: word1)),
-    expect: () => <WordState>[
-      WordsLoaded(words: [word1..id = 1]),
-    ],
+    expect: () {
+      final word = word1;
+      word.id = 1;
+      word.meaningReview.targetId = 1;
+      word.readingReview.targetId = 2;
+
+      return <WordState>[
+        WordsLoaded(words: [word]),
+      ];
+    },
   );
 
   blocTest<WordBloc, WordState>(
@@ -124,11 +150,16 @@ void main() async {
     build: () => bloc,
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(WordAdded(word: word4)),
-    expect: () => <WordState>[
-      WordsLoaded(words: [
-        word4..id = 4,
-      ]),
-    ],
+    expect: () {
+      final word = word4;
+      word.id = 4;
+      word.meaningReview.targetId = 7;
+      word.readingReview.targetId = 8;
+
+      return <WordState>[
+        WordsLoaded(words: [word]),
+      ];
+    },
   );
 
   blocTest<WordBloc, WordState>(
@@ -148,15 +179,22 @@ void main() async {
       bloc.add(WordAdded(word: word1)),
       bloc.add(WordAdded(word: word2)),
     },
-    expect: () => <WordState>[
-      WordsLoaded(words: [
-        word1..id = 1,
-      ]),
-      WordsLoaded(words: [
-        word1..id = 1,
-        word2..id = 2,
-      ]),
-    ],
+    expect: () {
+      final w1 = word1;
+      w1.id = 1;
+      w1.meaningReview.targetId = 1;
+      w1.readingReview.targetId = 2;
+
+      final w2 = word2;
+      w2.id = 2;
+      w2.meaningReview.targetId = 3;
+      w2.readingReview.targetId = 4;
+
+      return <WordState>[
+        WordsLoaded(words: [w1]),
+        WordsLoaded(words: [w1, w2]),
+      ];
+    },
   );
 
   blocTest<WordBloc, WordState>(
@@ -168,14 +206,21 @@ void main() async {
       bloc.add(WordAdded(word: word4)),
       bloc.add(WordAdded(word: word5)),
     },
-    expect: () => <WordState>[
-      WordsLoaded(words: [
-        word4..id = 4,
-      ]),
-      WordsLoaded(words: [
-        word4..id = 4,
-        word5..id = 5,
-      ]),
-    ],
+    expect: () {
+      final w1 = word4;
+      w1.id = 4;
+      w1.meaningReview.targetId = 7;
+      w1.readingReview.targetId = 8;
+
+      final w2 = word5;
+      w2.id = 5;
+      w2.meaningReview.targetId = 9;
+      w2.readingReview.targetId = 10;
+
+      return <WordState>[
+        WordsLoaded(words: [w1]),
+        WordsLoaded(words: [w1, w2]),
+      ];
+    },
   );
 }
