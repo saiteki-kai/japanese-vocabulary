@@ -25,8 +25,8 @@ import 'widgets/review_session_appbar.dart';
 /// review or, if there are no more, to go to the summary.
 
 /// Also a certain numbers of hints for a word are displayed and accessed by the [ReviewItem].
-/// that updates the current [hint] to be displayed in the [ReviewHint] and changes 
-/// the enabled values of the [ReviewQualitySelector]. 
+/// that updates the current [hint] to be displayed in the [ReviewHint] and changes
+/// the enabled values of the [ReviewQualitySelector].
 /// The [hint] can be of two types [MeaningHint] or [ReadingHint].
 class ReviewSessionScreen extends StatefulWidget implements AutoRouteWrapper {
   const ReviewSessionScreen({Key? key}) : super(key: key);
@@ -79,26 +79,29 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ScreenLayout(
-        appBar: const ReviewSessionAppBar(),
-        child: BlocConsumer<ReviewBloc, ReviewState>(
-          builder: (context, state) {
-            if (state is ReviewLoaded) {
-              final word = state.review.word.target;
+      body: BlocConsumer<ReviewBloc, ReviewState>(
+        builder: (context, state) {
+          if (state is ReviewLoaded) {
+            final word = state.review.word.target;
 
-              if (word == null) {
-                return const Text("Error");
-              }
+            if (word == null) {
+              return const Text("Error");
+            }
 
-              // Initialize the value based on the reading/meaning of the word
-              final reviewType = state.review.type;
-              if ( reviewType == "reading") {
-                _hint.value = ReadingHint.fromWord(word);
-              } else if (reviewType == "meaning") {
-                _hint.value = MeaningHint.fromWord(word);
-              }
+            // Initialize the value based on the reading/meaning of the word
+            final reviewType = state.review.type;
+            if (reviewType == "reading") {
+              _hint.value = ReadingHint.fromWord(word);
+            } else if (reviewType == "meaning") {
+              _hint.value = MeaningHint.fromWord(word);
+            }
 
-              return Column(
+            return ScreenLayout(
+              appBar: ReviewSessionAppBar(
+                current: state.current,
+                total: state.total,
+              ),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Spacer(flex: 1),
@@ -135,14 +138,14 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
                     onPressed: (q) => _nextReview(state.review, q),
                   ),
                 ],
-              );
-            } else {
-              return const LoadingIndicator(message: "Loading Reviews...");
-            }
-          },
-          listener: _reviewBlocListener,
-          buildWhen: _reviewBlocBuildWhen,
-        ),
+              ),
+            );
+          } else {
+            return const LoadingIndicator(message: "Loading Reviews...");
+          }
+        },
+        listener: _reviewBlocListener,
+        buildWhen: _reviewBlocBuildWhen,
       ),
     );
   }
