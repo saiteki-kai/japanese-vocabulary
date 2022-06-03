@@ -30,6 +30,7 @@ class ReviewLoaded extends ReviewState {
   List<Object> get props => [review, isLast];
 }
 
+/// A [ReviewState] to indicate when the list of reviews is empty.
 class ReviewEmpty extends ReviewState {}
 
 /// A [ReviewState] to indicate when the session has ended.
