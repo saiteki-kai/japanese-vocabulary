@@ -55,6 +55,6 @@ class SM2 {
       correctAnswers: corrects,
       incorrectAnswers: incorrects,
       nextDate: next,
-    );
+    )..word.target = review.word.target;
   }
 }
