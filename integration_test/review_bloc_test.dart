@@ -6,6 +6,7 @@ import 'package:japanese_vocabulary/data/models/review.dart';
 import 'package:japanese_vocabulary/data/repositories/review_repository.dart';
 import 'package:objectbox/objectbox.dart';
 
+import '../test/utils/db.dart';
 import '../test/utils/params.dart';
 
 void main() async {
@@ -37,13 +38,11 @@ void main() async {
     setUp: setUpWithReviews,
     act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () {
-      final updatedReview = readingReviewWithWord;
-      updatedReview.id = 1;
-      updatedReview.word.target?.id = 1;
+      final r = addReviewExpectedIds(readingReviewWithWord, 1, 1);
 
       return <ReviewState>[
         ReviewLoading(),
-        ReviewLoaded(review: updatedReview, isLast: false),
+        ReviewLoaded(review: r, isLast: false),
       ];
     },
   );
@@ -56,17 +55,13 @@ void main() async {
       ..add(ReviewSessionStarted())
       ..add(ReviewSessionUpdated(review: review1, quality: 4)),
     expect: () {
-      final updatedReview1 = readingReviewWithWord;
-      updatedReview1.id = 1;
-      updatedReview1.word.target?.id = 1;
-
-      final updatedReview2 = review1;
-      updatedReview2.id = 2;
+      final r1 = addReviewExpectedIds(readingReviewWithWord, 1, 1);
+      final r2 = addReviewExpectedIds(review1, 2, null);
 
       return <ReviewState>[
         ReviewLoading(),
-        ReviewLoaded(review: updatedReview1, isLast: false),
-        ReviewLoaded(review: updatedReview2, isLast: true),
+        ReviewLoaded(review: r1, isLast: false),
+        ReviewLoaded(review: r2, isLast: true),
       ];
     },
   );
@@ -80,17 +75,13 @@ void main() async {
       ..add(ReviewSessionUpdated(review: review1, quality: 4))
       ..add(ReviewSessionUpdated(review: review2, quality: 4)),
     expect: () {
-      final updatedReview1 = readingReviewWithWord;
-      updatedReview1.id = 1;
-      updatedReview1.word.target?.id = 1;
-
-      final updatedReview2 = review1;
-      updatedReview2.id = 2;
+      final r1 = addReviewExpectedIds(readingReviewWithWord, 1, 1);
+      final r2 = addReviewExpectedIds(review1, 2, null);
 
       return <ReviewState>[
         ReviewLoading(),
-        ReviewLoaded(review: updatedReview1, isLast: false),
-        ReviewLoaded(review: updatedReview2, isLast: true),
+        ReviewLoaded(review: r1, isLast: false),
+        ReviewLoaded(review: r2, isLast: true),
         ReviewFinished(),
       ];
     },

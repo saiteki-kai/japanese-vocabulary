@@ -6,6 +6,7 @@ import 'package:japanese_vocabulary/data/models/word.dart';
 import 'package:japanese_vocabulary/data/repositories/word_repository.dart';
 import 'package:japanese_vocabulary/objectbox.g.dart';
 
+import '../test/utils/db.dart';
 import '../test/utils/params.dart';
 
 void main() async {
@@ -45,18 +46,9 @@ void main() async {
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(const WordsRetrieved()),
     expect: () {
-      final w1 = word1;
-      w1.id = 1;
-      w1.meaningReview.targetId = 1;
-      w1.readingReview.targetId = 2;
-      final w2 = word2;
-      w2.id = 2;
-      w2.meaningReview.targetId = 3;
-      w2.readingReview.targetId = 4;
-      final w3 = word3;
-      w3.id = 3;
-      w3.meaningReview.targetId = 5;
-      w3.readingReview.targetId = 6;
+      final w1 = addWordExpectedIds(word1, 1, 1, 2);
+      final w2 = addWordExpectedIds(word2, 2, 3, 4);
+      final w3 = addWordExpectedIds(word3, 3, 5, 6);
 
       return <WordState>[
         WordLoading(),
@@ -81,10 +73,7 @@ void main() async {
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(const WordsRetrieved(search: "習")),
     expect: () {
-      final word = word2;
-      word.id = 2;
-      word.meaningReview.targetId = 3;
-      word.readingReview.targetId = 4;
+      final word = addWordExpectedIds(word2, 2, 3, 4);
 
       return <WordState>[
         WordLoading(),
@@ -110,15 +99,8 @@ void main() async {
     setUp: setUpWithWords2,
     act: (bloc) => bloc.add(const WordsRetrieved(search: "gracia")),
     expect: () {
-      final w1 = word5;
-      w1.id = 3;
-      w1.meaningReview.targetId = 5;
-      w1.readingReview.targetId = 6;
-
-      final w2 = word6;
-      w2.id = 5;
-      w2.meaningReview.targetId = 9;
-      w2.readingReview.targetId = 10;
+      final w1 = addWordExpectedIds(word5, 3, 5, 6);
+      final w2 = addWordExpectedIds(word6, 5, 9, 10);
 
       return <WordState>[
         WordLoading(),
@@ -133,10 +115,7 @@ void main() async {
     build: () => bloc,
     act: (bloc) => bloc.add(WordAdded(word: word1)),
     expect: () {
-      final word = word1;
-      word.id = 1;
-      word.meaningReview.targetId = 1;
-      word.readingReview.targetId = 2;
+      final word = addWordExpectedIds(word1, 1, 1, 2);
 
       return <WordState>[
         WordsLoaded(words: [word]),
@@ -151,10 +130,7 @@ void main() async {
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(WordAdded(word: word4)),
     expect: () {
-      final word = word4;
-      word.id = 4;
-      word.meaningReview.targetId = 7;
-      word.readingReview.targetId = 8;
+      final word = addWordExpectedIds(word4, 4, 7, 8);
 
       return <WordState>[
         WordsLoaded(words: [word]),
@@ -180,15 +156,8 @@ void main() async {
       bloc.add(WordAdded(word: word2)),
     },
     expect: () {
-      final w1 = word1;
-      w1.id = 1;
-      w1.meaningReview.targetId = 1;
-      w1.readingReview.targetId = 2;
-
-      final w2 = word2;
-      w2.id = 2;
-      w2.meaningReview.targetId = 3;
-      w2.readingReview.targetId = 4;
+      final w1 = addWordExpectedIds(word1, 1, 1, 2);
+      final w2 = addWordExpectedIds(word2, 2, 3, 4);
 
       return <WordState>[
         WordsLoaded(words: [w1]),
@@ -207,15 +176,8 @@ void main() async {
       bloc.add(WordAdded(word: word5)),
     },
     expect: () {
-      final w1 = word4;
-      w1.id = 4;
-      w1.meaningReview.targetId = 7;
-      w1.readingReview.targetId = 8;
-
-      final w2 = word5;
-      w2.id = 5;
-      w2.meaningReview.targetId = 9;
-      w2.readingReview.targetId = 10;
+      final w1 = addWordExpectedIds(word4, 4, 7, 8);
+      final w2 = addWordExpectedIds(word5, 5, 9, 10);
 
       return <WordState>[
         WordsLoaded(words: [w1]),
