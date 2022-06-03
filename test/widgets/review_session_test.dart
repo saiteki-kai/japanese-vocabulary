@@ -33,7 +33,7 @@ void main() {
     when(() => bloc.state).thenReturn(ReviewInitial());
 
     // Provide a review for the test
-    final state = ReviewLoaded(review: review, isLast: isLast);
+    final state = ReviewLoaded(review: review, total: 0, isLast: isLast);
     when(() => bloc.state).thenReturn(state);
 
     await tester.pumpAndSettle();

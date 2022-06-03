@@ -47,7 +47,7 @@ void main() async {
     act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview, isLast: false),
+      ReviewLoaded(review: nullDateReview, total: 2, isLast: false),
     ],
     verify: (_) {
       verify(() => repo.getTodayReviews()).called(1);
@@ -64,8 +64,8 @@ void main() async {
       ..add(ReviewSessionUpdated(review: review1, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview, isLast: false),
-      ReviewLoaded(review: review1, isLast: true),
+      ReviewLoaded(review: nullDateReview, total: 2, isLast: false),
+      ReviewLoaded(review: review1, total: 2, isLast: true),
     ],
     verify: (_) {
       verify(() => repo.getTodayReviews()).called(1);
@@ -83,8 +83,8 @@ void main() async {
       ..add(ReviewSessionUpdated(review: review2, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview, isLast: false),
-      ReviewLoaded(review: review1, isLast: true),
+      ReviewLoaded(review: nullDateReview, total: 2, isLast: false),
+      ReviewLoaded(review: review1, total: 2, isLast: true),
       ReviewFinished(),
     ],
     verify: (_) {
@@ -100,7 +100,7 @@ void main() async {
     act: (bloc) => bloc..add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      const ReviewError(message: "Empty session, no reviews found."),
+      ReviewEmpty(),
     ],
     verify: (_) {
       verify(() => repo.getTodayReviews()).called(1);
