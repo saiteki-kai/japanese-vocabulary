@@ -13,6 +13,7 @@ class SentenceItem extends StatelessWidget {
   const SentenceItem({
     Key? key,
     required this.sentence,
+    required this.editCallback,
     required this.deleteCallback,
   }) : super(key: key);
 
@@ -20,6 +21,7 @@ class SentenceItem extends StatelessWidget {
   final Sentence sentence;
 
   final VoidCallback deleteCallback;
+  final VoidCallback editCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +58,14 @@ class SentenceItem extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+              ),
+              IconButton(
+                key: const Key("sentence-edit"),
+                onPressed: editCallback,
+                icon: const Icon(
+                  Icons.edit,
+                  color: Colors.black,
                 ),
               ),
               IconButton(

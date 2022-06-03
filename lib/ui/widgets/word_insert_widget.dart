@@ -6,6 +6,7 @@ import '../../bloc/word_bloc.dart';
 import '../../data/models/sentence.dart';
 import '../../data/models/word.dart';
 import 'screen_layout.dart';
+import 'sentence_dialog.dart';
 import 'sentence_item.dart';
 
 /// A widget that allows the user to add a new [Word] they want to learn.
@@ -64,14 +65,15 @@ class _WordInsertState extends State<WordInsert> {
   ];
 
   WordBloc? _bloc;
-  final TextEditingController _textController = TextEditingController();
-  final TextEditingController _readingController = TextEditingController();
-  final TextEditingController _meaningController = TextEditingController();
-  final TextEditingController _sentenceTextController = TextEditingController();
-  final TextEditingController _sentenceTranslationController =
-      TextEditingController();
-  final GroupButtonController _posController = GroupButtonController();
-  final GroupButtonController _jlptController = GroupButtonController();
+  final _textController = TextEditingController();
+  final _readingController = TextEditingController();
+  final _meaningController = TextEditingController();
+  final _sentenceTextController = TextEditingController();
+  final _sentenceTranslationController = TextEditingController();
+  final _posController = GroupButtonController();
+  final _jlptController = GroupButtonController();
+  final _sentenceEditTextController = TextEditingController();
+  final _sentenceEditTranslationController = TextEditingController();
 
   @override
   void initState() {
@@ -248,6 +250,19 @@ class _WordInsertState extends State<WordInsert> {
                               itemBuilder: (context, index) {
                                 return SentenceItem(
                                   sentence: _sentences[index],
+                                  editCallback: () => showSentenceDialog(
+                                    context,
+                                    "Edit this example sentence",
+                                    _sentenceEditTextController,
+                                    _sentenceEditTranslationController,
+                                    () {
+                                      _sentenceEditTextController.text =
+                                          _sentences[index].text;
+                                      _sentenceEditTranslationController.text =
+                                          _sentences[index].translation;
+                                      _onEditSentencePressed(index);
+                                    },
+                                  ),
                                   deleteCallback: () => _onDeletePressed(index),
                                 );
                               },
@@ -264,6 +279,23 @@ class _WordInsertState extends State<WordInsert> {
         ),
       ),
     );
+  }
+
+  void _onEditSentencePressed(int index) {
+    final text = _sentenceEditTextController.text;
+    final translation = _sentenceEditTranslationController.text;
+    final noEqualSentences =
+        _sentences.every((element) => element.text != text);
+    if (text.isNotEmpty && translation.isNotEmpty && noEqualSentences) {
+      setState(() {
+        _sentences[index].text = text;
+        _sentences[index].translation = translation;
+      });
+
+      _sentenceEditTextController.clear();
+      _sentenceEditTranslationController.clear();
+      Navigator.pop(context);
+    }
   }
 
   void _onDeletePressed(int index) {

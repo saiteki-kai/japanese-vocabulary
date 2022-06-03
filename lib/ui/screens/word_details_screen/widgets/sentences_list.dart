@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../bloc/word_bloc.dart';
+import '../../../widgets/sentence_dialog.dart';
 import '../../../widgets/sentence_item.dart';
 import '../../../../data/models/sentence.dart';
 import '../../../../data/models/word.dart';
@@ -29,6 +30,8 @@ class SentencesList extends StatefulWidget {
 
 class _SentencesListState extends State<SentencesList> {
   WordBloc? _bloc;
+  final _sentenceTextController = TextEditingController();
+  final _sentenceTranslationController = TextEditingController();
 
   @override
   void initState() {
@@ -68,12 +71,33 @@ class _SentencesListState extends State<SentencesList> {
               itemCount: sentences.length,
               itemBuilder: (context, index) {
                 final Sentence sentence = sentences[index];
+                final word = widget.word;
 
                 return SentenceItem(
                   sentence: sentence,
+                  editCallback: () => showSentenceDialog(
+                    context,
+                    "Edit this example sentence",
+                    _sentenceTextController,
+                    _sentenceTranslationController,
+                    () => setState(() {
+                      _onEditSentencePressed(
+                        context,
+                        word,
+                        index,
+                        sentence,
+                      );
+                    }),
+                    sentence: sentence,
+                  ),
                   deleteCallback: () => _showAlertDialog(
                     context,
-                    () => _deleteCallback(widget.word, sentence),
+                    () => setState(() {
+                      _deleteCallback(
+                        word,
+                        index,
+                      );
+                    }),
                     continueText: "Delete",
                     title: "Would you like to delete this sentence?",
                     message: sentence.text,
@@ -91,13 +115,37 @@ class _SentencesListState extends State<SentencesList> {
     );
   }
 
-  void _deleteCallback(Word word, Sentence sentence) {
-    setState(() {
-      word.sentences.remove(sentence);
+  void _onEditSentencePressed(
+    BuildContext context,
+    Word word,
+    int index,
+    Sentence sentence,
+  ) {
+    final text = _sentenceTextController.text.trim();
+    final translation = _sentenceTranslationController.text.trim();
+    FocusScope.of(context).requestFocus(FocusNode());
+    final sentences = word.sentences;
+    final noEqualSentences = sentences.every((element) => element.text != text);
+
+    if (text.isNotEmpty && translation.isNotEmpty && noEqualSentences) {
+      sentence.text = text;
+      sentence.translation = translation;
+      final sentenceToEdit = word.sentences.elementAt(index);
+      sentenceToEdit.text = text;
+      sentenceToEdit.translation = translation;
+
       _bloc?.add(WordAdded(word: word));
-      _bloc?.add(WordRetrieved(wordId: word.id));
+      _sentenceTextController.clear();
+      _sentenceTranslationController.clear();
       Navigator.pop(context);
-    });
+    }
+  }
+
+  void _deleteCallback(Word word, int index) {
+    word.sentences.removeAt(index);
+    _bloc?.add(WordAdded(word: word));
+    _bloc?.add(WordRetrieved(wordId: word.id));
+    Navigator.pop(context);
   }
 }
 
