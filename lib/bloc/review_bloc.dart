@@ -37,9 +37,9 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
       _session.removeWhere((element) => true);
       _session.addAll(reviews);
 
-      emit(ReviewLoaded(review: _session[0], isLast: false));
+      emit(ReviewLoaded(review: _session[0], total: _session.length, isLast: false));
     } else {
-      emit(const ReviewError(message: "Empty session, no reviews found."));
+      emit(ReviewEmpty());
     }
   }
 
@@ -60,7 +60,7 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     if (_currentIndex < _session.length) {
       final isLast = _currentIndex == _session.length - 1;
 
-      emit(ReviewLoaded(review: _session[_currentIndex], isLast: isLast));
+      emit(ReviewLoaded(review: _session[_currentIndex], total: _session.length, isLast: isLast));
     } else {
       emit(ReviewFinished());
     }
