@@ -37,7 +37,7 @@ void main() async {
     expect(reviews.length, 0);
   });
 
-  test("get today's reviews", () async {
+  test("check number of today's reviews", () async {
     List<Review> reviews = await repo.getTodayReviews();
     expect(reviews.length, 2);
 
@@ -48,6 +48,26 @@ void main() async {
     box.removeAll();
     reviews = await repo.getReviews();
     expect(reviews.length, 0);
+  });
+
+  test("check today's reviews if no reviews exists", () async {
+    // if 0 reviews exist than should be that todayreviews.length == 0
+    box.removeAll();
+    final List<Review> reviews = await repo.getReviews();
+    expect(reviews.length, 0);
+
+    final List<Review> todayReviews = await repo.getTodayReviews();
+    expect(todayReviews.length, equals(0));
+  });
+
+  test("check today's reviews if some reviews exists", () async {
+    // if n reviews exist than should be that 0 <= todayreviews.length <= n
+    final List<Review> reviews = await repo.getReviews();
+    expect(reviews.length, greaterThan(0));
+
+    final List<Review> todayReviews = await repo.getTodayReviews();
+    expect(todayReviews.length, greaterThanOrEqualTo(0));
+    expect(todayReviews.length, lessThanOrEqualTo(reviews.length));
   });
 
   group("update a review", () {

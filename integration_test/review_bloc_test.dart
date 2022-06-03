@@ -73,7 +73,7 @@ void main() async {
   );
 
   blocTest<ReviewBloc, ReviewState>(
-    'emits [ReviewLoading, ReviewError] when ReviewSessionStarted is added and session is empty.',
+    'emits [ReviewLoading, ReviewEmpty] when ReviewSessionStarted is added and session is empty.',
     build: () => bloc,
     act: (bloc) => bloc..add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
