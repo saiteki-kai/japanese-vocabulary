@@ -96,7 +96,7 @@ class Review extends Equatable {
       incorrectAnswers,
       nextDate,
       type,
-      word.target,
+      word.targetId,
     ];
   }
 

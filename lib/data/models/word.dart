@@ -114,8 +114,8 @@ class Word extends Equatable {
         meaning,
         pos,
         sentences,
-        readingReview.target,
-        meaningReview.target,
+        readingReview.targetId,
+        meaningReview.targetId,
       ];
 
   @override

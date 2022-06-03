@@ -31,10 +31,8 @@ class Sentence extends Equatable {
   }
 
   @override
-  String toString() {
-    return 'Sentence(id: $id, text: $text, translation: $translation)';
-  }
+  List<Object?> get props => [id, text, translation];
 
   @override
-  List<Object?> get props => [id, text, translation];
+  bool? get stringify => true;
 }
