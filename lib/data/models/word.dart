@@ -106,11 +106,6 @@ class Word extends Equatable {
   }
 
   @override
-  String toString() {
-    return 'Word(id: $id, text: $text, reading: $reading, jlpt: $jlpt, meaning: $meaning, pos: $pos, sentences: $sentences)';
-  }
-
-  @override
   List<Object?> get props => [
         id,
         text,
@@ -122,6 +117,9 @@ class Word extends Equatable {
         readingReview.target,
         meaningReview.target,
       ];
+
+  @override
+  bool? get stringify => true;
 
   static int _sortByNextReview(Word a, Word b) {
     const maxMilliseconds = 8640000000000000;

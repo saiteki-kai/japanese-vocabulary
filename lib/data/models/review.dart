@@ -86,11 +86,6 @@ class Review extends Equatable {
   }
 
   @override
-  String toString() {
-    return 'Review(id: $id, ef: $ef, interval: $interval, repetition: $repetition, correctAnswers: $correctAnswers, incorrectAnswers: $incorrectAnswers, nextDate: $nextDate, type: $type)';
-  }
-
-  @override
   List<Object?> get props {
     return [
       id,
@@ -104,4 +99,7 @@ class Review extends Equatable {
       word.target,
     ];
   }
+
+  @override
+  bool? get stringify => true;
 }
