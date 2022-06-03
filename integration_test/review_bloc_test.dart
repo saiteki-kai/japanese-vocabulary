@@ -26,7 +26,7 @@ void main() async {
   });
 
   setUpWithReviews() {
-    repo.updateReview(meaningReviewWithWord);
+    repo.updateReview(readingReviewWithWord);
     repo.updateReview(review1);
     repo.updateReview(review2);
   }
@@ -36,10 +36,16 @@ void main() async {
     build: () => bloc,
     setUp: setUpWithReviews,
     act: (bloc) => bloc.add(ReviewSessionStarted()),
-    expect: () => <ReviewState>[
-      ReviewLoading(),
-      ReviewLoaded(review: meaningReviewWithWord..id = 1, isLast: false),
-    ],
+    expect: () {
+      final updatedReview = readingReviewWithWord;
+      updatedReview.id = 1;
+      updatedReview.word.target?.id = 1;
+
+      return <ReviewState>[
+        ReviewLoading(),
+        ReviewLoaded(review: updatedReview, isLast: false),
+      ];
+    },
   );
 
   blocTest<ReviewBloc, ReviewState>(
@@ -49,27 +55,45 @@ void main() async {
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
       ..add(ReviewSessionUpdated(review: review1, quality: 4)),
-    expect: () => <ReviewState>[
-      ReviewLoading(),
-      ReviewLoaded(review: meaningReviewWithWord..id = 1, isLast: false),
-      ReviewLoaded(review: review1..id = 2, isLast: true),
-    ],
+    expect: () {
+      final updatedReview1 = readingReviewWithWord;
+      updatedReview1.id = 1;
+      updatedReview1.word.target?.id = 1;
+
+      final updatedReview2 = review1;
+      updatedReview2.id = 2;
+
+      return <ReviewState>[
+        ReviewLoading(),
+        ReviewLoaded(review: updatedReview1, isLast: false),
+        ReviewLoaded(review: updatedReview2, isLast: true),
+      ];
+    },
   );
 
   blocTest<ReviewBloc, ReviewState>(
-    'emits [ReviewLoaded, ReviewLoaded] when ReviewSessionUpdated is added.',
+    'emits [ReviewLoaded, ReviewLoaded, ReviewFinished] when ReviewSessionUpdated is added.',
     build: () => bloc,
     setUp: setUpWithReviews,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
       ..add(ReviewSessionUpdated(review: review1, quality: 4))
       ..add(ReviewSessionUpdated(review: review2, quality: 4)),
-    expect: () => <ReviewState>[
-      ReviewLoading(),
-      ReviewLoaded(review: meaningReviewWithWord..id = 1, isLast: false),
-      ReviewLoaded(review: review1..id = 2, isLast: true),
-      ReviewFinished(),
-    ],
+    expect: () {
+      final updatedReview1 = readingReviewWithWord;
+      updatedReview1.id = 1;
+      updatedReview1.word.target?.id = 1;
+
+      final updatedReview2 = review1;
+      updatedReview2.id = 2;
+
+      return <ReviewState>[
+        ReviewLoading(),
+        ReviewLoaded(review: updatedReview1, isLast: false),
+        ReviewLoaded(review: updatedReview2, isLast: true),
+        ReviewFinished(),
+      ];
+    },
   );
 
   blocTest<ReviewBloc, ReviewState>(
