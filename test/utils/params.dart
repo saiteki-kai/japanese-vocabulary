@@ -218,6 +218,7 @@ Review createReviewByDate(
 
 Review get nullDateReview => createReviewByDate(null);
 Review get nowReview => createReviewByDate(DateTime.now());
+Review get review0 => createReviewByDate(DateTime(DateTime.now().year - 2));
 Review get review1 => createReviewByDate(DateTime(DateTime.now().year - 1));
 Review get review2 => createReviewByDate(DateTime(DateTime.now().year + 1));
 

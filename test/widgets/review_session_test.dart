@@ -33,7 +33,12 @@ void main() {
     when(() => bloc.state).thenReturn(ReviewInitial());
 
     // Provide a review for the test
-    final state = ReviewLoaded(review: review, isLast: isLast);
+    final state = ReviewLoaded(
+      review: review,
+      current: 1,
+      total: 1,
+      isLast: isLast,
+    );
     when(() => bloc.state).thenReturn(state);
 
     await tester.pumpAndSettle();
@@ -370,7 +375,6 @@ void main() {
   });
 
   group('meaning hint', () {
-
     testWidgets("no hint asked and answer hidden", (WidgetTester tester) async {
       await setUpWidget(tester, meaningReviewWithWord);
 
@@ -466,5 +470,4 @@ void main() {
       expectOnHintAsked(groupButtonFinder, 0, hintText, [4, 5]);
     });
   });
-
 }
