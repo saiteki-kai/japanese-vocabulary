@@ -14,6 +14,7 @@ import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/rev
 import 'package:japanese_vocabulary/ui/screens/review_session_screen/widgets/show_button.dart';
 import 'package:japanese_vocabulary/ui/widgets/loading_indicator.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../utils/mocks.dart';
 import '../utils/params.dart';
@@ -29,17 +30,22 @@ void main() {
     bloc.close();
   });
 
-  setUpWidget(WidgetTester tester, Review review, {bool isLast = false}) async {
-    when(() => bloc.state).thenReturn(ReviewInitial());
-
-    // Provide a review for the test
-    final state = ReviewLoaded(
-      review: review,
-      current: 1,
-      total: 1,
-      isLast: isLast,
+  setUpWidget(
+    WidgetTester tester,
+    Review review, {
+    bool isLast = false,
+    int current = 1,
+    int total = 1,
+  }) async {
+    // Provide a review for the tests
+    when(() => bloc.state).thenReturn(
+      ReviewLoaded(
+        review: review,
+        current: current,
+        total: total,
+        isLast: isLast,
+      ),
     );
-    when(() => bloc.state).thenReturn(state);
 
     await tester.pumpAndSettle();
 
@@ -264,6 +270,32 @@ void main() {
     verify(() {
       bloc.add(ReviewSessionUpdated(review: review, quality: 4));
     }).called(1);
+  });
+
+  group("progress bar", () {
+    testWidgets("1 review out of 1", (WidgetTester tester) async {
+      await setUpWidget(tester, readingReviewWithWord);
+
+      expect(find.text("1/1"), findsOneWidget);
+
+      final progressFinder = find.byType(LinearPercentIndicator);
+      expect(progressFinder, findsOneWidget);
+
+      final LinearPercentIndicator indicator = tester.widget(progressFinder);
+      expect(indicator.percent, equals(1 / 1));
+    });
+
+    testWidgets("2 review out of 3", (WidgetTester tester) async {
+      await setUpWidget(tester, readingReviewWithWord, current: 2, total: 3);
+
+      expect(find.text("2/3"), findsOneWidget);
+
+      final progressFinder = find.byType(LinearPercentIndicator);
+      expect(progressFinder, findsOneWidget);
+
+      final LinearPercentIndicator indicator = tester.widget(progressFinder);
+      expect(indicator.percent, equals(2 / 3));
+    });
   });
 
   group('reading hint', () {
