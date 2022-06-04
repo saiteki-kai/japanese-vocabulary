@@ -248,20 +248,22 @@ class _WordInsertState extends State<WordInsert> {
                               ),
                               itemCount: _sentences.length,
                               itemBuilder: (context, index) {
+                                final sentence = _sentences[index];
+
                                 return SentenceItem(
-                                  sentence: _sentences[index],
+                                  sentence: sentence,
                                   editCallback: () => showSentenceDialog(
                                     context,
                                     "Edit this example sentence",
                                     _sentenceEditTextController,
                                     _sentenceEditTranslationController,
-                                    () {
-                                      _sentenceEditTextController.text =
-                                          _sentences[index].text;
-                                      _sentenceEditTranslationController.text =
-                                          _sentences[index].translation;
-                                      _onEditSentencePressed(index);
-                                    },
+                                    () => setState(() {
+                                      _onEditSentencePressed(
+                                        index,
+                                        sentence.text,
+                                      );
+                                    }),
+                                    sentence: sentence,
                                   ),
                                   deleteCallback: () => _onDeletePressed(index),
                                 );
@@ -281,17 +283,14 @@ class _WordInsertState extends State<WordInsert> {
     );
   }
 
-  void _onEditSentencePressed(int index) {
+  void _onEditSentencePressed(int index, String oldText) {
     final text = _sentenceEditTextController.text;
     final translation = _sentenceEditTranslationController.text;
     final noEqualSentences =
-        _sentences.every((element) => element.text != text);
+        _sentences.every((element) => element.text != text) || oldText == text;
     if (text.isNotEmpty && translation.isNotEmpty && noEqualSentences) {
-      setState(() {
-        _sentences[index].text = text;
-        _sentences[index].translation = translation;
-      });
-
+      _sentences[index].text = text;
+      _sentences[index].translation = translation;
       _sentenceEditTextController.clear();
       _sentenceEditTranslationController.clear();
       Navigator.pop(context);

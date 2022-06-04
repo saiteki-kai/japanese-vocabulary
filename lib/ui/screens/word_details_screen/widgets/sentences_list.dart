@@ -125,7 +125,9 @@ class _SentencesListState extends State<SentencesList> {
     final translation = _sentenceTranslationController.text.trim();
     FocusScope.of(context).requestFocus(FocusNode());
     final sentences = word.sentences;
-    final noEqualSentences = sentences.every((element) => element.text != text);
+    final noEqualSentences =
+        sentences.every((element) => element.text != text) ||
+            sentence.text == text;
 
     if (text.isNotEmpty && translation.isNotEmpty && noEqualSentences) {
       sentence.text = text;
