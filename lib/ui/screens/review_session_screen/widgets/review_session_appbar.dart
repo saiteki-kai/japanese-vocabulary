@@ -40,19 +40,18 @@ class ReviewSessionAppBar extends StatelessWidget {
                     .titleMedium
                     ?.copyWith(color: Colors.white),
               ),
+              // ignore: avoid-wrapping-in-padding, the wrapped widget does not allow vertical padding
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 16.0,
-                ),
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: LinearPercentIndicator(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   lineHeight: 10.0,
                   percent: total == 0 ? 0 : current / total,
                   barRadius: const Radius.circular(8.0),
                   backgroundColor: Colors.black.withOpacity(0.1),
                   progressColor: Colors.amber,
                 ),
-              )
+              ),
             ],
           ),
         ),
