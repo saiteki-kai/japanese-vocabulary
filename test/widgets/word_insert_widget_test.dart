@@ -275,5 +275,116 @@ void main() {
 
     expect(deleteBtnFinder, findsOneWidget);
   });
+
+  testWidgets("valid sentence editing", (WidgetTester tester) async {
+    final state = WordInitial();
+    when(() => bloc.state).thenReturn(state);
+
+    await setUpWidget(tester, wordSentences);
+
+    final sentenceItemFinder = find.byType(SentenceItem);
+    expect(sentenceItemFinder, findsNWidgets(2));
+
+    SentenceItem firstSentenceItem =
+        tester.widgetList(sentenceItemFinder).first as SentenceItem;
+
+    final scrollView = find.byType(SingleChildScrollView);
+    await tester.dragUntilVisible(
+        sentenceItemFinder.last, scrollView, const Offset(-250, 0));
+
+    String firstSentenceText = firstSentenceItem.sentence.text;
+    expect(firstSentenceText, "text1");
+
+    final editBtnFinder = find.byKey(const Key("sentence-edit"));
+    expect(editBtnFinder, findsNWidgets(2));
+
+    await tester.tap(editBtnFinder.first);
+    await tester.pumpAndSettle();
+
+    final sentenceEditBtnFinder = find.byKey(const Key("sentence-button-d"));
+    expect(sentenceEditBtnFinder, findsOneWidget);
+
+    final textFinder = find.byKey(const Key("sentence-text-d"));
+    final textWidget = tester.widget(textFinder) as TextField;
+    textWidget.controller?.text = "ABC";
+
+    await tester.tap(sentenceEditBtnFinder);
+    await tester.pumpAndSettle();
+
+    firstSentenceItem =
+        tester.widgetList(sentenceItemFinder).first as SentenceItem;
+    firstSentenceText = firstSentenceItem.sentence.text;
+    expect(firstSentenceText, "ABC");
+  });
+
+  testWidgets("invalid sentence editing", (WidgetTester tester) async {
+    final word = wordSentences;
+    final state = WordLoaded(word: word);
+
+    when(() => bloc.state).thenReturn(state);
+
+    await setUpWidget(tester, word);
+
+    final sentenceItemFinder = find.byType(SentenceItem);
+    expect(sentenceItemFinder, findsNWidgets(2));
+
+    SentenceItem firstSentenceItem =
+        tester.widgetList(sentenceItemFinder).first as SentenceItem;
+
+    final scrollView = find.byType(SingleChildScrollView);
+    await tester.dragUntilVisible(
+        sentenceItemFinder.last, scrollView, const Offset(-250, 0));
+
+    String firstSentenceText = firstSentenceItem.sentence.text;
+    String firstSentenceTranslation = firstSentenceItem.sentence.translation;
+    expect(firstSentenceText, "text1");
+    expect(firstSentenceTranslation, "translation1");
+
+    final editBtnFinder = find.byKey(const Key("sentence-edit"));
+    expect(editBtnFinder, findsNWidgets(2));
+
+    await tester.tap(editBtnFinder.first);
+    await tester.pumpAndSettle();
+
+    final sentenceEditBtnFinder = find.byKey(const Key("sentence-button-d"));
+    expect(sentenceEditBtnFinder, findsOneWidget);
+
+    final textFinder = find.byKey(const Key("sentence-text-d"));
+    final textWidget = tester.widget(textFinder) as TextField;
+    final translationFinder = find.byKey(const Key("sentence-translation-d"));
+    final translationWidget = tester.widget(translationFinder) as TextField;
+
+    // Case: duplicated sentence
+    textWidget.controller?.text = "text2";
+
+    await tester.tap(sentenceEditBtnFinder);
+    await tester.pumpAndSettle();
+
+    firstSentenceItem =
+        tester.widgetList(sentenceItemFinder).first as SentenceItem;
+    firstSentenceText = firstSentenceItem.sentence.text;
+    expect(firstSentenceText, "text1");
+
+    // Case: empty text
+    textWidget.controller?.text = "";
+
+    await tester.tap(sentenceEditBtnFinder);
+    await tester.pumpAndSettle();
+
+    firstSentenceItem =
+        tester.widgetList(sentenceItemFinder).first as SentenceItem;
+    firstSentenceText = firstSentenceItem.sentence.text;
+    expect(firstSentenceText, "text1");
+
+    // Case: empty translation
+    translationWidget.controller?.text = "";
+
+    await tester.tap(sentenceEditBtnFinder);
+    await tester.pumpAndSettle();
+
+    firstSentenceItem =
+        tester.widgetList(sentenceItemFinder).first as SentenceItem;
+    firstSentenceTranslation = firstSentenceItem.sentence.translation;
+    expect(firstSentenceTranslation, "translation1");
+  });
 }
- 
