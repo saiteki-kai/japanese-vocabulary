@@ -38,7 +38,7 @@ void main() async {
     act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview..id = 1, total: 0, isLast: false),
+      ReviewLoaded(review: nullDateReview..id = 1, total: 2, isLast: false),
     ],
   );
 
@@ -51,8 +51,8 @@ void main() async {
       ..add(ReviewSessionUpdated(review: review1, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview..id = 1, total: 0, isLast: false),
-      ReviewLoaded(review: review1..id = 2, total: 0, isLast: true),
+      ReviewLoaded(review: nullDateReview..id = 1, total: 2, isLast: false),
+      ReviewLoaded(review: review1..id = 2, total: 2, isLast: true),
     ],
   );
 
@@ -66,8 +66,8 @@ void main() async {
       ..add(ReviewSessionUpdated(review: review2, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview..id = 1, total: 0, isLast: false),
-      ReviewLoaded(review: review1..id = 2, total: 0, isLast: true),
+      ReviewLoaded(review: nullDateReview..id = 1, total: 2, isLast: false),
+      ReviewLoaded(review: review1..id = 2, total: 2, isLast: true),
       ReviewFinished(),
     ],
   );
