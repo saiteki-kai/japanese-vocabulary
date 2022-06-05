@@ -37,11 +37,13 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
       _session.removeWhere((element) => true);
       _session.addAll(reviews);
 
-      emit(ReviewLoaded(
-        review: _session[0],
-        total: _session.length,
-        isLast: false,
-      ));
+      if (_validWord(emit, _session[0])) {
+        emit(ReviewLoaded(
+          review: _session[0],
+          total: _session.length,
+          isLast: false,
+        ));
+      }
     } else {
       emit(ReviewEmpty());
     }
@@ -64,13 +66,27 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     if (_currentIndex < _session.length) {
       final isLast = _currentIndex == _session.length - 1;
 
-      emit(ReviewLoaded(
-        review: _session[_currentIndex],
-        total: _session.length,
-        isLast: isLast,
-      ));
+      final nextReview = _session[_currentIndex];
+
+      if (_validWord(emit, nextReview)) {
+        emit(ReviewLoaded(
+          review: nextReview,
+          total: _session.length,
+          isLast: isLast,
+        ));
+      }
     } else {
       emit(ReviewFinished());
     }
+  }
+
+  _validWord(Emitter<ReviewState> emit, Review review) {
+    final valid = review.word.target != null;
+
+    if (!valid) {
+      emit(const ReviewError(message: "missing word"));
+    }
+
+    return valid;
   }
 }

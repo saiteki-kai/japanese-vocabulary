@@ -16,7 +16,11 @@ class ReviewLoading extends ReviewState {}
 class ReviewLoaded extends ReviewState {
   /// Creates a [ReviewState] with [review] to return and a boolean value
   /// [isLast] to specify whether [review] is the last one in the session.
-  const ReviewLoaded({required this.review, required this.total, required this.isLast});
+  const ReviewLoaded({
+    required this.review,
+    required this.total,
+    required this.isLast,
+  });
 
   /// The next [review] in the session.
   final Review review;
@@ -32,6 +36,19 @@ class ReviewLoaded extends ReviewState {
 
 /// A [ReviewState] to indicate when the list of reviews is empty.
 class ReviewEmpty extends ReviewState {}
+
+/// A [ReviewState] to handle errors.
+class ReviewError extends ReviewState {
+  /// Creates a [ReviewState] to handle errors. A [message] is required to
+  /// specify information about the error.
+  const ReviewError({required this.message});
+
+  /// A message to specify information about the error.
+  final String message;
+
+  @override
+  List<Object> get props => [message];
+}
 
 /// A [ReviewState] to indicate when the session has ended.
 class ReviewFinished extends ReviewState {}
