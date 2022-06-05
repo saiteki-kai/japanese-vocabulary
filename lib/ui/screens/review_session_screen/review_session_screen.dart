@@ -122,6 +122,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
 
   Future<bool> _onWillPop() async {
     _bloc?.add(ReviewSessionStarted());
+
     return true;
   }
 

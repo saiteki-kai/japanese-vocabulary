@@ -17,6 +17,7 @@ class ReviewScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is ReviewLoaded || state is ReviewEmpty) {
             final total = state is ReviewLoaded ? state.total : 0;
+
             return Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
