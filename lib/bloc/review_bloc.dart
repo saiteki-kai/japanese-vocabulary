@@ -64,7 +64,6 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     await repository.updateReview(review);
 
     _currentIndex = _currentIndex + 1;
-    print(_currentIndex);
 
     if (_currentIndex < _session.length) {
       final isLast = _currentIndex == _session.length - 1;
