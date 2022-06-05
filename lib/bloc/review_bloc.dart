@@ -29,12 +29,14 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     ReviewSessionStarted _,
     Emitter<ReviewState> emit,
   ) async {
+    _currentIndex = 0;
+    _session.removeWhere((_) => true);
+
     emit(ReviewLoading());
 
     final reviews = await repository.getTodayReviews();
 
     if (reviews.isNotEmpty) {
-      _session.removeWhere((element) => true);
       _session.addAll(reviews);
 
       if (_validWord(emit, _session[0])) {
@@ -62,6 +64,7 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     await repository.updateReview(review);
 
     _currentIndex = _currentIndex + 1;
+    print(_currentIndex);
 
     if (_currentIndex < _session.length) {
       final isLast = _currentIndex == _session.length - 1;
