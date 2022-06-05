@@ -43,6 +43,14 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   /// The initial value is set to [Hint.empty].
   final _hint = ValueNotifier<Hint>(Hint.empty());
 
+  ReviewBloc? _bloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = BlocProvider.of<ReviewBloc>(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -56,7 +64,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
                 final word = state.review.word.target;
 
                 if (word == null) {
-                  return const Text("Error");
+                  return const SizedBox();
                 }
 
                 // Initialize the value based on the reading of the word
@@ -113,18 +121,18 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   }
 
   Future<bool> _onWillPop() async {
-    BlocProvider.of<ReviewBloc>(context).add(ReviewSessionStarted());
+    _bloc?.add(ReviewSessionStarted());
     return true;
   }
 
   /// Defines when to build the widget.
-  bool _reviewBlocBuildWhen(ReviewState before, ReviewState after) {
-    return before is! ReviewFinished;
+  bool _reviewBlocBuildWhen(ReviewState before, ReviewState _) {
+    return !(before is ReviewFinished || before is ReviewError);
   }
 
   /// When there is an error returns to the home page.
   void _reviewBlocListener(BuildContext context, ReviewState state) {
-    if (state is ReviewFinished) {
+    if (state is ReviewFinished || state is ReviewError) {
       AutoRouter.of(context).pop();
     }
   }
@@ -133,8 +141,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   ///
   /// The [_hideAnswer] and [_selectedQuality] are reset.
   void _nextReview(Review review, int quality) {
-    final _bloc = BlocProvider.of<ReviewBloc>(context);
-    _bloc.add(ReviewSessionUpdated(review: review, quality: quality));
+    _bloc?.add(ReviewSessionUpdated(review: review, quality: quality));
 
     _hideAnswer.value = true;
     _selectedQuality.value = -1;

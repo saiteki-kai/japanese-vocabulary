@@ -12,16 +12,12 @@ void main() async {
   late ReviewRepository repo;
 
   void setUpEmpty() {
-    when(repo.getReviews).thenAnswer((_) async => []);
     when(repo.getTodayReviews).thenAnswer((_) async => []);
   }
 
   void setUpWithReviews() {
-    when(repo.getReviews).thenAnswer((_) async {
-      return [nullDateReview, review1, review2];
-    });
     when(repo.getTodayReviews).thenAnswer((_) async {
-      return [nullDateReview, review1];
+      return [meaningReviewWithWord, readingReviewWithWord];
     });
   }
 
@@ -47,7 +43,7 @@ void main() async {
     act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview, total: 2, isLast: false),
+      ReviewLoaded(review: meaningReviewWithWord, total: 2, isLast: false),
     ],
     verify: (_) {
       verify(() => repo.getTodayReviews()).called(1);
@@ -61,11 +57,11 @@ void main() async {
     setUp: setUpWithReviews,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
-      ..add(ReviewSessionUpdated(review: review1, quality: 4)),
+      ..add(ReviewSessionUpdated(review: meaningReviewWithWord, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview, total: 2, isLast: false),
-      ReviewLoaded(review: review1, total: 2, isLast: true),
+      ReviewLoaded(review: meaningReviewWithWord, total: 2, isLast: false),
+      ReviewLoaded(review: readingReviewWithWord, total: 2, isLast: true),
     ],
     verify: (_) {
       verify(() => repo.getTodayReviews()).called(1);
@@ -74,17 +70,17 @@ void main() async {
   );
 
   blocTest<ReviewBloc, ReviewState>(
-    'emits [ReviewLoaded, ReviewLoaded, ReviewLoaded, ReviewFinished] when ReviewSessionUpdated is added twice and the session is finished.',
+    'emits [ReviewLoaded, ReviewLoaded, ReviewLoaded] when ReviewSessionUpdated is added twice and the session is finished.',
     build: () => bloc,
     setUp: setUpWithReviews,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
-      ..add(ReviewSessionUpdated(review: review1, quality: 4))
-      ..add(ReviewSessionUpdated(review: review2, quality: 4)),
+      ..add(ReviewSessionUpdated(review: meaningReviewWithWord, quality: 4))
+      ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview, total: 2, isLast: false),
-      ReviewLoaded(review: review1, total: 2, isLast: true),
+      ReviewLoaded(review: meaningReviewWithWord, total: 2, isLast: false),
+      ReviewLoaded(review: readingReviewWithWord, total: 2, isLast: true),
       ReviewFinished(),
     ],
     verify: (_) {
@@ -113,11 +109,47 @@ void main() async {
     build: () => bloc,
     setUp: setUpWithReviews,
     act: (bloc) => bloc.add(
-      ReviewSessionUpdated(review: review1, quality: 4),
+      ReviewSessionUpdated(review: readingReviewWithWord, quality: 4),
     ),
     expect: () => <ReviewState>[ReviewFinished()],
     verify: (_) {
       verify(() => repo.updateReview(any())).called(1);
+    },
+  );
+
+  blocTest<ReviewBloc, ReviewState>(
+    'emits [ReviewLoading, ReviewError] when the review have no valid word.',
+    build: () => bloc,
+    setUp: () {
+      when(repo.getTodayReviews).thenAnswer((_) async {
+        return [review1];
+      });
+    },
+    act: (bloc) => bloc.add(ReviewSessionStarted()),
+    expect: () => <ReviewState>[
+      ReviewLoading(),
+      const ReviewError(message: 'missing word'),
+    ],
+  );
+
+  blocTest<ReviewBloc, ReviewState>(
+    'emits [ReviewLoading, ReviewLoaded, ReviewError] when the review have no valid word.',
+    build: () => bloc,
+    setUp: () {
+      when(repo.getTodayReviews).thenAnswer((_) async {
+        return [readingReviewWithWord, review1];
+      });
+    },
+    act: (bloc) => bloc
+      ..add(ReviewSessionStarted())
+      ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4)),
+    expect: () => <ReviewState>[
+      ReviewLoading(),
+      ReviewLoaded(review: readingReviewWithWord, total: 2, isLast: false),
+      const ReviewError(message: 'missing word'),
+    ],
+    verify: (bloc) {
+      verify(repo.getTodayReviews).called(1);
     },
   );
 }

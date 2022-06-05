@@ -69,7 +69,7 @@ void main() {
   testWidgets("review without associated words", (WidgetTester tester) async {
     await setUpWidget(tester, review1);
 
-    expect(find.text("Error"), findsOneWidget);
+    expect(find.byType(ReviewItem), findsNothing);
   });
 
   testWidgets("check correct answer", (WidgetTester tester) async {
