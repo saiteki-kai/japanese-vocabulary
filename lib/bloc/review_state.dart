@@ -27,7 +27,7 @@ class ReviewLoaded extends ReviewState {
   final int total;
 
   @override
-  List<Object> get props => [review, isLast];
+  List<Object> get props => [review, total, isLast];
 }
 
 /// A [ReviewState] to indicate when the list of reviews is empty.
