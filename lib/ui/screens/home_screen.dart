@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/review_bloc.dart';
 import '../../bloc/word_bloc.dart';
 import '../../config/routes.gr.dart';
 import '../../data/models/word.dart';
@@ -51,9 +52,12 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _onTap(context, int index, tabsRouter) {
-    if (index == 1) {
+    if (index == 0) {
+      BlocProvider.of<ReviewBloc>(context).add(ReviewSessionStarted());
+    } else if (index == 1) {
       BlocProvider.of<WordBloc>(context).add(const WordsRetrieved());
     }
+
     tabsRouter.setActiveIndex(index);
   }
 }

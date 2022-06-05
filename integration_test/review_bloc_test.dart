@@ -26,8 +26,8 @@ void main() async {
   });
 
   setUpWithReviews() {
-    repo.updateReview(nullDateReview);
-    repo.updateReview(review1);
+    repo.updateReview(meaningReviewWithWord);
+    repo.updateReview(readingReviewWithWord);
     repo.updateReview(review2);
   }
 
@@ -38,7 +38,8 @@ void main() async {
     act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview..id = 1, isLast: false),
+      ReviewLoaded(
+          review: meaningReviewWithWord..id = 1, total: 2, isLast: false),
     ],
   );
 
@@ -48,37 +49,41 @@ void main() async {
     setUp: setUpWithReviews,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
-      ..add(ReviewSessionUpdated(review: review1, quality: 4)),
+      ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview..id = 1, isLast: false),
-      ReviewLoaded(review: review1..id = 2, isLast: true),
+      ReviewLoaded(
+          review: meaningReviewWithWord..id = 1, total: 2, isLast: false),
+      ReviewLoaded(
+          review: readingReviewWithWord..id = 2, total: 2, isLast: true),
     ],
   );
 
   blocTest<ReviewBloc, ReviewState>(
-    'emits [ReviewLoaded, ReviewLoaded] when ReviewSessionUpdated is added.',
+    'emits [ReviewLoaded, ReviewLoaded] when two ReviewSessionUpdated are added.',
     build: () => bloc,
     setUp: setUpWithReviews,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
-      ..add(ReviewSessionUpdated(review: review1, quality: 4))
+      ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4))
       ..add(ReviewSessionUpdated(review: review2, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: nullDateReview..id = 1, isLast: false),
-      ReviewLoaded(review: review1..id = 2, isLast: true),
+      ReviewLoaded(
+          review: meaningReviewWithWord..id = 1, total: 2, isLast: false),
+      ReviewLoaded(
+          review: readingReviewWithWord..id = 2, total: 2, isLast: true),
       ReviewFinished(),
     ],
   );
 
   blocTest<ReviewBloc, ReviewState>(
-    'emits [ReviewLoading, ReviewError] when ReviewSessionStarted is added and session is empty.',
+    'emits [ReviewLoading, ReviewEmpty] when ReviewSessionStarted is added and session is empty.',
     build: () => bloc,
     act: (bloc) => bloc..add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      const ReviewError(message: "Empty session, no reviews found."),
+      ReviewEmpty(),
     ],
   );
 
@@ -86,10 +91,41 @@ void main() async {
     'emits [ReviewFinished] when ReviewUpdated is added and ReviewRetrieved is not added previously.',
     build: () => bloc,
     setUp: setUpWithReviews,
-    act: (bloc) =>
-        bloc..add(ReviewSessionUpdated(review: review1..id = 1, quality: 4)),
+    act: (bloc) => bloc
+      ..add(ReviewSessionUpdated(
+          review: readingReviewWithWord..id = 1, quality: 4)),
     expect: () => <ReviewState>[
       ReviewFinished(),
+    ],
+  );
+
+  blocTest<ReviewBloc, ReviewState>(
+    'emits [ReviewLoading, ReviewError] when the review have no valid word.',
+    build: () => bloc,
+    setUp: () {
+      repo.updateReview(review1);
+    },
+    act: (bloc) => bloc..add(ReviewSessionStarted()),
+    expect: () => <ReviewState>[
+      ReviewLoading(),
+      const ReviewError(message: 'missing word'),
+    ],
+  );
+
+  blocTest<ReviewBloc, ReviewState>(
+    'emits [ReviewLoading, ReviewLoaded, ReviewError] when the review have no valid word.',
+    build: () => bloc,
+    setUp: () {
+      repo.updateReview(readingReviewWithWord);
+      repo.updateReview(review1);
+    },
+    act: (bloc) => bloc
+      ..add(ReviewSessionStarted())
+      ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4)),
+    expect: () => <ReviewState>[
+      ReviewLoading(),
+      ReviewLoaded(review: readingReviewWithWord..id = 1, total: 2, isLast: false),
+      const ReviewError(message: 'missing word'),
     ],
   );
 }

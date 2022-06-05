@@ -33,7 +33,7 @@ void main() {
     when(() => bloc.state).thenReturn(ReviewInitial());
 
     // Provide a review for the test
-    final state = ReviewLoaded(review: review, isLast: isLast);
+    final state = ReviewLoaded(review: review, total: 0, isLast: isLast);
     when(() => bloc.state).thenReturn(state);
 
     await tester.pumpAndSettle();
@@ -69,7 +69,7 @@ void main() {
   testWidgets("review without associated words", (WidgetTester tester) async {
     await setUpWidget(tester, review1);
 
-    expect(find.text("Error"), findsOneWidget);
+    expect(find.byType(ReviewItem), findsNothing);
   });
 
   testWidgets("check correct answer", (WidgetTester tester) async {
