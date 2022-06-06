@@ -33,29 +33,25 @@ class WordRepository {
       reading.word.target = word;
     }
 
-    final wordId = word.id;
-    final currentWord = wordId == 0 ? null : box.get(word.id);
+    final List<int> idsToRemove = [];
 
-    final newSentences = word.sentences;
-    sentenceBox.putMany(newSentences);
+    if (word.id != 0) {
+      final List<Sentence> sentences = box.get(word.id)?.sentences ?? [];
 
-    final id = box.put(word);
+      if (sentences.isNotEmpty) {
+        final newIds = word.sentences.map((Sentence e) => e.id).toSet();
+        final oldIds = sentences.map((e) => e.id).toSet();
 
-    final removedSentences = _removedSentences(currentWord, word);
-    sentenceBox.removeMany(removedSentences);
+        idsToRemove.addAll(oldIds.difference(newIds));
+      }
 
-    return id;
-  }
-
-  List<int> _removedSentences(Word? currentWord, Word updatedWord) {
-    if (currentWord != null) {
-      final currentIds = currentWord.sentences.map((s) => s.id).toSet();
-      final updatedIds = updatedWord.sentences.map((s) => s.id).toSet();
-
-      return currentIds.difference(updatedIds).toList();
+      word.sentences.forEach(sentenceBox.put);
     }
 
-    return [];
+    final id = box.put(word);
+    sentenceBox.removeMany(idsToRemove);
+
+    return id;
   }
 
   /// This method returns all the words in the repository.
