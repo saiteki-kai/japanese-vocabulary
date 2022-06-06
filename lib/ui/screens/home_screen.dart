@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../bloc/review_bloc.dart';
 import '../../bloc/word_bloc.dart';
 import '../../config/routes.gr.dart';
 import '../../data/models/word.dart';
+import '../widgets/floating_action_button.dart';
 
 /// Widget for the basic definition of the [WordScreen].
 ///
@@ -21,11 +23,12 @@ class HomeScreen extends StatelessWidget {
       ],
       builder: (context, child, animation) {
         final tabsRouter = AutoTabsRouter.of(context);
+
         return Scaffold(
           body: child,
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: tabsRouter.activeIndex,
-            onTap: (index) => _onTap(index, context, tabsRouter),
+            onTap: (index) => _onTap(context, index, tabsRouter),
             items: const [
               BottomNavigationBarItem(
                 label: 'Reviews',
@@ -37,27 +40,24 @@ class HomeScreen extends StatelessWidget {
               ),
             ],
           ),
-          floatingActionButton: tabsRouter.activeIndex == 1
-              ? Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FloatingActionButton(
-                    child: const Icon(Icons.add),
-                    backgroundColor: Colors.amber,
-                    onPressed: () {
-                      AutoRouter.of(context).push(const WordInsertScreen());
-                    },
-                  ),
-                )
-              : const SizedBox(),
+          floatingActionButton: floatingActionButton(
+            show: tabsRouter.activeIndex == 1,
+            onPressed: () {
+              AutoRouter.of(context).push(WordInsertScreen());
+            },
+          ),
         );
       },
     );
   }
 
-  void _onTap(int index, context, tabsRouter) {
-    if (index == 1) {
-      BlocProvider.of<WordBloc>(context).add(WordRetrieved());
+  void _onTap(context, int index, tabsRouter) {
+    if (index == 0) {
+      BlocProvider.of<ReviewBloc>(context).add(ReviewSessionStarted());
+    } else if (index == 1) {
+      BlocProvider.of<WordBloc>(context).add(const WordsRetrieved());
     }
+
     tabsRouter.setActiveIndex(index);
   }
 }

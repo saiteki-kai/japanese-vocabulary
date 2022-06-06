@@ -25,18 +25,32 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
   ///
   /// Returns the [ReviewLoaded] with the first review of the session.
   /// If the session is empty returns [ReviewError].
-  void _onSessionStarted(_, emit) async {
+  void _onSessionStarted(
+    ReviewSessionStarted _,
+    Emitter<ReviewState> emit,
+  ) async {
+    _currentIndex = 0;
+    _session.removeWhere((_) => true);
+
     emit(ReviewLoading());
 
     final reviews = await repository.getTodayReviews();
 
     if (reviews.isNotEmpty) {
-      _session.removeWhere((element) => true);
       _session.addAll(reviews);
 
-      emit(ReviewLoaded(review: _session[0], isLast: false));
+      if (_validWord(emit, _session[0])) {
+        emit(
+          ReviewLoaded(
+            review: _session[0],
+            current: 1,
+            total: _session.length,
+            isLast: false,
+          ),
+        );
+      }
     } else {
-      emit(const ReviewError(message: "Empty session, no reviews found."));
+      emit(ReviewEmpty());
     }
   }
 
@@ -45,7 +59,10 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
   ///
   /// Returns a [ReviewLoaded] with next word to review or [ReviewFinished]
   /// if the session has ended.
-  void _onSessionUpdated(ReviewSessionUpdated event, emit) async {
+  void _onSessionUpdated(
+    ReviewSessionUpdated event,
+    Emitter<ReviewState> emit,
+  ) async {
     final review = SM2.schedule(event.review, event.quality);
     await repository.updateReview(review);
 
@@ -54,9 +71,30 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     if (_currentIndex < _session.length) {
       final isLast = _currentIndex == _session.length - 1;
 
-      emit(ReviewLoaded(review: _session[_currentIndex], isLast: isLast));
+      final nextReview = _session[_currentIndex];
+
+      if (_validWord(emit, nextReview)) {
+        emit(
+          ReviewLoaded(
+            review: nextReview,
+            current: _currentIndex + 1,
+            total: _session.length,
+            isLast: isLast,
+          ),
+        );
+      }
     } else {
       emit(ReviewFinished());
     }
+  }
+
+  _validWord(Emitter<ReviewState> emit, Review review) {
+    final valid = review.word.target != null;
+
+    if (!valid) {
+      emit(const ReviewError(message: "missing word"));
+    }
+
+    return valid;
   }
 }

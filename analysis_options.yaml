@@ -29,6 +29,11 @@ dart_code_metrics:
     - prefer-extracting-callbacks
     - prefer-single-widget-per-file:
         ignore-private-widgets: true
+    - avoid-global-state
+    - avoid-unnecessary-type-assertions
+    - no-empty-block
+    - prefer-moving-to-variable
+    - prefer-trailing-comma
   anti-patterns:
     - long-method:
       severity: warning

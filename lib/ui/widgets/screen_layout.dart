@@ -26,18 +26,22 @@ class ScreenLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).primaryColor,
+    final theme = Theme.of(context);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: theme.primaryColor,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          if (appBar != null) appBar!,
+          appBar ?? const SizedBox(),
           Expanded(
             child: Container(
               clipBehavior: Clip.hardEdge,
               padding: padding,
               decoration: BoxDecoration(
-                color: Theme.of(context).canvasColor,
+                color: theme.canvasColor,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(24),
                   topRight: Radius.circular(24),

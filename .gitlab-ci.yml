@@ -29,20 +29,37 @@ flutter_dependencies:
   before_script: []
   script:
     - flutter pub get
+    - dart --version
 
 pages:
   stage: docs
+  needs: [autogenerate_doc]
   image: python:3.9
   before_script: []
   script:
   - pip install -r ./docs/requirements.txt
-  - mkdocs build --strict --verbose
+  - mkdocs build --verbose
   artifacts:
     paths:
     - public
   only:
-  - main
-  - sprint_1
+  - /^sprint-.*/
+
+autogenerate_doc:
+  image: cirrusci/flutter:2.10.3
+  stage: docs
+  needs: [flutter_dependencies]
+  script:
+  - pub global activate dartdoc
+  - export PATH="$PATH":"$HOME/.pub-cache/bin"
+  - pub global run dartdoc .
+  artifacts:
+    name: doc
+    paths:
+      - $CI_PROJECT_DIR/doc
+    when: always
+  only:
+  - /^sprint-.*/
 
 lint:
   image: cirrusci/flutter:2.10.3
@@ -57,7 +74,7 @@ code-quality:
   needs: [flutter_dependencies]
   script:
     - pub global activate dart_code_metrics
-    - metrics --reporter=gitlab lib -r codeclimate > gl-code-quality-report.json
+    - metrics lib --reporter=gitlab --exclude={/**.g.dart,/**.template.dart,/**.gr.dart} > gl-code-quality-report.json
   artifacts:
     reports:
       codequality: gl-code-quality-report.json
@@ -70,7 +87,7 @@ unit-test:
     - bash <(curl -s https://raw.githubusercontent.com/objectbox/objectbox-dart/main/install.sh)
     - pub global activate junitreport
     - pub global activate remove_from_coverage
-    - flutter test --no-sound-null-safety --machine --coverage | tojunit -o report.xml
+    - flutter test --machine --coverage | tojunit -o report.xml
     - remove_from_coverage -f coverage/lcov.info -r '\.g\.dart$'
     - remove_from_coverage -f coverage/lcov.info -r '\.gr\.dart$'
     - lcov --summary coverage/lcov.info

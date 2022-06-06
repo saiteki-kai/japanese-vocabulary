@@ -33,6 +33,8 @@ class ReviewAnswer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+
     return ValueListenableBuilder(
       valueListenable: hidden,
       builder: (BuildContext context, bool value, Widget? child) {
@@ -44,8 +46,7 @@ class ReviewAnswer extends StatelessWidget {
           child: Text(
             review.type == "meaning" ? meaning : reading,
             textAlign: TextAlign.center,
-            style:
-                Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 22.0),
+            style: textTheme.headline6,
           ),
         );
       },

@@ -1,9 +1,15 @@
+import 'package:equatable/equatable.dart';
+import 'dart:core';
+import 'dart:math';
 import 'package:objectbox/objectbox.dart';
 
-import './review.dart';
+import 'sort_option.dart';
+import 'review.dart';
+import 'sentence.dart';
 
 @Entity()
-class Word {
+// ignore: must_be_immutable
+class Word extends Equatable {
   Word({
     this.id = 0,
     required this.text,
@@ -18,23 +24,23 @@ class Word {
 
   /// Text of this word.
   @Index()
-  String text;
+  final String text;
 
   /// Reading of this word.
   @Index()
-  String reading;
+  final String reading;
 
   /// A number corresponding to the JLPT level N5 to N1 of this word.
   @Property(type: PropertyType.byte)
-  int jlpt;
+  final int jlpt;
 
   /// Meaning of this word.
   @Index()
-  String meaning;
+  final String meaning;
 
   /// Part of speech of this word.
   @Index()
-  String pos;
+  final String pos;
 
   /// Review related to meaning of this word.
   final meaningReview = ToOne<Review>();
@@ -42,31 +48,38 @@ class Word {
   /// Review related to reading of this word.
   final readingReview = ToOne<Review>();
 
+  /// Sentences related to this word.
+  final sentences = ToMany<Sentence>();
+
   double get meanAccuracy {
-    if (meaningReview.target == null || readingReview.target == null) {
-      return 0.0;
+    final acc1 = meaningReview.target?.getReviewAccuracy() ?? 0.0;
+    final acc2 = readingReview.target?.getReviewAccuracy() ?? 0.0;
+
+    if (meaningReview.target != null && readingReview.target != null) {
+      return (acc1 + acc2) / 2;
     }
-    return (meaningReview.target!.getReviewAccuracy() +
-            readingReview.target!.getReviewAccuracy()) /
-        2;
+
+    return acc1 + acc2;
   }
 
   DateTime? get nextReview {
-    if (meaningReview.target?.nextDate == null &&
-        readingReview.target?.nextDate == null) return null;
+    final meaningNextDate = meaningReview.target?.nextDate;
+    final readingNextDate = readingReview.target?.nextDate;
 
-    var r1 = 8640000000000000; // maxMillisecondsSinceEpoch
-    var r2 = 8640000000000000; // maxMillisecondsSinceEpoch
-
-    if (meaningReview.target?.nextDate != null) {
-      r1 = meaningReview.target!.nextDate!.millisecondsSinceEpoch;
-    }
-    if (readingReview.target?.nextDate != null) {
-      r2 = readingReview.target!.nextDate!.millisecondsSinceEpoch;
+    if (meaningNextDate == null && readingNextDate == null) {
+      return null;
     }
 
-    if (r1 < r2) return readingReview.target!.nextDate;
-    return readingReview.target!.nextDate;
+    const maxMilliseconds = 8640000000000000;
+
+    final r1 = meaningNextDate?.millisecondsSinceEpoch ?? maxMilliseconds;
+    final r2 = readingNextDate?.millisecondsSinceEpoch ?? maxMilliseconds;
+
+    if (r1 < r2) {
+      return meaningNextDate;
+    }
+
+    return readingNextDate;
   }
 
   Word copyWith({
@@ -76,7 +89,7 @@ class Word {
     String? meaning,
     String? pos,
   }) {
-    return Word(
+    final word = Word(
       id: id,
       text: text ?? this.text,
       reading: reading ?? this.reading,
@@ -84,55 +97,75 @@ class Word {
       meaning: meaning ?? this.meaning,
       pos: pos ?? this.pos,
     );
-  }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'text': text,
-      'reading': reading,
-      'jlpt': jlpt,
-      'meaning': meaning,
-      'pos': pos,
-    };
-  }
+    word.readingReview.target = readingReview.target;
+    word.meaningReview.target = meaningReview.target;
+    word.sentences.addAll(sentences);
 
-  factory Word.fromMap(Map<String, dynamic> map) {
-    return Word(
-      id: map['id']?.toInt() ?? 0,
-      text: map['text'] ?? '',
-      reading: map['reading'] ?? '',
-      jlpt: map['jlpt']?.toInt() ?? 0,
-      meaning: map['meaning'] ?? '',
-      pos: map['pos'] ?? '',
-    );
+    return word;
   }
 
   @override
-  String toString() {
-    return 'Word(id: $id, text: $text, reading: $reading, jlpt: $jlpt, meaning: $meaning, pos: $pos)';
-  }
+  List<Object?> get props => [
+        id,
+        text,
+        reading,
+        jlpt,
+        meaning,
+        pos,
+        sentences,
+        readingReview.target?.id,
+        meaningReview.target?.id,
+      ];
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+  bool? get stringify => true;
 
-    return other is Word &&
-        other.id == id &&
-        other.text == text &&
-        other.reading == reading &&
-        other.jlpt == jlpt &&
-        other.meaning == meaning &&
-        other.pos == pos;
+  static int _sortByNextReview(Word a, Word b) {
+    const maxMilliseconds = 8640000000000000;
+
+    final dateA = a.nextReview?.millisecondsSinceEpoch ?? maxMilliseconds;
+    final dateB = b.nextReview?.millisecondsSinceEpoch ?? maxMilliseconds;
+
+    return dateA.compareTo(dateB);
   }
 
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        text.hashCode ^
-        reading.hashCode ^
-        jlpt.hashCode ^
-        meaning.hashCode ^
-        pos.hashCode;
+  static int _sortByStreak(Word a, Word b) {
+    final streakAR = a.readingReview.target?.repetition ?? 0;
+    final streakAM = a.meaningReview.target?.repetition ?? 0;
+
+    final streakBR = b.readingReview.target?.repetition ?? 0;
+    final streakBM = b.meaningReview.target?.repetition ?? 0;
+
+    return max(streakAR, streakAM).compareTo(max(streakBR, streakBM));
+  }
+
+  static int _sortByText(Word a, Word b) {
+    return a.text.compareTo(b.text);
+  }
+
+  static int _sortByAccuracy(Word a, Word b) {
+    return a.meanAccuracy.compareTo(b.meanAccuracy);
+  }
+
+  static int sortBy(Word a, Word b, {SortField? attribute, bool? descending}) {
+    // switch arguments
+    if (descending ?? false) {
+      final c = a;
+      a = b;
+      b = c;
+    }
+
+    switch (attribute) {
+      case SortField.streak:
+        return _sortByStreak(a, b);
+      case SortField.date:
+        return _sortByNextReview(a, b);
+      case SortField.accuracy:
+        return _sortByAccuracy(a, b);
+      case SortField.text:
+      default:
+        return _sortByText(a, b);
+    }
   }
 }

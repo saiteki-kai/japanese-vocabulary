@@ -44,7 +44,7 @@ class LoadingIndicator extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Text(
-        message!,
+        message ?? "Loading...",
         style: Theme.of(context)
             .textTheme
             .subtitle1
