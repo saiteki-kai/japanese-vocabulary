@@ -85,6 +85,8 @@ class _WordInsertState extends State<WordInsert> {
 
       /// If a word has been passed, fill in the fields
       _wordToAdd.id = wordToAdd.id;
+      _wordToAdd.readingReview.target = wordToAdd.readingReview.target;
+      _wordToAdd.meaningReview.target = wordToAdd.meaningReview.target;
       _textController.text = wordToAdd.text;
       _readingController.text = wordToAdd.reading;
       _meaningController.text = wordToAdd.meaning;
@@ -258,8 +260,8 @@ class _WordInsertState extends State<WordInsert> {
                                     _sentenceEditTextController,
                                     _sentenceEditTranslationController,
                                     () => _onEditSentencePressed(
-                                        index,
-                                        sentence.text,
+                                      index,
+                                      sentence.text,
                                     ),
                                     sentence: sentence,
                                   ),
