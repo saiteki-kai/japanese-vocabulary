@@ -38,7 +38,7 @@ void main() async {
     setUp: setUpWithReviews,
     act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () {
-      final r = addReviewExpectedIds(readingReviewWithWord, 1, 1);
+      final r = addReviewExpectedIds(meaningReviewWithWord, 1, 1);
 
       return <ReviewState>[
         ReviewLoading(),
@@ -131,11 +131,14 @@ void main() async {
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
       ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4)),
-    expect: () => <ReviewState>[
-      ReviewLoading(),
-      ReviewLoaded(
-          review: readingReviewWithWord..id = 1, total: 2, isLast: false),
-      const ReviewError(message: 'missing word'),
-    ],
+    expect: () {
+      final r = addReviewExpectedIds(readingReviewWithWord, 1, 1);
+
+      return <ReviewState>[
+        ReviewLoading(),
+        ReviewLoaded(review: r, total: 2, isLast: false),
+        const ReviewError(message: 'missing word'),
+      ];
+    },
   );
 }

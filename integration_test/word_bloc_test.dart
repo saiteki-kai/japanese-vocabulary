@@ -130,10 +130,13 @@ void main() async {
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(WordAdded(word: word4)),
     expect: () {
+      final w1 = addWordExpectedIds(word1, 1, 1, 2);
+      final w2 = addWordExpectedIds(word2, 2, 3, 4);
+      final w3 = addWordExpectedIds(word3, 3, 5, 6);
       final word = addWordExpectedIds(word4, 4, 7, 8);
 
       return <WordState>[
-        WordsLoaded(words: [word]),
+        WordsLoaded(words: [w1, w2, w3, word]),
       ];
     },
   );
@@ -151,10 +154,9 @@ void main() async {
     'emits [WordLoaded] when WordAdded is added multiple times.',
     seed: () => const WordsLoaded(words: []),
     build: () => bloc,
-    act: (bloc) => {
-      bloc.add(WordAdded(word: word1)),
-      bloc.add(WordAdded(word: word2)),
-    },
+    act: (bloc) => bloc
+      ..add(WordAdded(word: word1))
+      ..add(WordAdded(word: word2)),
     expect: () {
       final w1 = addWordExpectedIds(word1, 1, 1, 2);
       final w2 = addWordExpectedIds(word2, 2, 3, 4);
@@ -171,17 +173,19 @@ void main() async {
     seed: () => const WordsLoaded(words: []),
     build: () => bloc,
     setUp: setUpWithWords,
-    act: (bloc) => {
-      bloc.add(WordAdded(word: word4)),
-      bloc.add(WordAdded(word: word5)),
-    },
+    act: (bloc) => bloc
+      ..add(WordAdded(word: word4))
+      ..add(WordAdded(word: word5)),
     expect: () {
-      final w1 = addWordExpectedIds(word4, 4, 7, 8);
-      final w2 = addWordExpectedIds(word5, 5, 9, 10);
+      final w1 = addWordExpectedIds(word1, 1, 1, 2);
+      final w2 = addWordExpectedIds(word2, 2, 3, 4);
+      final w3 = addWordExpectedIds(word3, 3, 5, 6);
+      final w4 = addWordExpectedIds(word4, 4, 7, 8);
+      final w5 = addWordExpectedIds(word5, 5, 9, 10);
 
       return <WordState>[
-        WordsLoaded(words: [w1]),
-        WordsLoaded(words: [w1, w2]),
+        WordsLoaded(words: [w1, w2, w3, w4]),
+        WordsLoaded(words: [w1, w2, w3, w4, w5]),
       ];
     },
   );

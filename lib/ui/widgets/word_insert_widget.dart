@@ -288,8 +288,12 @@ class _WordInsertState extends State<WordInsert> {
     final noEqualSentences =
         _sentences.every((element) => element.text != text) || oldText == text;
     if (text.isNotEmpty && translation.isNotEmpty && noEqualSentences) {
-      _sentences[index].text = text;
-      _sentences[index].translation = translation;
+      setState(() {
+        _sentences[index] = _sentences[index].copyWith(
+          text: text,
+          translation: translation,
+        );
+      });
       _sentenceEditTextController.clear();
       _sentenceEditTranslationController.clear();
       Navigator.pop(context);

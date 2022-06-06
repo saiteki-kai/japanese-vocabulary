@@ -15,6 +15,10 @@ void main() async {
   late Box<Sentence> sentenceBox;
   late WordRepository repo;
 
+  setUpAll(() async {
+    await AppDatabase.instance.deleteDatabase();
+  });
+
   // At the start of each test the db have no words or reviews.
   setUp(() async {
     store = await AppDatabase.instance.store;
@@ -148,8 +152,11 @@ void main() async {
       expect(sentences.length, 2);
 
       Word word = wordBox.get(res)!;
+      word.sentences.removeAt(0);
+
       res = await repo.addWord(word);
       word = wordBox.get(res)!;
+
       expect(word.sentences.length, 1);
 
       sentences = sentenceBox.getAll();
@@ -171,8 +178,9 @@ void main() async {
       expect(sentence.text, "text1");
       expect(word.sentences.first.text, "text1");
 
-      word.sentences.first.text = "ABC";
+      word.sentences[0] = word.sentences[0].copyWith(text: "ABC");
       res = await repo.addWord(word);
+
       word = wordBox.get(res)!;
 
       sentence = sentenceBox.get(sentenceId)!;

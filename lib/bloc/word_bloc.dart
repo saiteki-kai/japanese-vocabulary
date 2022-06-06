@@ -30,7 +30,9 @@ class WordBloc extends Bloc<WordEvent, WordState> {
       final state = this.state;
       if (state is WordsLoaded) {
         await repository.addWord(word);
-        emit(WordsLoaded(words: [...state.words, word]));
+
+        final words = await repository.getWords();
+        emit(WordsLoaded(words: words));
       }
       if (state is WordLoaded) {
         await repository.addWord(word);

@@ -120,7 +120,7 @@ void main() async {
     setUp: setUpWithWords,
     act: (bloc) => bloc.add(WordAdded(word: word1)),
     expect: () => <WordState>[
-      WordsLoaded(words: [word1]),
+      WordsLoaded(words: [word1, word2, word3]),
     ],
     verify: (_) {
       verify(() => repo.addWord(any())).called(1);
@@ -133,9 +133,6 @@ void main() async {
     build: () => bloc,
     setUp: setUpEmpty,
     act: (bloc) => bloc.add(WordAdded(word: word1)),
-    expect: () => <WordState>[
-      WordsLoaded(words: [word1]),
-    ],
     verify: (_) {
       verify(() => repo.addWord(any())).called(1);
     },

@@ -118,8 +118,10 @@ class _SentencesListState extends State<SentencesList> {
             oldSentence.text == text;
 
     if (text.isNotEmpty && translation.isNotEmpty && noEqualSentences) {
-      oldSentence.text = text;
-      oldSentence.translation = translation;
+      word.sentences[index] = oldSentence.copyWith(
+        text: text,
+        translation: translation,
+      );
 
       _bloc?.add(WordAdded(word: word));
       _sentenceTextController.clear();

@@ -65,6 +65,7 @@ void main() async {
   });
 
   test("check today's reviews if some reviews exists", () async {
+    setUpWithReviews();
     // if n reviews exist than should be that 0 <= todayreviews.length <= n
     final List<Review> reviews = await repo.getReviews();
     expect(reviews.length, greaterThan(0));
