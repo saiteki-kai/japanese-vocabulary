@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/review_bloc.dart';
 import '../../../data/models/review.dart';
 import '../../../data/models/word.dart';
-import '../../../data/repositories/review_repository.dart';
 import '../../../utils/hint.dart';
 import '../../widgets/loading_indicator.dart';
 import '../../widgets/screen_layout.dart';
@@ -28,21 +27,11 @@ import 'widgets/review_session_appbar.dart';
 /// that updates the current [hint] to be displayed in the [ReviewHint] and changes
 /// the enabled values of the [ReviewQualitySelector].
 /// The [hint] can be of two types [MeaningHint] or [ReadingHint].
-class ReviewSessionScreen extends StatefulWidget implements AutoRouteWrapper {
+class ReviewSessionScreen extends StatefulWidget {
   const ReviewSessionScreen({Key? key}) : super(key: key);
 
   @override
   State<ReviewSessionScreen> createState() => _ReviewSessionScreenState();
-
-  @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ReviewBloc(
-        repository: RepositoryProvider.of<ReviewRepository>(context),
-      ),
-      child: this,
-    );
-  }
 }
 
 class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
@@ -65,15 +54,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   @override
   void initState() {
     _bloc = BlocProvider.of<ReviewBloc>(context);
-    _bloc?.add(ReviewSessionStarted());
-
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _bloc?.close();
-    super.dispose();
   }
 
   @override
@@ -166,7 +147,7 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
 
   /// When there is an error returns to the home page.
   void _reviewBlocListener(BuildContext context, ReviewState state) {
-    if (state is ReviewError) {
+    if (state is ReviewError || state is ReviewFinished) {
       AutoRouter.of(context).pop();
     }
   }
