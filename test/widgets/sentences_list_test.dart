@@ -40,7 +40,7 @@ void main() {
     final noSentence =
         (tester.widget(find.byKey(const Key("noSentenceTest"))) as Text).data;
 
-    expect(noSentence, equals("No senteces found"));
+    expect(noSentence, equals("No sentences found"));
   });
 
   testWidgets("sentence list", (WidgetTester tester) async {
@@ -62,7 +62,7 @@ void main() {
 
     when(() => bloc.state).thenReturn(state);
 
-    final word2 = wordSentences.copyWith()..sentences.removeAt(0);
+    final word2 = wordSentences.copyWith();
 
     await setUpWidget(tester, word);
 
@@ -79,12 +79,11 @@ void main() {
 
     await tester.tap(confirmBtnFinder);
     await tester.pumpAndSettle();
-
     verify(() {
-      bloc.add(WordAdded(word: word2));
+      bloc.add(WordAdded(word: word2..sentences.removeAt(0)));
     }).called(1);
 
-    when(() => bloc.state).thenReturn(WordLoaded(word: word2));
+    await setUpWidget(tester, word2);
 
     expect(sentenceItemFinder, findsOneWidget);
   });

@@ -48,7 +48,7 @@ class Sentence {
 
   @override
   String toString() {
-    return 'Sentece(id: $id, text: $text, translation: $translation)';
+    return 'Sentence(id: $id, text: $text, translation: $translation)';
   }
 
   @override

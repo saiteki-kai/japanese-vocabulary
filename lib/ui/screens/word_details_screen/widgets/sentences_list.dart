@@ -57,7 +57,7 @@ class _SentencesListState extends State<SentencesList> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   Text(
-                    "No senteces found",
+                    "No sentences found",
                     key: Key("noSentenceTest"),
                     style: TextStyle(
                       fontSize: 20,
@@ -80,24 +80,12 @@ class _SentencesListState extends State<SentencesList> {
                     "Edit this example sentence",
                     _sentenceTextController,
                     _sentenceTranslationController,
-                    () => setState(() {
-                      _onEditSentencePressed(
-                        context,
-                        word,
-                        index,
-                        sentence,
-                      );
-                    }),
+                    () => _onEditSentencePressed(context, word, index),
                     sentence: sentence,
                   ),
                   deleteCallback: () => _showAlertDialog(
                     context,
-                    () => setState(() {
-                      _deleteCallback(
-                        word,
-                        index,
-                      );
-                    }),
+                    () => _deleteCallback(word, index),
                     continueText: "Delete",
                     title: "Would you like to delete this sentence?",
                     message: sentence.text,
@@ -119,22 +107,19 @@ class _SentencesListState extends State<SentencesList> {
     BuildContext context,
     Word word,
     int index,
-    Sentence sentence,
   ) {
     final text = _sentenceTextController.text.trim();
     final translation = _sentenceTranslationController.text.trim();
     FocusScope.of(context).requestFocus(FocusNode());
     final sentences = word.sentences;
+    final oldSentence = word.sentences.elementAt(index);
     final noEqualSentences =
         sentences.every((element) => element.text != text) ||
-            sentence.text == text;
+            oldSentence.text == text;
 
     if (text.isNotEmpty && translation.isNotEmpty && noEqualSentences) {
-      sentence.text = text;
-      sentence.translation = translation;
-      final sentenceToEdit = word.sentences.elementAt(index);
-      sentenceToEdit.text = text;
-      sentenceToEdit.translation = translation;
+      oldSentence.text = text;
+      oldSentence.translation = translation;
 
       _bloc?.add(WordAdded(word: word));
       _sentenceTextController.clear();

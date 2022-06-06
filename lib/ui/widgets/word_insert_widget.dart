@@ -257,12 +257,10 @@ class _WordInsertState extends State<WordInsert> {
                                     "Edit this example sentence",
                                     _sentenceEditTextController,
                                     _sentenceEditTranslationController,
-                                    () => setState(() {
-                                      _onEditSentencePressed(
+                                    () => _onEditSentencePressed(
                                         index,
                                         sentence.text,
-                                      );
-                                    }),
+                                    ),
                                     sentence: sentence,
                                   ),
                                   deleteCallback: () => _onDeletePressed(index),
