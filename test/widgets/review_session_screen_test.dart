@@ -47,7 +47,8 @@ main() {
       "100 reviews are selected for today",
       (WidgetTester tester) async {
         when(() => bloc.state).thenReturn(
-            ReviewLoaded(review: review1, total: 100, isLast: false));
+          ReviewLoaded(review: review1, current: 1, total: 100, isLast: false),
+        );
         await tester.pumpAndSettle();
 
         await setUpWidget(tester);

@@ -42,7 +42,7 @@ void main() async {
 
       return <ReviewState>[
         ReviewLoading(),
-        ReviewLoaded(review: r, total: 2, isLast: false),
+        ReviewLoaded(review: r, current: 1, total: 2, isLast: false),
       ];
     },
   );
@@ -60,8 +60,8 @@ void main() async {
 
         return <ReviewState>[
           ReviewLoading(),
-          ReviewLoaded(review: r1, total: 2, isLast: false),
-          ReviewLoaded(review: r2, total: 2, isLast: true),
+          ReviewLoaded(review: r1, current: 1, total: 2, isLast: false),
+          ReviewLoaded(review: r2, current: 2, total: 2, isLast: true),
         ];
       });
 
@@ -79,8 +79,29 @@ void main() async {
 
       return <ReviewState>[
         ReviewLoading(),
-        ReviewLoaded(review: r1, total: 2, isLast: false),
-        ReviewLoaded(review: r2, total: 2, isLast: true),
+        ReviewLoaded(review: r1, current: 1, total: 2, isLast: false),
+        ReviewLoaded(review: r2, current: 2, total: 2, isLast: true),
+        ReviewFinished(),
+      ];
+    },
+  );
+
+  blocTest<ReviewBloc, ReviewState>(
+    'emits [ReviewLoaded, ReviewLoaded] when ReviewSessionUpdated is added.',
+    build: () => bloc,
+    setUp: setUpWithReviews,
+    act: (bloc) => bloc
+      ..add(ReviewSessionStarted())
+      ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4))
+      ..add(ReviewSessionUpdated(review: review2, quality: 4)),
+    expect: () {
+      final r1 = addReviewExpectedIds(meaningReviewWithWord, 1, 1);
+      final r2 = addReviewExpectedIds(readingReviewWithWord, 2, 2);
+
+      return <ReviewState>[
+        ReviewLoading(),
+        ReviewLoaded(review: r1, current: 1, total: 2, isLast: false),
+        ReviewLoaded(review: r2, current: 2, total: 2, isLast: true),
         ReviewFinished(),
       ];
     },
@@ -136,7 +157,7 @@ void main() async {
 
       return <ReviewState>[
         ReviewLoading(),
-        ReviewLoaded(review: r, total: 2, isLast: false),
+        ReviewLoaded(review: r, current: 1, total: 2, isLast: false),
         const ReviewError(message: 'missing word'),
       ];
     },

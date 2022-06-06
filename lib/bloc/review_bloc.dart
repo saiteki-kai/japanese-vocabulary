@@ -40,11 +40,14 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
       _session.addAll(reviews);
 
       if (_validWord(emit, _session[0])) {
-        emit(ReviewLoaded(
-          review: _session[0],
-          total: _session.length,
-          isLast: false,
-        ));
+        emit(
+          ReviewLoaded(
+            review: _session[0],
+            current: 1,
+            total: _session.length,
+            isLast: false,
+          ),
+        );
       }
     } else {
       emit(ReviewEmpty());
@@ -71,11 +74,14 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
       final nextReview = _session[_currentIndex];
 
       if (_validWord(emit, nextReview)) {
-        emit(ReviewLoaded(
-          review: nextReview,
-          total: _session.length,
-          isLast: isLast,
-        ));
+        emit(
+          ReviewLoaded(
+            review: nextReview,
+            current: _currentIndex + 1,
+            total: _session.length,
+            isLast: isLast,
+          ),
+        );
       }
     } else {
       emit(ReviewFinished());

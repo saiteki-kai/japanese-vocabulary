@@ -18,8 +18,9 @@ class ReviewLoaded extends ReviewState {
   /// [isLast] to specify whether [review] is the last one in the session.
   const ReviewLoaded({
     required this.review,
-    required this.total,
     required this.isLast,
+    required this.current,
+    required this.total,
   });
 
   /// The next [review] in the session.
@@ -28,10 +29,12 @@ class ReviewLoaded extends ReviewState {
   /// A boolean to specify whether [review] is the last one in the session.
   final bool isLast;
 
+  final int current;
+
   final int total;
 
   @override
-  List<Object> get props => [review, total, isLast];
+  List<Object> get props => [review, isLast, current, total];
 }
 
 /// A [ReviewState] to indicate when the list of reviews is empty.

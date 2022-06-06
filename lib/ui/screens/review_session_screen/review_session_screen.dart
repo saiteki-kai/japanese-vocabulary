@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/review_bloc.dart';
 import '../../../data/models/review.dart';
 import '../../../data/models/word.dart';
+import '../../../data/repositories/review_repository.dart';
 import '../../../utils/hint.dart';
 import '../../widgets/loading_indicator.dart';
 import '../../widgets/screen_layout.dart';
@@ -27,14 +28,27 @@ import 'widgets/review_session_appbar.dart';
 /// that updates the current [hint] to be displayed in the [ReviewHint] and changes
 /// the enabled values of the [ReviewQualitySelector].
 /// The [hint] can be of two types [MeaningHint] or [ReadingHint].
-class ReviewSessionScreen extends StatefulWidget {
+class ReviewSessionScreen extends StatefulWidget implements AutoRouteWrapper {
   const ReviewSessionScreen({Key? key}) : super(key: key);
 
   @override
   State<ReviewSessionScreen> createState() => _ReviewSessionScreenState();
+
+  @override
+  Widget wrappedRoute(BuildContext context) {
+    return BlocProvider(
+      create: (context) => ReviewBloc(
+        repository: RepositoryProvider.of<ReviewRepository>(context),
+      ),
+      child: this,
+    );
+  }
 }
 
 class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
+  /// A [ReviewBloc] instance.
+  ReviewBloc? _bloc;
+
   /// A boolean value that handles when show or hide the [ReviewAnswer] and
   /// enable the [ReviewQualitySelector].
   final _hideAnswer = ValueNotifier<bool>(true);
@@ -48,12 +62,18 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
   /// The initial value is set to [Hint.empty].
   final _hint = ValueNotifier<Hint>(MeaningHint.empty());
 
-  ReviewBloc? _bloc;
-
   @override
   void initState() {
-    super.initState();
     _bloc = BlocProvider.of<ReviewBloc>(context);
+    _bloc?.add(ReviewSessionStarted());
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bloc?.close();
+    super.dispose();
   }
 
   @override
@@ -61,26 +81,29 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        body: ScreenLayout(
-          appBar: const ReviewSessionAppBar(),
-          child: BlocConsumer<ReviewBloc, ReviewState>(
-            builder: (context, state) {
-              if (state is ReviewLoaded) {
-                final word = state.review.word.target;
+        body: BlocConsumer<ReviewBloc, ReviewState>(
+          builder: (context, state) {
+            if (state is ReviewLoaded) {
+              final word = state.review.word.target;
 
-                if (word == null) {
-                  return const SizedBox();
-                }
+              if (word == null) {
+                return const Text("Error");
+              }
 
-                // Initialize the value based on the reading/meaning of the word
-                final reviewType = state.review.type;
-                if (reviewType == "reading") {
-                  _hint.value = ReadingHint.fromWord(word);
-                } else if (reviewType == "meaning") {
-                  _hint.value = MeaningHint.fromWord(word);
-                }
+              // Initialize the value based on the reading/meaning of the word
+              final reviewType = state.review.type;
+              if (reviewType == "reading") {
+                _hint.value = ReadingHint.fromWord(word);
+              } else if (reviewType == "meaning") {
+                _hint.value = MeaningHint.fromWord(word);
+              }
 
-                return Column(
+              return ScreenLayout(
+                appBar: ReviewSessionAppBar(
+                  current: state.current,
+                  total: state.total,
+                ),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const Spacer(flex: 1),
@@ -92,7 +115,6 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
                       hint: _hint,
                       onAskHint: () => _onAskHint(word),
                     ),
-
                     const Spacer(flex: 1),
                     // Answer to show/hide
                     Expanded(
@@ -118,14 +140,14 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
                       onPressed: (q) => _nextReview(state.review, q),
                     ),
                   ],
-                );
-              } else {
-                return const LoadingIndicator(message: "Loading Reviews...");
-              }
-            },
-            listener: _reviewBlocListener,
-            buildWhen: _reviewBlocBuildWhen,
-          ),
+                ),
+              );
+            } else {
+              return const LoadingIndicator(message: "Loading Reviews...");
+            }
+          },
+          listener: _reviewBlocListener,
+          buildWhen: _reviewBlocBuildWhen,
         ),
       ),
     );
@@ -139,12 +161,12 @@ class _ReviewSessionScreenState extends State<ReviewSessionScreen> {
 
   /// Defines when to build the widget.
   bool _reviewBlocBuildWhen(ReviewState before, ReviewState _) {
-    return !(before is ReviewFinished || before is ReviewError);
+    return !(before is ReviewError || before is ReviewFinished);
   }
 
   /// When there is an error returns to the home page.
   void _reviewBlocListener(BuildContext context, ReviewState state) {
-    if (state is ReviewFinished || state is ReviewError) {
+    if (state is ReviewError) {
       AutoRouter.of(context).pop();
     }
   }

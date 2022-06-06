@@ -43,7 +43,12 @@ void main() async {
     act: (bloc) => bloc.add(ReviewSessionStarted()),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: meaningReviewWithWord, total: 2, isLast: false),
+      ReviewLoaded(
+        review: meaningReviewWithWord,
+        current: 1,
+        total: 2,
+        isLast: false,
+      ),
     ],
     verify: (_) {
       verify(() => repo.getTodayReviews()).called(1);
@@ -60,8 +65,18 @@ void main() async {
       ..add(ReviewSessionUpdated(review: meaningReviewWithWord, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: meaningReviewWithWord, total: 2, isLast: false),
-      ReviewLoaded(review: readingReviewWithWord, total: 2, isLast: true),
+      ReviewLoaded(
+        review: meaningReviewWithWord,
+        current: 1,
+        total: 2,
+        isLast: false,
+      ),
+      ReviewLoaded(
+        review: readingReviewWithWord,
+        current: 2,
+        total: 2,
+        isLast: true,
+      ),
     ],
     verify: (_) {
       verify(() => repo.getTodayReviews()).called(1);
@@ -79,8 +94,18 @@ void main() async {
       ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: meaningReviewWithWord, total: 2, isLast: false),
-      ReviewLoaded(review: readingReviewWithWord, total: 2, isLast: true),
+      ReviewLoaded(
+        review: meaningReviewWithWord,
+        current: 1,
+        total: 2,
+        isLast: false,
+      ),
+      ReviewLoaded(
+        review: readingReviewWithWord,
+        current: 2,
+        total: 2,
+        isLast: true,
+      ),
       ReviewFinished(),
     ],
     verify: (_) {
@@ -145,7 +170,12 @@ void main() async {
       ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: readingReviewWithWord, total: 2, isLast: false),
+      ReviewLoaded(
+        review: readingReviewWithWord,
+        current: 1,
+        total: 2,
+        isLast: false,
+      ),
       const ReviewError(message: 'missing word'),
     ],
     verify: (bloc) {
