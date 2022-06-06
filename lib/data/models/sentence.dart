@@ -1,7 +1,9 @@
+import 'package:equatable/equatable.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
-class Sentence {
+// ignore: must_be_immutable
+class Sentence extends Equatable {
   Sentence({
     this.id = 0,
     required this.text,
@@ -12,12 +14,10 @@ class Sentence {
   int id;
 
   /// Text of this sentence.
-  @Index()
-  String text;
+  final String text;
 
-  /// Traslantion of this sentence.
-  @Index()
-  String translation;
+  /// Translation of this sentence.
+  final String translation;
 
   Sentence copyWith({
     String? text,
@@ -30,39 +30,9 @@ class Sentence {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'text': text,
-      'translation': translation,
-    };
-  }
-
-  factory Sentence.fromMap(Map<String, dynamic> map) {
-    return Sentence(
-      id: map['id']?.toInt() ?? 0,
-      text: map['text'] ?? '',
-      translation: map['translation'] ?? '',
-    );
-  }
+  @override
+  List<Object?> get props => [id, text, translation];
 
   @override
-  String toString() {
-    return 'Sentence(id: $id, text: $text, translation: $translation)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Sentence &&
-        other.id == id &&
-        other.text == text &&
-        other.translation == translation;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^ text.hashCode ^ translation.hashCode;
-  }
+  bool? get stringify => true;
 }

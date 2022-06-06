@@ -199,15 +199,7 @@ Review createReviewByDate(
   Word? word,
   String type = "meaning",
 }) {
-  final review = Review(
-    ef: 2.5,
-    interval: 0,
-    repetition: 0,
-    correctAnswers: 0,
-    incorrectAnswers: 0,
-    nextDate: date,
-    type: type,
-  );
+  final review = Review(nextDate: date, type: type);
 
   if (word != null) {
     review.word.target = word;

@@ -59,11 +59,11 @@ void main() {
 
     for (var i = 0; i < 100; i++) {
       final quality = rnd.nextInt(6);
-      final newReview = SM2.schedule(oldReview, quality);
+      Review newReview = SM2.schedule(oldReview, quality);
 
       // Only for test. Simulate the passing days by using the scheduled oldReview
-      newReview.nextDate = oldReview.nextDate?.add(
-        Duration(days: newReview.interval),
+      newReview = newReview.copyWith(
+        nextDate: oldReview.nextDate?.add(Duration(days: newReview.interval)),
       );
 
       final newEF = double.parse(newReview.ef.toStringAsPrecision(2));

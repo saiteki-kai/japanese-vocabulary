@@ -18,30 +18,17 @@ class WordRepository {
     final store = await AppDatabase.instance.store;
     final sentenceBox = store.box<Sentence>();
     final box = await _box;
+
     final readingReview = word.readingReview;
     final meaningReview = word.meaningReview;
-    if (readingReview.target == null) {
-      final Review meaning = Review(
-        ef: 2.5,
-        interval: 0,
-        repetition: 0,
-        correctAnswers: 0,
-        incorrectAnswers: 0,
-        type: 'meaning',
-        nextDate: DateTime.now(),
-      );
-      final Review reading = Review(
-        ef: 2.5,
-        interval: 0,
-        repetition: 0,
-        correctAnswers: 0,
-        incorrectAnswers: 0,
-        type: 'reading',
-        nextDate: DateTime.now(),
-      );
+
+    if (readingReview.target == null && meaningReview.target == null) {
+      final Review meaning = Review(type: 'meaning', nextDate: DateTime.now());
+      final Review reading = Review(type: 'reading', nextDate: DateTime.now());
 
       meaningReview.target = meaning;
       readingReview.target = reading;
+
       meaning.word.target = word;
       reading.word.target = word;
     }

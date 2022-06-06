@@ -6,6 +6,7 @@ import 'package:japanese_vocabulary/data/models/review.dart';
 import 'package:japanese_vocabulary/data/repositories/review_repository.dart';
 import 'package:objectbox/objectbox.dart';
 
+import '../test/utils/db.dart';
 import '../test/utils/params.dart';
 
 void main() async {
@@ -36,45 +37,53 @@ void main() async {
     build: () => bloc,
     setUp: setUpWithReviews,
     act: (bloc) => bloc.add(ReviewSessionStarted()),
-    expect: () => <ReviewState>[
-      ReviewLoading(),
-      ReviewLoaded(
-          review: meaningReviewWithWord..id = 1, total: 2, isLast: false),
-    ],
+    expect: () {
+      final r = addReviewExpectedIds(readingReviewWithWord, 1, 1);
+
+      return <ReviewState>[
+        ReviewLoading(),
+        ReviewLoaded(review: r, total: 2, isLast: false),
+      ];
+    },
   );
 
   blocTest<ReviewBloc, ReviewState>(
-    'emits [ReviewLoaded, ReviewLoaded] when ReviewSessionUpdated is added.',
-    build: () => bloc,
-    setUp: setUpWithReviews,
-    act: (bloc) => bloc
-      ..add(ReviewSessionStarted())
-      ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4)),
-    expect: () => <ReviewState>[
-      ReviewLoading(),
-      ReviewLoaded(
-          review: meaningReviewWithWord..id = 1, total: 2, isLast: false),
-      ReviewLoaded(
-          review: readingReviewWithWord..id = 2, total: 2, isLast: true),
-    ],
-  );
+      'emits [ReviewLoaded, ReviewLoaded] when ReviewSessionUpdated is added.',
+      build: () => bloc,
+      setUp: setUpWithReviews,
+      act: (bloc) => bloc
+        ..add(ReviewSessionStarted())
+        ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4)),
+      expect: () {
+        final r1 = addReviewExpectedIds(meaningReviewWithWord, 1, 1);
+        final r2 = addReviewExpectedIds(readingReviewWithWord, 2, 2);
+
+        return <ReviewState>[
+          ReviewLoading(),
+          ReviewLoaded(review: r1, total: 2, isLast: false),
+          ReviewLoaded(review: r2, total: 2, isLast: true),
+        ];
+      });
 
   blocTest<ReviewBloc, ReviewState>(
-    'emits [ReviewLoaded, ReviewLoaded] when two ReviewSessionUpdated are added.',
+    'emits [ReviewLoaded, ReviewLoaded, ReviewFinished] when ReviewSessionUpdated is added.',
     build: () => bloc,
     setUp: setUpWithReviews,
     act: (bloc) => bloc
       ..add(ReviewSessionStarted())
       ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4))
       ..add(ReviewSessionUpdated(review: review2, quality: 4)),
-    expect: () => <ReviewState>[
-      ReviewLoading(),
-      ReviewLoaded(
-          review: meaningReviewWithWord..id = 1, total: 2, isLast: false),
-      ReviewLoaded(
-          review: readingReviewWithWord..id = 2, total: 2, isLast: true),
-      ReviewFinished(),
-    ],
+    expect: () {
+      final r1 = addReviewExpectedIds(meaningReviewWithWord, 1, 1);
+      final r2 = addReviewExpectedIds(readingReviewWithWord, 2, 2);
+
+      return <ReviewState>[
+        ReviewLoading(),
+        ReviewLoaded(review: r1, total: 2, isLast: false),
+        ReviewLoaded(review: r2, total: 2, isLast: true),
+        ReviewFinished(),
+      ];
+    },
   );
 
   blocTest<ReviewBloc, ReviewState>(
@@ -124,7 +133,8 @@ void main() async {
       ..add(ReviewSessionUpdated(review: readingReviewWithWord, quality: 4)),
     expect: () => <ReviewState>[
       ReviewLoading(),
-      ReviewLoaded(review: readingReviewWithWord..id = 1, total: 2, isLast: false),
+      ReviewLoaded(
+          review: readingReviewWithWord..id = 1, total: 2, isLast: false),
       const ReviewError(message: 'missing word'),
     ],
   );

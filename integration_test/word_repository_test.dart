@@ -118,22 +118,22 @@ void main() async {
       expect(res, 2, reason: "Id should've been 2");
       expect(wordBox.getAll().length, 3, reason: "# elements should've been 3");
 
-      final word = wordBox.get(res);
-
-      word!.text = "Gracias";
-      word.reading = "Gra see uhs";
-      word.jlpt = 1;
-      word.meaning = "Thanks";
-      word.pos = "n, vi";
+      final word = wordBox.get(res)!.copyWith(
+            text: "Gracias",
+            reading: "Gra see uhs",
+            jlpt: 1,
+            meaning: "Thanks",
+            pos: "n, vi",
+          );
 
       final res2 = await repo.addWord(word);
-      final wordEdited = wordBox.get(res2);
+      final wordEdited = wordBox.get(res2)!;
 
-      expect(wordEdited?.text, "Gracias");
-      expect(wordEdited?.reading, "Gra see uhs");
-      expect(wordEdited?.jlpt, 1);
-      expect(wordEdited?.meaning, "Thanks");
-      expect(wordEdited?.pos, "n, vi");
+      expect(wordEdited.text, "Gracias");
+      expect(wordEdited.reading, "Gra see uhs");
+      expect(wordEdited.jlpt, 1);
+      expect(wordEdited.meaning, "Thanks");
+      expect(wordEdited.pos, "n, vi");
 
       expect(res2, 2, reason: "Id should've been 2");
       expect(wordBox.getAll().length, 3, reason: "# elements should've been 3");
@@ -208,22 +208,22 @@ void main() async {
     test('edit with not empty db', () async {
       expect(wordBox.getAll().length, 3, reason: "# elements should've been 3");
 
-      final word = wordBox.get(2);
-
-      word!.text = "Gracias";
-      word.reading = "Gra see uhs";
-      word.jlpt = 1;
-      word.meaning = "Thanks";
-      word.pos = "n, vi";
+      final word = wordBox.get(2)!.copyWith(
+            text: "Gracias",
+            reading: "Gra see uhs",
+            jlpt: 1,
+            meaning: "Thanks",
+            pos: "n, vi",
+          );
 
       final res2 = await repo.addWord(word);
-      final wordEdited = wordBox.get(res2);
+      final wordEdited = wordBox.get(res2)!;
 
-      expect(wordEdited?.text, "Gracias");
-      expect(wordEdited?.reading, "Gra see uhs");
-      expect(wordEdited?.jlpt, 1);
-      expect(wordEdited?.meaning, "Thanks");
-      expect(wordEdited?.pos, "n, vi");
+      expect(wordEdited.text, "Gracias");
+      expect(wordEdited.reading, "Gra see uhs");
+      expect(wordEdited.jlpt, 1);
+      expect(wordEdited.meaning, "Thanks");
+      expect(wordEdited.pos, "n, vi");
 
       expect(res2, 2, reason: "Id should've been 2");
       expect(wordBox.getAll().length, 3, reason: "# elements should've been 3");
