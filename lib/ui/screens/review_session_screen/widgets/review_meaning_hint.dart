@@ -40,8 +40,9 @@ class _ReviewMeaningHintState extends State<ReviewMeaningHint> {
   @override
   void didUpdateWidget(covariant ReviewMeaningHint oldWidget) {
     if (widget.hint != oldWidget.hint && _controller != null) {
-      _controller?.jumpToPage(widget.hint.n - 1);
-      page.value = widget.hint.n - 1;
+      final n = widget.hint.n;
+      _controller?.jumpToPage(n - 1);
+      page.value = n - 1;
     }
     super.didUpdateWidget(oldWidget);
   }

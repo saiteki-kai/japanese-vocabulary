@@ -73,10 +73,12 @@ class MeaningHint extends Hint {
       return MeaningHint.empty();
     }
 
-    // add the next sentence!
-    currSentences.add(word.sentences[this.n]);
+    int n = this.n;
 
-    final n = this.n + 1;
+    // add the next sentence!
+    currSentences.add(word.sentences[n]);
+
+    n = n + 1;
     final length = word.sentences.length;
 
     if (n > length) {
