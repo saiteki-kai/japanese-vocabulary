@@ -22,7 +22,6 @@ class WordInsert extends StatefulWidget {
 
 class _WordInsertState extends State<WordInsert> {
   Word _wordToAdd = Word(jlpt: 5, text: "", reading: "", meaning: "", pos: "");
-  bool readyToBuild = false;
   Text titleInsert = const Text("Insert a word");
 
   /// The currently selected jlpt button index
@@ -273,31 +272,24 @@ class _WordInsertState extends State<WordInsert> {
   }
 
   void _onPressed() {
-    _wordToAdd = _wordToAdd.copyWith(
-      text: _textController.text,
-      reading: _readingController.text,
-      meaning: _meaningController.text,
-    );
-
-    if (_wordToAdd.text.isNotEmpty &&
-        _wordToAdd.reading.isNotEmpty &&
-        _wordToAdd.meaning.isNotEmpty) {
-      // Just to check if all the mandatory fields are not empty
-      readyToBuild = true;
-    }
-
     // A string built by concatenating the selected parts of speech names, following the format 'A,B,...,Z'
     _posSelected.remove(-1);
     final posTmp = _posSelected.map((e) => _posNames[e]).join(",");
 
     _wordToAdd = _wordToAdd.copyWith(
-      jlpt: _jlptValues[_jlptIndex],
+      text: _textController.text,
+      reading: _readingController.text,
+      meaning: _meaningController.text,
+      jlpt: _jlptIndex == -1 ? null : _jlptValues[_jlptIndex],
       pos: posTmp,
     );
 
+    // Just to check if all the mandatory fields are not empty
     // If the mandatory fields are not compiled it doesn't insert or edit.
     // Also doesn't change route.
-    if (readyToBuild) {
+    if (_wordToAdd.text.isNotEmpty &&
+        _wordToAdd.reading.isNotEmpty &&
+        _wordToAdd.meaning.isNotEmpty) {
       _wordToAdd.sentences.addAll(_sentences);
       _bloc?.add(WordAdded(word: _wordToAdd));
 
