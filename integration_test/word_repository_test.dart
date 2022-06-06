@@ -12,6 +12,7 @@ void main() async {
   late Store store;
   late Box<Word> wordBox;
   late Box<Review> reviewBox;
+  late Box<Sentence> sentenceBox;
   late WordRepository repo;
 
   // At the start of each test the db have no words or reviews.
@@ -19,6 +20,7 @@ void main() async {
     store = await AppDatabase.instance.store;
     wordBox = store.box<Word>();
     reviewBox = store.box<Review>();
+    sentenceBox = store.box<Sentence>();
     repo = WordRepository(box: Future.value(wordBox));
   });
 
@@ -97,6 +99,16 @@ void main() async {
       expect(reviewBox.getAll().length, 2);
     });
 
+    test('word-sentences relations', () async {
+      wordBox.removeAll();
+      sentenceBox.removeAll();
+      final res = await repo.addWord(wordSentences);
+      final word = wordBox.get(res);
+
+      expect(word?.sentences.length, 2);
+      expect(sentenceBox.getAll().length, 2);
+    });
+
     test('simple edit', () async {
       expect(wordBox.getAll().length, 0);
 
@@ -125,6 +137,47 @@ void main() async {
 
       expect(res2, 2, reason: "Id should've been 2");
       expect(wordBox.getAll().length, 3, reason: "# elements should've been 3");
+    });
+
+    test('delete a sentence', () async {
+      wordBox.removeAll();
+      sentenceBox.removeAll();
+
+      int res = await repo.addWord(wordSentences);
+      List<Sentence> sentences = sentenceBox.getAll();
+      expect(sentences.length, 2);
+
+      Word word = wordBox.get(res)!;
+      res = await repo.addWord(word);
+      word = wordBox.get(res)!;
+      expect(word.sentences.length, 1);
+
+      sentences = sentenceBox.getAll();
+      expect(sentences.length, 1);
+    });
+
+    test('edit a sentence', () async {
+      wordBox.removeAll();
+      sentenceBox.removeAll();
+
+      int res = await repo.addWord(wordSentences);
+      final sentences = sentenceBox.getAll();
+      expect(sentences.length, 2);
+
+      Word word = wordBox.get(res)!;
+      final sentenceId = word.sentences.first.id;
+
+      Sentence sentence = sentenceBox.get(sentenceId)!;
+      expect(sentence.text, "text1");
+      expect(word.sentences.first.text, "text1");
+
+      word.sentences.first.text = "ABC";
+      res = await repo.addWord(word);
+      word = wordBox.get(res)!;
+
+      sentence = sentenceBox.get(sentenceId)!;
+      expect(sentence.text, "ABC");
+      expect(word.sentences.first.text, "ABC");
     });
   });
 

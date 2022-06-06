@@ -159,30 +159,4 @@ void main() {
 
     expect(addFinder, findsOneWidget);
   });
-  testWidgets("delete a sentence", (WidgetTester tester) async {
-    final word = wordSentences;
-    final state = WordLoaded(word: word);
-
-    when(() => bloc.state).thenReturn(state);
-
-    await setUpWidget(tester, word.id);
-
-    final deleteBtnFinder = find.byKey(const Key("sentence-delete"));
-    expect(deleteBtnFinder, findsNWidgets(2));
-
-    await tester.tap(deleteBtnFinder.first);
-    await tester.pumpAndSettle();
-
-    final confirmBtnFinder = find.byKey(const Key("alert-confirm"));
-    expect(confirmBtnFinder, findsOneWidget);
-
-    await tester.tap(confirmBtnFinder);
-    await tester.pumpAndSettle();
-
-    verify(() {
-      bloc.add(WordAdded(word: wordSentences..sentences.removeAt(0)));
-    }).called(1);
-
-    expect(deleteBtnFinder, findsOneWidget);
-  });
 }
